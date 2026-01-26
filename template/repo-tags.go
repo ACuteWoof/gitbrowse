@@ -75,9 +75,9 @@ func (p RepoTagsPage) Body() (body string) {
 	tags.ForEach(func(r *plumbing.Reference) error {
 		t, err := p.Repo.TagObject(r.Hash())
 		if err == plumbing.ErrObjectNotFound {
-			println("skipping tag")
 			return nil
 		}
+		checkErr(err)
 		var rowBuffer bytes.Buffer
 		rowTemplate := template.Must(template.New("row").Parse(`<tr>
 <td class="tag"><a href="{{.URLRoot}}/tag/{{.Tag.Hash.String}}">{{.Tag.Name}}</a></td>
