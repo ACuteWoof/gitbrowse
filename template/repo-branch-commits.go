@@ -88,7 +88,9 @@ func (p RepoBranchLogPage) Body() (body string) {
 </tr>`))
 		checkErr(err)
 
-		shortHash, err := exec.Command("git", "rev-parse", "--short", c.Hash.String()).Output()
+		cmd := exec.Command("git", "rev-parse", "--short", c.Hash.String())
+		cmd.Dir = p.Config.RootDir
+		shortHash, err := cmd.Output()
 		checkErr(err)
 
 		rowTemplate.Execute(&rowBuffer, Row{&p.Config.URLRoot, &p.Branch, c, string(shortHash)})

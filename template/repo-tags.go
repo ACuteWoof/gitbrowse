@@ -13,8 +13,8 @@ import (
 )
 
 type RepoTagsPage struct {
-	Repo      *git.Repository
-	Config    *config.PageConfig
+	Repo   *git.Repository
+	Config *config.PageConfig
 }
 
 func (p RepoTagsPage) Head() (head string) {
@@ -64,9 +64,9 @@ func (p RepoTagsPage) Body() (body string) {
 	checkErr(err)
 
 	type Row struct {
-		URLRoot *string
-		Branch  string
-		Tag     *object.Tag
+		URLRoot   *string
+		Branch    string
+		Tag       *object.Tag
 		ShortHash string
 	}
 
@@ -90,7 +90,9 @@ func (p RepoTagsPage) Body() (body string) {
 </td>
 <td class="date">{{.Tag.Tagger.When.Format "2006-01-02 15:04:05"}}</td>
 </tr>`))
-		shortHash, err := exec.Command("git", "rev-parse", "--short", t.Hash.String()).Output()
+		cmd := exec.Command("git", "rev-parse", "--short", t.Hash.String())
+		cmd.Dir = p.Config.RootDir
+		shortHash, err := cmd.Output()
 		rowTemplate.Execute(&rowBuffer, Row{&p.Config.URLRoot, r.Name().Short(), t, string(shortHash)})
 		rows = append(rows, rowBuffer.String())
 		return nil
@@ -105,7 +107,6 @@ func (p RepoTagsPage) Body() (body string) {
 			{{.}}
 		</p>
 		`))
-
 
 	descTemplate.Execute(&bodyBuffer, "Showing tags for repository")
 

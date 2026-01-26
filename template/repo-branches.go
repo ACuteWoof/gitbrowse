@@ -88,7 +88,9 @@ func (p RepoBranchesPage) Body() (body string) {
 <td class="date">{{.Commit.Author.When.Format "2006-01-02 15:04:05"}}</td>
 <td class="actions"><a href="{{.URLRoot}}/branch/{{.Branch}}/commit">See Commits</a></td>
 </tr>`))
-		shortHash, err := exec.Command("git", "rev-parse", "--short", c.Hash.String()).Output()
+		cmd := exec.Command("git", "rev-parse", "--short", c.Hash.String())
+		cmd.Dir = p.Config.RootDir
+		shortHash, err := cmd.Output()
 		rowTemplate.Execute(&rowBuffer, Row{&p.Config.URLRoot, r.Name().Short(), c, string(shortHash)})
 		rows = append(rows, rowBuffer.String())
 		return nil
