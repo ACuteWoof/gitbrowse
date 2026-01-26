@@ -42,18 +42,20 @@ func (p RepoBranchTreePage) Head() (head string) {
 func (p RepoBranchTreePage) Body() (body string) {
 	var bodyBuffer bytes.Buffer
 	t := template.Must(template.New("body").Parse(`
-		<body class="repo-branch-tree">readme
+		<body class="repo-branch-tree">
 			<header>
 			 	<img src="{{.Config.Thumbnail}}" alt="Thumbnail">
 				<div>
 				<h1>{{.Config.Title}}</h1>
-				<nav>
-					<a href="{{.Config.URLRoot}}/">Readme</a>
-					<em><a href="{{.Config.URLRoot}}/branch/master/tree">Tree</a></em>
-					<a href="{{.Config.URLRoot}}/branch/master/commit">Commits</a>
-					<a href="{{.Config.URLRoot}}/branch">Branches</a>
-					<a href="{{.Config.URLRoot}}/tag">Tags</a>
-				</nav>
+				<table>
+					<tr>
+					<td><a href="{{.Config.URLRoot}}/">Readme</a></td>
+					<td><em><a href="{{.Config.URLRoot}}/branch/master/tree">Tree</a></em></td>
+					<td><a href="{{.Config.URLRoot}}/branch/master/commit">Commits</a></td>
+					<td><a href="{{.Config.URLRoot}}/branch">Branches</a></td>
+					<td><a href="{{.Config.URLRoot}}/tag">Tags</a></td>
+					</tr>
+				</table>
 				</div>
 			</header>
 			<main>
@@ -111,7 +113,10 @@ func (p RepoBranchTreePage) Body() (body string) {
 		}
 		rows = append(rows, rowBuffer.String())
 	}
-	table := "<table>" + strings.Join(rows, "") + "</table>"
+
+	tableHeader := "<tr><th>File</th><th>Commit</th><th>Last Updated</th><th>Size</th><th>Mode</th></tr>"
+
+	table := "<table>" + tableHeader + strings.Join(rows, "") + "</table>"
 
 	type Crumb struct {
 		Name    string
@@ -143,6 +148,13 @@ func (p RepoBranchTreePage) Body() (body string) {
 	}
 	breadcrumbTemplate.Execute(&breadcrumbsBuffer, Breadcrumb{defaultCrumbs})
 	breadcrumbs := breadcrumbsBuffer.String()
+
+	descTemplate := template.Must(template.New("desc").Parse(`
+		<p class="description">
+			{{.}}
+		</p>
+		`))
+	descTemplate.Execute(&bodyBuffer, "Browsing tree for branch "+p.Branch)
 
 	body = bodyBuffer.String() + breadcrumbs + table + "</article></main></body>"
 	return

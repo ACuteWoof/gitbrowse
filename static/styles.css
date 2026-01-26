@@ -108,10 +108,12 @@ table.breadcrumbs {
 table, th, td {
   border-width: 1px;
   border-style: solid;
+  padding: 5px;
+  text-align: left;
 }
 
 @media (min-width: 768px) {
-  body.user main {
+  body main {
     margin-top: 2rem;
     margin-bottom: 2rem;
   }

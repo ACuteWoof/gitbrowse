@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"html/template"
 	"strings"
+	"os/exec"
 
 	"git.lewoof.xyz/gitbrowse/config"
 	"github.com/go-git/go-git/v6"
@@ -45,13 +46,15 @@ func (p RepoBranchLogPage) Body() (body string) {
 			 	<img src="{{.Config.Thumbnail}}" alt="Thumbnail">
 				<div>
 				<h1>{{.Config.Title}}</h1>
-				<nav>
-					<a href="{{.Config.URLRoot}}/">Readme</a>
-					<a href="{{.Config.URLRoot}}/branch/master/tree">Tree</a>
-					<em><a href="{{.Config.URLRoot}}/branch/master/commit">Commits</a></em>
-					<a href="{{.Config.URLRoot}}/branch">Branches</a>
-					<a href="{{.Config.URLRoot}}/tag">Tags</a>
-				</nav>
+				<table>
+					<tr>
+					<td><a href="{{.Config.URLRoot}}/">Readme</a></td>
+					<td><a href="{{.Config.URLRoot}}/branch/master/tree">Tree</a></td>
+					<td><em><a href="{{.Config.URLRoot}}/branch/master/commit">Commits</a></em></td>
+					<td><a href="{{.Config.URLRoot}}/branch">Branches</a></td>
+					<td><a href="{{.Config.URLRoot}}/tag">Tags</a></td>
+					</tr>
+				</table>
 				</div>
 			</header>
 			<main>
@@ -83,13 +86,19 @@ func (p RepoBranchLogPage) Body() (body string) {
 </td>
 <td class="date">{{.Commit.Author.When.Format "2006-01-02 15:04:05"}}</td>
 </tr>`))
-		shortHash := c.Hash.String()[:7]
-		rowTemplate.Execute(&rowBuffer, Row{&p.Config.URLRoot, &p.Branch, c, shortHash})
+		checkErr(err)
+
+		shortHash, err := exec.Command("git", "rev-parse", "--short", c.Hash.String()).Output()
+		checkErr(err)
+
+		rowTemplate.Execute(&rowBuffer, Row{&p.Config.URLRoot, &p.Branch, c, string(shortHash)})
 		rows = append(rows, rowBuffer.String())
 		return nil
 	})
 
-	table := "<table>" + strings.Join(rows, "") + "</table>"
+	tableHeader := "<tr><th>Commit</th><th>Message</th><th>Author</th><th>Date</th></tr>"
+
+	table := "<table>" +tableHeader + strings.Join(rows, "") + "</table>"
 
 	descTemplate := template.Must(template.New("desc").Parse(`
 		<p class="description">

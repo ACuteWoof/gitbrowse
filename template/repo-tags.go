@@ -3,8 +3,8 @@ package template
 import (
 	"bytes"
 	"html/template"
-	"strings"
 	"os/exec"
+	"strings"
 
 	"git.lewoof.xyz/gitbrowse/config"
 	"github.com/go-git/go-git/v6"
@@ -12,12 +12,12 @@ import (
 	"github.com/go-git/go-git/v6/plumbing/object"
 )
 
-type RepoBranchesPage struct {
+type RepoTagsPage struct {
 	Repo      *git.Repository
 	Config    *config.PageConfig
 }
 
-func (p RepoBranchesPage) Head() (head string) {
+func (p RepoTagsPage) Head() (head string) {
 	var headBuffer bytes.Buffer
 	t := template.Must(template.New("head").Parse(`
 		<head>
@@ -36,15 +36,15 @@ func (p RepoBranchesPage) Head() (head string) {
 	return
 }
 
-func (p RepoBranchesPage) Body() (body string) {
+func (p RepoTagsPage) Body() (body string) {
 	var bodyBuffer bytes.Buffer
 	t := template.Must(template.New("body").Parse(`
-		<body class="repo-branches">
+		<body class="repo-tags">
 			<header>
 			 	<img src="{{.Config.Thumbnail}}" alt="Thumbnail">
 				<div>
-				<h1>{{.Config.Title}}</h1>
 				<table>
+				<h1>{{.Config.Title}}</h1>
 					<tr>
 					<td><a href="{{.Config.URLRoot}}/">Readme</a></td>
 					<td><a href="{{.Config.URLRoot}}/branch/master/tree">Tree</a></td>
@@ -60,40 +60,43 @@ func (p RepoBranchesPage) Body() (body string) {
 	`))
 	t.Execute(&bodyBuffer, p)
 
-	branches, err := p.Repo.Branches()
+	tags, err := p.Repo.Tags()
 	checkErr(err)
 
 	type Row struct {
 		URLRoot *string
 		Branch  string
-		Commit  *object.Commit
+		Tag     *object.Tag
 		ShortHash string
 	}
 
 	rows := []string{}
 
-	branches.ForEach(func(r *plumbing.Reference) error {
-		c, err := p.Repo.CommitObject(r.Hash())
-		checkErr(err)
+	tags.ForEach(func(r *plumbing.Reference) error {
+		t, err := p.Repo.TagObject(r.Hash())
+		if err == plumbing.ErrObjectNotFound {
+			println("skipping tag")
+			return nil
+		}
 		var rowBuffer bytes.Buffer
 		rowTemplate := template.Must(template.New("row").Parse(`<tr>
-<td class="branchname"><a href="{{.URLRoot}}/branch/{{.Branch}}/tree">{{.Branch}}</a></td>
-<td class="commithash"><a href="{{.URLRoot}}/commit/{{.Commit.Hash.String}}">{{.ShortHash}}</a></td>
-<td class="commitmessage">{{.Commit.Message}}</td>
-<td class="author">
-	<a href="mailto:{{.Commit.Author.Email}}">
-	{{.Commit.Author.Name}}
+<td class="tag"><a href="{{.URLRoot}}/tag/{{.Tag.Hash.String}}">{{.Tag.Name}}</a></td>
+<td class="taghash"><a href="{{.URLRoot}}/tag/{{.Tag.Hash.String}}">{{.ShortHash}}</a></td>
+<td class="tagmessage">{{.Tag.Message}}</td>
+<td class="tagger">
+	<a href="mailto:{{.Tag.Tagger.Email}}">
+	{{.Tag.Tagger.Name}}
 	</a>
 </td>
-<td class="date">{{.Commit.Author.When.Format "2006-01-02 15:04:05"}}</td>
+<td class="date">{{.Tag.Tagger.When.Format "2006-01-02 15:04:05"}}</td>
 </tr>`))
-		shortHash, err := exec.Command("git", "rev-parse", "--short", c.Hash.String()).Output()
-		rowTemplate.Execute(&rowBuffer, Row{&p.Config.URLRoot, r.Name().Short(), c, string(shortHash)})
+		shortHash, err := exec.Command("git", "rev-parse", "--short", t.Hash.String()).Output()
+		rowTemplate.Execute(&rowBuffer, Row{&p.Config.URLRoot, r.Name().Short(), t, string(shortHash)})
 		rows = append(rows, rowBuffer.String())
 		return nil
 	})
 
-	tableHeader := "<tr><th>Branch</th><th>Head</th><th>Message</th><th>Author</th><th>Date</th></tr>"
+	tableHeader := "<tr><th>Name</th><th>Hash</th><th>Message</th><th>Tagger</th><th>Date</th></tr>"
 
 	table := "<table>" + tableHeader + strings.Join(rows, "") + "</table>"
 
@@ -104,7 +107,7 @@ func (p RepoBranchesPage) Body() (body string) {
 		`))
 
 
-	descTemplate.Execute(&bodyBuffer, "Showing branches for repository")
+	descTemplate.Execute(&bodyBuffer, "Showing tags for repository")
 
 	body = bodyBuffer.String() +
 		table + "</article></main></body>"
@@ -112,6 +115,6 @@ func (p RepoBranchesPage) Body() (body string) {
 	return body
 }
 
-func (p RepoBranchesPage) FullPage() string {
+func (p RepoTagsPage) FullPage() string {
 	return "<!DOCTYPE html><html>" + p.Head() + p.Body() + "</html>"
 }

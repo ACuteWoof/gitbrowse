@@ -38,13 +38,15 @@ func (p RepoReadmePage) Body() (body string) {
 			 	<img src="{{.Config.Thumbnail}}" alt="Thumbnail">
 				<div>
 				<h1>{{.Config.Title}}</h1>
-				<nav>
-					<em><a href="{{.Config.URLRoot}}/">Readme</a></em>
-					<a href="{{.Config.URLRoot}}/branch/master/tree">Tree</a>
-					<a href="{{.Config.URLRoot}}/branch/master/commit">Commits</a>
-					<a href="{{.Config.URLRoot}}/branch">Branches</a>
-					<a href="{{.Config.URLRoot}}/tag">Tags</a>
-				</nav>
+				<table>
+					<tr>
+					<td><em><a href="{{.Config.URLRoot}}/">Readme</a></em></td>
+					<td><a href="{{.Config.URLRoot}}/branch/master/tree">Tree</a></td>
+					<td><a href="{{.Config.URLRoot}}/branch/master/commit">Commits</a></td>
+					<td><a href="{{.Config.URLRoot}}/branch">Branches</a></td>
+					<td><a href="{{.Config.URLRoot}}/tag">Tags</a></td>
+					</tr>
+				</table>
 				</div>
 			</header>
 			<main>
