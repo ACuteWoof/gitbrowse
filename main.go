@@ -23,7 +23,7 @@ func HandleStatic(w http.ResponseWriter, r *http.Request) {
 
 func SetupSingleUserHandlers() {
 	http.HandleFunc("/", routes.IndexRoute{DisplayRoot: "/", ConfigGetter: config.GetIndexConfg}.Handler)
-	// http.HandleFunc("/{repo}", routes.RepoRoute{Config: &config.RepoPageConfig}.Handler)
+	http.HandleFunc("/{repo}", routes.RepoReadmeRoute{ConfigGetter: config.GetRepoConfg}.Handler)
 	// http.HandleFunc("/{repo}/tags", routes.RepoTabRoute{Config: &config.RepoTabConfig}.Handler)
 	// http.HandleFunc("/{repo}/diff/{commit1}/{commit2}", routes.RepoRoute{Config: &config.RepoTabFileConfig}.Handler)
 	// http.HandleFunc("/{repo}/commit/{commit}/tree/{path...}", routes.RepoRoute{Config: &config.RepoTabFileConfig}.Handler)

@@ -3,16 +3,15 @@ package template
 import (
 	"bytes"
 	"html/template"
-
 	"git.lewoof.xyz/gitbrowse/config"
 )
 
-type IndexPage struct {
-	Repos []string;
+type RepoReadmePage struct {
+	Readme string;
 	Config *config.PageConfig;
 }
 
-func (p IndexPage) Head() (head string) {
+func (p RepoReadmePage) Head() (head string) {
 	var headBuffer bytes.Buffer
 	t := template.Must(template.New("head").Parse(`
 		<head>
@@ -31,25 +30,19 @@ func (p IndexPage) Head() (head string) {
 	return
 }
 
-func (p IndexPage) Body() (body string) {
+func (p RepoReadmePage) Body() (body string) {
 	var bodyBuffer bytes.Buffer
 	t := template.Must(template.New("body").Parse(`
 		<body class="user">
 			<main>
 			<h1>{{.Config.Title}}</h1>
-			<ul>
-				{{range .Repos}}
-					<li><a href="{{.}}">{{.}}</a></li>
-				{{end}}
-			</ul>
-			</main>
-		</body>
+			<article>
 	`))
 	t.Execute(&bodyBuffer, p)
-	body = bodyBuffer.String()
+	body = bodyBuffer.String() + p.Readme + "</article></main></body>"
 	return
 }
 
-func (p IndexPage) FullPage() string {
+func (p RepoReadmePage) FullPage() string {
 	return "<!DOCTYPE html><html>" + p.Head() + p.Body() + "</html>"
 }
