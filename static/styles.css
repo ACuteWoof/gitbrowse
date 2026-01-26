@@ -105,11 +105,35 @@ table.breadcrumbs {
   margin-bottom: 1rem;
 }
 
-table, th, td {
+table,
+th,
+td {
   border-width: 1px;
   border-style: solid;
   padding: 5px;
   text-align: left;
+}
+
+pre {
+  padding: 1rem;
+  border-width: 1px;
+  border-style: solid;
+}
+
+.filemode {
+  font-family: monospace;
+}
+
+.isbinary {
+  font-family: monospace;
+}
+
+.isbinary#sub {
+  color: #d8a657;
+}
+
+.isbinary#bin {
+  color: #be5046;
 }
 
 @media (min-width: 768px) {

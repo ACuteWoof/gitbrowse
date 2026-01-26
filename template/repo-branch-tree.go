@@ -3,11 +3,13 @@ package template
 import (
 	"bytes"
 	"html/template"
+	"strconv"
 	"strings"
 
 	"git.lewoof.xyz/gitbrowse/config"
 	"github.com/go-git/go-git/v6"
 	"github.com/go-git/go-git/v6/plumbing"
+	"github.com/go-git/go-git/v6/plumbing/filemode"
 	"github.com/go-git/go-git/v6/plumbing/object"
 )
 
@@ -73,6 +75,7 @@ func (p RepoBranchTreePage) Body() (body string) {
 		File       *object.File
 		FileSize   string
 		LastCommit *object.Commit
+		Type       string
 	}
 
 	for _, entry := range p.Tree.Entries {
@@ -82,6 +85,7 @@ func (p RepoBranchTreePage) Body() (body string) {
 			checkErr(err)
 
 			rowTemplate := template.Must(template.New("row").Parse(`<tr>
+<td class="isbinary" id="{{.Type}}">{{.Type}}</td>
 <td class="filename"><a href="{{.URLRoot}}/branch/{{.Branch}}/tree/{{.FilePath}}/{{.Entry.Name}}/">{{.Entry.Name}}</a></td>
 <td class="commitmessage">
 	<a href="mailto:{{.LastCommit.Author.Email}}">
@@ -106,22 +110,34 @@ func (p RepoBranchTreePage) Body() (body string) {
 				lastCommit = c
 				return nil
 			})
-			rowTemplate.Execute(&rowBuffer, Row{&p.Config.URLRoot, &p.Branch, &p.FilePath, &entry, file, getFormattedSize(float64(file.Size)), lastCommit})
+			var fileType string
+			isBinary, err := file.IsBinary()
+			if isBinary {
+				fileType = "bin"
+			} else {
+				fileType = "txt"
+			}
+			rowTemplate.Execute(&rowBuffer, Row{&p.Config.URLRoot, &p.Branch, &p.FilePath, &entry, file, getFormattedSize(float64(file.Size)), lastCommit, fileType})
 		} else {
-			rowTemplate := template.Must(template.New("row").Parse(`<tr><td><a href="{{.URLRoot}}/branch/{{.Branch}}/tree/{{.FilePath}}/{{.Entry.Name}}/">{{.Entry.Name}}</a></td></tr>`))
-			rowTemplate.Execute(&rowBuffer, Row{&p.Config.URLRoot, &p.Branch, &p.FilePath, &entry, nil, "", nil})
+			var fileType string = "dir"
+			rowTemplate := template.Must(template.New("row").Parse(`<tr><td class="isbinary" id="{{.Type}}">{{.Type}}</td><td><a href="{{.URLRoot}}/branch/{{.Branch}}/tree/{{.FilePath}}/{{.Entry.Name}}/">{{.Entry.Name}}</a></td><td></td><td></td><td></td><td class="filemode">{{.Entry.Mode.ToOSFileMode}}</td></tr>`))
+			if entry.Mode == filemode.Submodule {
+				fileType = "sub"
+				rowTemplate = template.Must(template.New("row").Parse(`<tr><td class="isbinary" id="{{.Type}}">{{.Type}}</td><td>{{.Entry.Name}}</td><td></td><td></td><td></td><td class="filemode">{{.Entry.Mode.ToOSFileMode}}</td></tr>`))
+			}
+			rowTemplate.Execute(&rowBuffer, Row{&p.Config.URLRoot, &p.Branch, &p.FilePath, &entry, nil, "", nil, fileType})
 		}
 		rows = append(rows, rowBuffer.String())
 	}
 
-	tableHeader := "<tr><th>File</th><th>Commit</th><th>Commit Date</th><th>Size</th><th>Mode</th></tr>"
+	tableHeader := "<tr><th>Type</th><th>File</th><th>Commit</th><th>Commit Date</th><th>Size</th><th>Mode</th></tr>"
 
 	table := "<table>" + tableHeader + strings.Join(rows, "") + "</table>"
 
 	type Crumb struct {
-		Name    string
-		Root *string
-		Branch  *string
+		Name   string
+		Root   *string
+		Branch *string
 	}
 
 	type Breadcrumb struct {
@@ -154,7 +170,7 @@ func (p RepoBranchTreePage) Body() (body string) {
 			{{.}}
 		</p>
 		`))
-	descTemplate.Execute(&bodyBuffer, "Browsing tree for branch "+p.Branch)
+	descTemplate.Execute(&bodyBuffer, "Browsing tree for branch "+p.Branch+", showing "+strconv.Itoa(len(rows))+" entries")
 
 	body = bodyBuffer.String() + breadcrumbs + table + "</article></main></body>"
 	return

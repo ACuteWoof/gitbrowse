@@ -23,6 +23,11 @@ func (route RepoBranchLogRoute) Handler(w http.ResponseWriter, req *http.Request
 
 	r, err := git.PlainOpen(config.RootDir)
 	errCheck(err)
+	b, err := r.Branch(branch)
+	if err != nil || b == nil {
+		http.Redirect(w, req, config.URLRoot + "/branch", http.StatusTemporaryRedirect)
+		return
+	}
 	refName := plumbing.NewBranchReferenceName(branch)
 	ref, err := r.Reference(refName, true)
 	fmt.Fprintf(w, template.RepoBranchLogPage{Repo: r, Branch: branch, BranchRef: ref, Config: &config}.FullPage())

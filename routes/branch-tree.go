@@ -2,6 +2,7 @@ package routes
 
 import (
 	"fmt"
+	"io"
 	"net/http"
 	"strings"
 
@@ -29,7 +30,7 @@ func (route RepoBranchTreeRoute) Handler(w http.ResponseWriter, req *http.Reques
 
 	b, err := r.Branch(branch)
 	if err != nil || b == nil {
-		http.Redirect(w, req, config.URLRoot + "/branch", http.StatusTemporaryRedirect)
+		http.Redirect(w, req, config.URLRoot+"/branch", http.StatusTemporaryRedirect)
 		return
 	}
 
@@ -46,6 +47,28 @@ func (route RepoBranchTreeRoute) Handler(w http.ResponseWriter, req *http.Reques
 		entry, err := rootTree.FindEntry(filePath)
 		errCheck(err)
 		if entry.Mode.IsFile() {
+			file, err := rootTree.File(filePath)
+			errCheck(err)
+			isBinary, err := file.IsBinary()
+			errCheck(err)
+			if isBinary {
+				w.Header().Set("Content-Disposition", fmt.Sprintf("attachment; filename=%q", file.Name))
+				w.Header().Set("Content-Type", "application/octet-stream")
+				w.Header().Set("Content-Length", fmt.Sprintf("%d", file.Size))
+				w.Header().Set("Cache-Control", "public, max-age=3600")
+
+				// Copy file content to response
+				reader, err := file.Reader()
+				errCheck(err)
+				defer reader.Close()
+
+				io.Copy(w, reader)
+
+				return
+			}
+			contents, err := file.Contents()
+			errCheck(err)
+			fmt.Fprintf(w, template.RepoBranchFilePage{Contents: string(contents), FilePath: filePath, Branch: branch, IsBinary: isBinary, Config: &config}.FullPage())
 			return
 		}
 		tree, err := r.TreeObject(entry.Hash)

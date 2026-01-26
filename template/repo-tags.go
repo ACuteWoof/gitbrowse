@@ -49,8 +49,8 @@ func (p RepoTagsPage) Body() (body string) {
 					<td><a href="{{.Config.URLRoot}}/">Readme</a></td>
 					<td><a href="{{.Config.URLRoot}}/branch/master/tree">Tree</a></td>
 					<td><a href="{{.Config.URLRoot}}/branch/master/commit">Commits</a></td>
-					<td><em><a href="{{.Config.URLRoot}}/branch">Branches</a></em></td>
-					<td><a href="{{.Config.URLRoot}}/tag">Tags</a></td>
+					<td><a href="{{.Config.URLRoot}}/branch">Branches</a></td>
+					<td><em><a href="{{.Config.URLRoot}}/tag">Tags</a></em></td>
 					</tr>
 				</table>
 				</div>
