@@ -17,8 +17,6 @@ func (route RepoReadmeRoute) Handler(w http.ResponseWriter, req *http.Request) {
 	repo := req.PathValue("repo")
 	config := route.ConfigGetter(repo)
 
-	fmt.Println(config.RootDir)
-
 	r, err := git.PlainOpen(config.RootDir)
 	errCheck(err)
 
@@ -32,7 +30,7 @@ func (route RepoReadmeRoute) Handler(w http.ResponseWriter, req *http.Request) {
 	errCheck(err)
 
 	// file, err := tree.File("README.md")
-	possibleReadmes := []string{"README.md", "README.markdown", "README.txt", "README", "readme", "README"}
+	possibleReadmes := []string{"README.md", "README.markdown", "README.txt", "README", "readme", "README", "LICENSE", "LICENSE.md", "LICENSE.txt", "license", "license.txt", "license.md"}
 	var readme *object.File
 	for _, possibleReadme := range possibleReadmes {
 		file, err := tree.File(possibleReadme)
@@ -42,7 +40,7 @@ func (route RepoReadmeRoute) Handler(w http.ResponseWriter, req *http.Request) {
 		}
 	}
 	if readme == nil {
-		http.Redirect(w, req, req.URL.Path+"/tree/master", http.StatusTemporaryRedirect)
+		http.Redirect(w, req, req.URL.Path+"/browse/branch", http.StatusTemporaryRedirect)
 		return
 	}
 

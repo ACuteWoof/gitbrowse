@@ -9,12 +9,12 @@ import (
 )
 
 type IndexRoute struct {
-	DisplayRoot string;
+	RepoRoute string;
 	ConfigGetter func() config.PageConfig;
 }
 
 func (i IndexRoute) Handler(w http.ResponseWriter, _ *http.Request) {
-	var dirs []string = getGitDirs(i.ConfigGetter().RootDir, i.DisplayRoot)
+	var dirs []string = getGitDirs(i.ConfigGetter().RootDir, i.RepoRoute)
 	config := i.ConfigGetter()
 	fmt.Fprintf(w, template.IndexPage{Repos: dirs, Config: &config}.FullPage())
 }

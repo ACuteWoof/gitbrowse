@@ -1,0 +1,153 @@
+package template
+
+import (
+	"bytes"
+	"html/template"
+	"strings"
+
+	"git.lewoof.xyz/gitbrowse/config"
+	"github.com/go-git/go-git/v6"
+	"github.com/go-git/go-git/v6/plumbing"
+	"github.com/go-git/go-git/v6/plumbing/object"
+)
+
+type RepoBranchTreePage struct {
+	Repo         *git.Repository
+	Branch       string
+	BranchCommit *object.Commit
+	Tree         *object.Tree
+	FilePath     string
+	Config       *config.PageConfig
+}
+
+func (p RepoBranchTreePage) Head() (head string) {
+	var headBuffer bytes.Buffer
+	t := template.Must(template.New("head").Parse(`
+		<head>
+			<meta charset="utf-8">
+			<meta name="viewport" content="width=device-width, initial-scale=1">
+			<title>{{.Title}}</title>
+			<meta name="description" content="{{.Description}}">
+			{{range .Styles}}
+				<link rel="stylesheet" href="{{.}}">
+			{{end}}
+			<link rel="icon" href="{{.Favicon}}">
+		</head>
+	`))
+	t.Execute(&headBuffer, *p.Config)
+	head = headBuffer.String()
+	return
+}
+
+func (p RepoBranchTreePage) Body() (body string) {
+	var bodyBuffer bytes.Buffer
+	t := template.Must(template.New("body").Parse(`
+		<body class="repo-branch-tree">readme
+			<header>
+			 	<img src="{{.Config.Thumbnail}}" alt="Thumbnail">
+				<div>
+				<h1>{{.Config.Title}}</h1>
+				<nav>
+					<a href="{{.Config.URLRoot}}/">Readme</a>
+					<em><a href="{{.Config.URLRoot}}/branch/master/tree">Tree</a></em>
+					<a href="{{.Config.URLRoot}}/branch/master/commit">Commits</a>
+					<a href="{{.Config.URLRoot}}/branch">Branches</a>
+					<a href="{{.Config.URLRoot}}/tag">Tags</a>
+				</nav>
+				</div>
+			</header>
+			<main>
+			<article>
+	`))
+	t.Execute(&bodyBuffer, p)
+
+	rows := []string{}
+
+	type Row struct {
+		URLRoot    *string
+		Branch     *string
+		FilePath   *string
+		Entry      *object.TreeEntry
+		File       *object.File
+		FileSize   string
+		LastCommit *object.Commit
+	}
+
+	for _, entry := range p.Tree.Entries {
+		var rowBuffer bytes.Buffer
+		if entry.Mode.IsFile() {
+			file, err := p.Tree.File(entry.Name)
+			checkErr(err)
+
+			rowTemplate := template.Must(template.New("row").Parse(`<tr>
+<td class="filename"><a href="{{.URLRoot}}/branch/{{.Branch}}/tree/{{.FilePath}}/{{.Entry.Name}}/">{{.Entry.Name}}</a></td>
+<td class="commitmessage">
+	<a href="mailto:{{.LastCommit.Author.Email}}">
+	{{.LastCommit.Author.Name}}
+	</a>
+</td>
+<td class="lastupdated">{{.LastCommit.Author.When.Format "2006-01-02 15:04:05"}}</td>
+<td class="filesize">{{.FileSize}}</td>
+<td class="filemode">{{.File.Mode.ToOSFileMode}}</td>
+</tr>`))
+			fileRef, err := p.Repo.Reference(plumbing.NewBranchReferenceName(p.Branch), true)
+			checkErr(err)
+			log, err := p.Repo.Log(&git.LogOptions{From: fileRef.Hash(), Order: git.LogOrderCommitterTime, PathFilter: func(path string) bool {
+				if p.FilePath == "" {
+					return path == entry.Name
+				}
+				return path == p.FilePath+"/"+entry.Name
+			}})
+			checkErr(err)
+			var lastCommit *object.Commit
+			log.ForEach(func(c *object.Commit) error {
+				lastCommit = c
+				return nil
+			})
+			rowTemplate.Execute(&rowBuffer, Row{&p.Config.URLRoot, &p.Branch, &p.FilePath, &entry, file, getFormattedSize(float64(file.Size)), lastCommit})
+		} else {
+			rowTemplate := template.Must(template.New("row").Parse(`<tr><td><a href="{{.URLRoot}}/branch/{{.Branch}}/tree/{{.FilePath}}/{{.Entry.Name}}/">{{.Entry.Name}}</a></td></tr>`))
+			rowTemplate.Execute(&rowBuffer, Row{&p.Config.URLRoot, &p.Branch, &p.FilePath, &entry, nil, "", nil})
+		}
+		rows = append(rows, rowBuffer.String())
+	}
+	table := "<table>" + strings.Join(rows, "") + "</table>"
+
+	type Crumb struct {
+		Name    string
+		Root *string
+		Branch  *string
+	}
+
+	type Breadcrumb struct {
+		Crumbs []Crumb
+	}
+
+	var breadcrumbsBuffer bytes.Buffer
+	breadcrumbTemplate := template.Must(template.New("breadcrumb").Parse(`
+	<table class="breadcrumbs">
+		<tr>
+		{{range .Crumbs}}
+			<td><a href="{{.Root}}/branch/{{.Branch}}/tree/{{.Name}}">{{.Name}}</a></td>
+		{{end}}
+		</tr>
+	</table>
+	`))
+	defaultCrumbs := []Crumb{
+		{"/", &p.Config.URLRoot, &p.Branch},
+	}
+	if p.FilePath != "" {
+		for _, entry := range strings.Split(p.FilePath, "/") {
+			defaultCrumbs = append(defaultCrumbs, Crumb{entry, &p.Config.URLRoot, &p.Branch})
+		}
+	}
+	breadcrumbTemplate.Execute(&breadcrumbsBuffer, Breadcrumb{defaultCrumbs})
+	breadcrumbs := breadcrumbsBuffer.String()
+
+	body = bodyBuffer.String() + breadcrumbs + table + "</article></main></body>"
+	return
+}
+
+func (p RepoBranchTreePage) FullPage() string {
+	return "<!DOCTYPE html><html>" + p.Head() + p.Body() + "</html>"
+}

@@ -4,6 +4,7 @@ package config
 
 type PageConfig struct {
 	RootDir string;
+	URLRoot string;
 	Title string;
 	Description string;
 	Thumbnail string;

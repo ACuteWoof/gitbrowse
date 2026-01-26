@@ -1,8 +1,21 @@
+/* I'm HORRIBLE at plain css, so you really should write your own */
+
 * {
   border-color: #504945;
 }
 a {
   color: #458588;
+  line-height: 1;
+  text-decoration-line: underline;
+  text-underline-offset: 2px;
+  transition-property: all;
+  transition-duration: 150ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+a:hover {
+  background-color: #eddbb2;
+  color: #282828;
+  text-decoration-color: #ebdbb2;
 }
 a:visited {
   color: #d3869b;
@@ -15,6 +28,7 @@ html {
   background-image: url("/static/background.jpg");
   background-size: cover;
   background-position: center;
+  background-attachment: fixed;
 }
 input,
 textarea {
@@ -33,18 +47,75 @@ body.user {
   height: full;
 }
 
-body.user main {
-  max-width: 65ch;
+main {
+  max-width: 110ch;
+  width: 100%;
   margin-right: auto;
   margin-left: auto;
   background-color: #1d2021;
   padding: 2rem;
 }
 
+img {
+  max-width: 100%;
+}
+
+body.user main {
+  max-width: 65ch;
+}
+
+body.repo-readme {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+}
+
+header {
+  max-width: 110ch;
+  width: 100%;
+  margin-right: auto;
+  margin-left: auto;
+  background-color: #1d2021;
+  padding: 2rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+}
+
+header img {
+  max-height: 100px;
+  height: auto;
+}
+
+header h1 {
+  text-align: left;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+table.breadcrumbs {
+  width: fit-content;
+  border-collapse: collapse;
+  margin-bottom: 1rem;
+}
+
+table, th, td {
+  border-width: 1px;
+  border-style: solid;
+}
+
 @media (min-width: 768px) {
   body.user main {
     margin-top: 2rem;
     margin-bottom: 2rem;
+  }
+  body {
     padding: 2rem;
   }
 }
