@@ -1,0 +1,50 @@
+* {
+  border-color: #504945;
+}
+a {
+  color: #458588;
+}
+a:visited {
+  color: #d3869b;
+}
+body {
+  color: #ebdbb2;
+}
+html {
+  background-color: #000000;
+  background-image: url("/static/background.jpg");
+  background-size: cover;
+  background-position: center;
+}
+input,
+textarea {
+  background-color: #282828;
+  color: #ebdbb2;
+}
+blockquote,
+pre {
+  background-color: #282828;
+  color: #ebdbb2;
+}
+
+body.user {
+  margin: 0;
+  width: full;
+  height: full;
+}
+
+body.user main {
+  max-width: 65ch;
+  margin-right: auto;
+  margin-left: auto;
+  background-color: #1d2021;
+  padding: 2rem;
+}
+
+@media (min-width: 768px) {
+  body.user main {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    padding: 2rem;
+  }
+}
