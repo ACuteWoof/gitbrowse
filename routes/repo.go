@@ -40,7 +40,7 @@ func (route RepoReadmeRoute) Handler(w http.ResponseWriter, req *http.Request) {
 		}
 	}
 	if readme == nil {
-		http.Redirect(w, req, req.URL.Path+"/browse/branch", http.StatusTemporaryRedirect)
+		http.Redirect(w, req, req.URL.Path+"/branch", http.StatusTemporaryRedirect)
 		return
 	}
 

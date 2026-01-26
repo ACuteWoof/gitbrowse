@@ -114,7 +114,7 @@ func (p RepoBranchTreePage) Body() (body string) {
 		rows = append(rows, rowBuffer.String())
 	}
 
-	tableHeader := "<tr><th>File</th><th>Commit</th><th>Last Updated</th><th>Size</th><th>Mode</th></tr>"
+	tableHeader := "<tr><th>File</th><th>Commit</th><th>Commit Date</th><th>Size</th><th>Mode</th></tr>"
 
 	table := "<table>" + tableHeader + strings.Join(rows, "") + "</table>"
 
