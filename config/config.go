@@ -21,7 +21,7 @@ var IndexPageConfig PageConfig = PageConfig{
 // this is the config used for all the tabs on the repo page
 var RepoPageConfig PageConfig = PageConfig{
 	URLRoot: "/browse/<REPO>",
-	CloneURL: "https://git.lewoof.xyz/clone/<REPO>",
+	CloneURL: "https://git.lewoof.xyz/<REPO>",
 	RootDir: "/home/acutewoof/gitbrowse/<REPO>",
 	Title: "lewoof/<REPO>",
 	Description: "<REPO> on git.lewoof.xyz",
