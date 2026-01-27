@@ -110,9 +110,7 @@ func (p RepoBranchFilePage) Body() (body string) {
 		bodyBuffer.WriteString("</a>")
 		bodyBuffer.WriteString("</td>")
 		bodyBuffer.WriteString("<td>")
-		bodyBuffer.WriteString("<pre class=\"code\">")
 		bodyBuffer.WriteString(html.EscapeString(line))
-		bodyBuffer.WriteString("</pre>")
 		bodyBuffer.WriteString("</td>")
 		bodyBuffer.WriteString("</tr>")
 	}
