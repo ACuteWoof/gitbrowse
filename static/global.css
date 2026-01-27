@@ -26,6 +26,13 @@ a:visited {
 body {
   color: #ebdbb2;
   overflow-x: hidden;
+  margin: 0;
+  width: full;
+  height: full;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
 }
 html {
   background-color: #000000;
@@ -46,19 +53,13 @@ pre {
   color: #ebdbb2;
 }
 
-body.user {
-  margin: 0;
-  width: full;
-  height: full;
-}
-
 main {
   max-width: 110ch;
   width: 100%;
-  margin-right: auto;
-  margin-left: auto;
-  background-color: #1d2021;
-  padding: 2rem;
+  background-color: #1d2021f2;
+  text-wrap: auto;
+  overflow-x: hidden;
+  padding: 1rem;
 }
 
 code {
@@ -74,14 +75,8 @@ img {
 header {
   max-width: 110ch;
   width: 100%;
-  margin-right: auto;
-  margin-left: auto;
-  background-color: #1d2021;
-  padding: 2rem;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 1rem;
+  background-color: #1d2021f2;
+  padding: 1rem;
 }
 
 header img {
@@ -96,7 +91,6 @@ header h1 {
 
 table {
   border-collapse: collapse;
-  width: 100%;
 }
 
 table.breadcrumbs {
@@ -146,11 +140,37 @@ pre {
 }
 
 @media (min-width: 768px) {
-  body main {
+  main {
     margin-top: 2rem;
     margin-bottom: 2rem;
+    padding: 2rem;
   }
   body {
     padding: 2rem;
+  }
+  header {
+    max-width: 110ch;
+    width: 100%;
+    background-color: #1d2021;
+    padding: 2rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+  }
+  table {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  table {
+    display: block;
+    min-width: 100%;
+    overflow-x: scroll;
+    border: none;
+  }
+  header img {
+	  max-height: 50px;
   }
 }
