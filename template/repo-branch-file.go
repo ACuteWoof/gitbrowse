@@ -2,17 +2,20 @@ package template
 
 import (
 	"bytes"
-	"git.lewoof.xyz/gitbrowse/config"
-	"strings"
+	"html"
 	"html/template"
+	"strconv"
+	"strings"
+
+	"git.lewoof.xyz/gitbrowse/config"
 )
 
 type RepoBranchFilePage struct {
 	Contents string
 	FilePath string
-	Branch string
+	Branch   string
 	IsBinary bool
-	Config *config.PageConfig
+	Config   *config.PageConfig
 }
 
 func (p RepoBranchFilePage) Head() (head string) {
@@ -58,11 +61,10 @@ func (p RepoBranchFilePage) Body() (body string) {
 	`))
 	t.Execute(&bodyBuffer, p)
 
-
 	type Crumb struct {
-		Name    string
-		Root *string
-		Branch  *string
+		Name   string
+		Root   *string
+		Branch *string
 	}
 
 	type Breadcrumb struct {
@@ -98,14 +100,26 @@ func (p RepoBranchFilePage) Body() (body string) {
 	descTemplate.Execute(&bodyBuffer, "Browsing file on branch "+p.Branch)
 
 	bodyBuffer.WriteString(breadcrumbs)
+	bodyBuffer.WriteString("<table class=\"code\">")
+	bodyBuffer.WriteString("<tbody>")
+	for i, line := range strings.Split(p.Contents, "\n") {
+		bodyBuffer.WriteString("<tr id=\"" + strconv.Itoa(i + 1) + "\">")
+		bodyBuffer.WriteString("<td class=\"linenumber\">")
+		bodyBuffer.WriteString("<a href=\"#" + strconv.Itoa(i + 1) + "\">")
+		bodyBuffer.WriteString(strconv.Itoa((i + 1)))
+		bodyBuffer.WriteString("</a>")
+		bodyBuffer.WriteString("</td>")
+		bodyBuffer.WriteString("<td>")
+		bodyBuffer.WriteString("<pre class=\"code\">")
+		bodyBuffer.WriteString(html.EscapeString(line))
+		bodyBuffer.WriteString("</pre>")
+		bodyBuffer.WriteString("</td>")
+		bodyBuffer.WriteString("</tr>")
+	}
+	bodyBuffer.WriteString("<tbody>")
+	bodyBuffer.WriteString("<table>")
 
-	c := template.Must(template.New("contents").Parse(`
-		<pre>{{.}}</pre>
-		</article></main></body>
-	`))
-	c.Execute(&bodyBuffer, p.Contents)
-
-	body = bodyBuffer.String() 
+	body = bodyBuffer.String()
 
 	return
 }

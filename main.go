@@ -28,5 +28,7 @@ func SetupSingleUserHandlers() {
 	http.HandleFunc("/browse/{repo}/branch/{branch}/tree/{filepath...}", routes.RepoBranchTreeRoute{ConfigGetter: config.GetRepoConfg}.Handler)
 	http.HandleFunc("/browse/{repo}/branch/{branch}/commit", routes.RepoBranchLogRoute{ConfigGetter: config.GetRepoConfg}.Handler)
 	http.HandleFunc("/browse/{repo}/tag/", routes.RepoTagsRoute{ConfigGetter: config.GetRepoConfg}.Handler)
+	http.HandleFunc("/browse/{repo}/commit/{hash}", routes.RepoGitShowRoute{ConfigGetter: config.GetRepoConfg}.Handler)
+	http.HandleFunc("/browse/{repo}/tag/{hash}", routes.RepoGitShowRoute{ConfigGetter: config.GetRepoConfg}.Handler)
 	// http.HandleFunc("/browse/{repo}/commit/{commit}/", routes.RepoCommitRoute{ConfigGetter: config.GetRepoConfg}.Handler)
 }

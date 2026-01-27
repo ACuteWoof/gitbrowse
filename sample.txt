@@ -1,0 +1,382 @@
+commit bd3f2b945dc7c8fd8f820b2854e7962dc1c96ac4
+Author: Vithushan <sutharshanvithushan@gmail.com>
+Commit: Vithushan <sutharshanvithushan@gmail.com>
+
+    View files
+
+diff --git a/config/config.go b/config/config.go
+index 4a4263a..21541cb 100644
+--- a/config/config.go
++++ b/config/config.go
+@@ -4,7 +4,7 @@ const SizePrecision = 2
+ 
+ var IndexPageConfig PageConfig = PageConfig{
+ 	URLRoot: "/",
+-	RootDir: "/home/acutewoof/Projects/acutewoof/",
++	RootDir: "/home/acutewoof/Projects/woof-os/pacman",
+ 	Title: "Gitbrowse on lewoof.xyz",
+ 	Description: "lewoof on lewoof.xyz",
+ 	Thumbnail: "/static/thumbnail.png",
+@@ -18,7 +18,7 @@ var IndexPageConfig PageConfig = PageConfig{
+ // this is the config used for all the tabs on the repo page
+ var RepoPageConfig PageConfig = PageConfig{
+ 	URLRoot: "/browse/<REPO>",
+-	RootDir: "/home/acutewoof/Projects/acutewoof/<REPO>",
++	RootDir: "/home/acutewoof/Projects/woof-os/pacman/<REPO>",
+ 	Title: "lewoof/<REPO>",
+ 	Description: "<REPO> on lewoof.xyz",
+ 	Thumbnail: "/static/thumbnail.png",
+diff --git a/routes/branch-log.go b/routes/branch-log.go
+index ca7f218..e5546bf 100644
+--- a/routes/branch-log.go
++++ b/routes/branch-log.go
+@@ -23,6 +23,11 @@ func (route RepoBranchLogRoute) Handler(w http.ResponseWriter, req *http.Request
+ 
+ 	r, err := git.PlainOpen(config.RootDir)
+ 	errCheck(err)
++	b, err := r.Branch(branch)
++	if err != nil || b == nil {
++		http.Redirect(w, req, config.URLRoot + "/branch", http.StatusTemporaryRedirect)
++		return
++	}
+ 	refName := plumbing.NewBranchReferenceName(branch)
+ 	ref, err := r.Reference(refName, true)
+ 	fmt.Fprintf(w, template.RepoBranchLogPage{Repo: r, Branch: branch, BranchRef: ref, Config: &config}.FullPage())
+diff --git a/routes/branch-tree.go b/routes/branch-tree.go
+index 9eeecf4..07f3477 100644
+--- a/routes/branch-tree.go
++++ b/routes/branch-tree.go
+@@ -2,6 +2,7 @@ package routes
+ 
+ import (
+ 	"fmt"
++	"io"
+ 	"net/http"
+ 	"strings"
+ 
+@@ -29,7 +30,7 @@ func (route RepoBranchTreeRoute) Handler(w http.ResponseWriter, req *http.Reques
+ 
+ 	b, err := r.Branch(branch)
+ 	if err != nil || b == nil {
+-		http.Redirect(w, req, config.URLRoot + "/branch", http.StatusTemporaryRedirect)
++		http.Redirect(w, req, config.URLRoot+"/branch", http.StatusTemporaryRedirect)
+ 		return
+ 	}
+ 
+@@ -46,6 +47,28 @@ func (route RepoBranchTreeRoute) Handler(w http.ResponseWriter, req *http.Reques
+ 		entry, err := rootTree.FindEntry(filePath)
+ 		errCheck(err)
+ 		if entry.Mode.IsFile() {
++			file, err := rootTree.File(filePath)
++			errCheck(err)
++			isBinary, err := file.IsBinary()
++			errCheck(err)
++			if isBinary {
++				w.Header().Set("Content-Disposition", fmt.Sprintf("attachment; filename=%q", file.Name))
++				w.Header().Set("Content-Type", "application/octet-stream")
++				w.Header().Set("Content-Length", fmt.Sprintf("%d", file.Size))
++				w.Header().Set("Cache-Control", "public, max-age=3600")
++
++				// Copy file content to response
++				reader, err := file.Reader()
++				errCheck(err)
++				defer reader.Close()
++
++				io.Copy(w, reader)
++
++				return
++			}
++			contents, err := file.Contents()
++			errCheck(err)
++			fmt.Fprintf(w, template.RepoBranchFilePage{Contents: string(contents), FilePath: filePath, Branch: branch, IsBinary: isBinary, Config: &config}.FullPage())
+ 			return
+ 		}
+ 		tree, err := r.TreeObject(entry.Hash)
+diff --git a/static/styles.css b/static/styles.css
+index 2a35b6e..6511436 100644
+--- a/static/styles.css
++++ b/static/styles.css
+@@ -105,13 +105,37 @@ table.breadcrumbs {
+   margin-bottom: 1rem;
+ }
+ 
+-table, th, td {
++table,
++th,
++td {
+   border-width: 1px;
+   border-style: solid;
+   padding: 5px;
+   text-align: left;
+ }
+ 
++pre {
++  padding: 1rem;
++  border-width: 1px;
++  border-style: solid;
++}
++
++.filemode {
++  font-family: monospace;
++}
++
++.isbinary {
++  font-family: monospace;
++}
++
++.isbinary#sub {
++  color: #d8a657;
++}
++
++.isbinary#bin {
++  color: #be5046;
++}
++
+ @media (min-width: 768px) {
+   body main {
+     margin-top: 2rem;
+diff --git a/template/repo-branch-commits.go b/template/repo-branch-commits.go
+index 419a1df..a9417ea 100644
+--- a/template/repo-branch-commits.go
++++ b/template/repo-branch-commits.go
+@@ -3,8 +3,9 @@ package template
+ import (
+ 	"bytes"
+ 	"html/template"
+-	"strings"
+ 	"os/exec"
++	"strconv"
++	"strings"
+ 
+ 	"git.lewoof.xyz/gitbrowse/config"
+ 	"github.com/go-git/go-git/v6"
+@@ -109,7 +110,7 @@ func (p RepoBranchLogPage) Body() (body string) {
+ 		`))
+ 
+ 
+-	descTemplate.Execute(&bodyBuffer, "Showing commits for branch "+p.Branch)
++	descTemplate.Execute(&bodyBuffer, "Showing " + strconv.Itoa(len(rows)) + " commits for branch "+p.Branch)
+ 
+ 	body = bodyBuffer.String() +
+ 		table + "</article></main></body>"
+diff --git a/template/repo-branch-file.go b/template/repo-branch-file.go
+new file mode 100644
+index 0000000..3c9e492
+--- /dev/null
++++ b/template/repo-branch-file.go
+@@ -0,0 +1,115 @@
++package template
++
++import (
++	"bytes"
++	"git.lewoof.xyz/gitbrowse/config"
++	"strings"
++	"html/template"
++)
++
++type RepoBranchFilePage struct {
++	Contents string
++	FilePath string
++	Branch string
++	IsBinary bool
++	Config *config.PageConfig
++}
++
++func (p RepoBranchFilePage) Head() (head string) {
++	var headBuffer bytes.Buffer
++	t := template.Must(template.New("head").Parse(`
++		<head>
++			<meta charset="utf-8">
++			<meta name="viewport" content="width=device-width, initial-scale=1">
++			<title>{{.Title}}</title>
++			<meta name="description" content="{{.Description}}">
++			{{range .Styles}}
++				<link rel="stylesheet" href="{{.}}">
++			{{end}}
++			<link rel="icon" href="{{.Favicon}}">
++		</head>
++	`))
++	t.Execute(&headBuffer, *p.Config)
++	head = headBuffer.String()
++	return
++}
++
++func (p RepoBranchFilePage) Body() (body string) {
++	var bodyBuffer bytes.Buffer
++	t := template.Must(template.New("body").Parse(`
++		<body class="repo-readme">
++			<header>
++			 	<img src="{{.Config.Thumbnail}}" alt="Thumbnail">
++				<div>
++				<h1>{{.Config.Title}}</h1>
++				<table>
++					<tr>
++					<td><em><a href="{{.Config.URLRoot}}/">Readme</a></em></td>
++					<td><a href="{{.Config.URLRoot}}/branch/master/tree">Tree</a></td>
++					<td><a href="{{.Config.URLRoot}}/branch/master/commit">Commits</a></td>
++					<td><a href="{{.Config.URLRoot}}/branch">Branches</a></td>
++					<td><a href="{{.Config.URLRoot}}/tag">Tags</a></td>
++					</tr>
++				</table>
++				</div>
++			</header>
++			<main>
++			<article>
++	`))
++	t.Execute(&bodyBuffer, p)
++
++
++	type Crumb struct {
++		Name    string
++		Root *string
++		Branch  *string
++	}
++
++	type Breadcrumb struct {
++		Crumbs []Crumb
++	}
++
++	var breadcrumbsBuffer bytes.Buffer
++	breadcrumbTemplate := template.Must(template.New("breadcrumb").Parse(`
++	<table class="breadcrumbs">
++		<tr>
++		{{range .Crumbs}}
++			<td><a href="{{.Root}}/branch/{{.Branch}}/tree/{{.Name}}">{{.Name}}</a></td>
++		{{end}}
++		</tr>
++	</table>
++	`))
++	defaultCrumbs := []Crumb{
++		{"/", &p.Config.URLRoot, &p.Branch},
++	}
++	if p.FilePath != "" {
++		for entry := range strings.SplitSeq(p.FilePath, "/") {
++			defaultCrumbs = append(defaultCrumbs, Crumb{entry, &p.Config.URLRoot, &p.Branch})
++		}
++	}
++	breadcrumbTemplate.Execute(&breadcrumbsBuffer, Breadcrumb{defaultCrumbs})
++	breadcrumbs := breadcrumbsBuffer.String()
++
++	descTemplate := template.Must(template.New("desc").Parse(`
++		<p class="description">
++			{{.}}
++		</p>
++		`))
++	descTemplate.Execute(&bodyBuffer, "Browsing file on branch "+p.Branch)
++
++	bodyBuffer.WriteString(breadcrumbs)
++
++	c := template.Must(template.New("contents").Parse(`
++		<pre>{{.}}</pre>
++		</article></main></body>
++	`))
++	c.Execute(&bodyBuffer, p.Contents)
++
++	body = bodyBuffer.String() 
++
++	return
++}
++
++func (p RepoBranchFilePage) FullPage() string {
++	return "<!DOCTYPE html><html>" + p.Head() + p.Body() + "</html>"
++}
+diff --git a/template/repo-branch-tree.go b/template/repo-branch-tree.go
+index 8ff6249..dbcf2f6 100644
+--- a/template/repo-branch-tree.go
++++ b/template/repo-branch-tree.go
+@@ -3,11 +3,13 @@ package template
+ import (
+ 	"bytes"
+ 	"html/template"
++	"strconv"
+ 	"strings"
+ 
+ 	"git.lewoof.xyz/gitbrowse/config"
+ 	"github.com/go-git/go-git/v6"
+ 	"github.com/go-git/go-git/v6/plumbing"
++	"github.com/go-git/go-git/v6/plumbing/filemode"
+ 	"github.com/go-git/go-git/v6/plumbing/object"
+ )
+ 
+@@ -73,6 +75,7 @@ func (p RepoBranchTreePage) Body() (body string) {
+ 		File       *object.File
+ 		FileSize   string
+ 		LastCommit *object.Commit
++		Type       string
+ 	}
+ 
+ 	for _, entry := range p.Tree.Entries {
+@@ -82,6 +85,7 @@ func (p RepoBranchTreePage) Body() (body string) {
+ 			checkErr(err)
+ 
+ 			rowTemplate := template.Must(template.New("row").Parse(`<tr>
++<td class="isbinary" id="{{.Type}}">{{.Type}}</td>
+ <td class="filename"><a href="{{.URLRoot}}/branch/{{.Branch}}/tree/{{.FilePath}}/{{.Entry.Name}}/">{{.Entry.Name}}</a></td>
+ <td class="commitmessage">
+ 	<a href="mailto:{{.LastCommit.Author.Email}}">
+@@ -106,22 +110,34 @@ func (p RepoBranchTreePage) Body() (body string) {
+ 				lastCommit = c
+ 				return nil
+ 			})
+-			rowTemplate.Execute(&rowBuffer, Row{&p.Config.URLRoot, &p.Branch, &p.FilePath, &entry, file, getFormattedSize(float64(file.Size)), lastCommit})
++			var fileType string
++			isBinary, err := file.IsBinary()
++			if isBinary {
++				fileType = "bin"
++			} else {
++				fileType = "txt"
++			}
++			rowTemplate.Execute(&rowBuffer, Row{&p.Config.URLRoot, &p.Branch, &p.FilePath, &entry, file, getFormattedSize(float64(file.Size)), lastCommit, fileType})
+ 		} else {
+-			rowTemplate := template.Must(template.New("row").Parse(`<tr><td><a href="{{.URLRoot}}/branch/{{.Branch}}/tree/{{.FilePath}}/{{.Entry.Name}}/">{{.Entry.Name}}</a></td></tr>`))
+-			rowTemplate.Execute(&rowBuffer, Row{&p.Config.URLRoot, &p.Branch, &p.FilePath, &entry, nil, "", nil})
++			var fileType string = "dir"
++			rowTemplate := template.Must(template.New("row").Parse(`<tr><td class="isbinary" id="{{.Type}}">{{.Type}}</td><td><a href="{{.URLRoot}}/branch/{{.Branch}}/tree/{{.FilePath}}/{{.Entry.Name}}/">{{.Entry.Name}}</a></td><td></td><td></td><td></td><td class="filemode">{{.Entry.Mode.ToOSFileMode}}</td></tr>`))
++			if entry.Mode == filemode.Submodule {
++				fileType = "sub"
++				rowTemplate = template.Must(template.New("row").Parse(`<tr><td class="isbinary" id="{{.Type}}">{{.Type}}</td><td>{{.Entry.Name}}</td><td></td><td></td><td></td><td class="filemode">{{.Entry.Mode.ToOSFileMode}}</td></tr>`))
++			}
++			rowTemplate.Execute(&rowBuffer, Row{&p.Config.URLRoot, &p.Branch, &p.FilePath, &entry, nil, "", nil, fileType})
+ 		}
+ 		rows = append(rows, rowBuffer.String())
+ 	}
+ 
+-	tableHeader := "<tr><th>File</th><th>Commit</th><th>Commit Date</th><th>Size</th><th>Mode</th></tr>"
++	tableHeader := "<tr><th>Type</th><th>File</th><th>Commit</th><th>Commit Date</th><th>Size</th><th>Mode</th></tr>"
+ 
+ 	table := "<table>" + tableHeader + strings.Join(rows, "") + "</table>"
+ 
+ 	type Crumb struct {
+-		Name    string
+-		Root *string
+-		Branch  *string
++		Name   string
++		Root   *string
++		Branch *string
+ 	}
+ 
+ 	type Breadcrumb struct {
+@@ -154,7 +170,7 @@ func (p RepoBranchTreePage) Body() (body string) {
+ 			{{.}}
+ 		</p>
+ 		`))
+-	descTemplate.Execute(&bodyBuffer, "Browsing tree for branch "+p.Branch)
++	descTemplate.Execute(&bodyBuffer, "Browsing tree for branch "+p.Branch+", showing "+strconv.Itoa(len(rows))+" entries")
+ 
+ 	body = bodyBuffer.String() + breadcrumbs + table + "</article></main></body>"
+ 	return
+diff --git a/template/repo-tags.go b/template/repo-tags.go
+index 4125f41..d990612 100644
+--- a/template/repo-tags.go
++++ b/template/repo-tags.go
+@@ -49,8 +49,8 @@ func (p RepoTagsPage) Body() (body string) {
+ 					<td><a href="{{.Config.URLRoot}}/">Readme</a></td>
+ 					<td><a href="{{.Config.URLRoot}}/branch/master/tree">Tree</a></td>
+ 					<td><a href="{{.Config.URLRoot}}/branch/master/commit">Commits</a></td>
+-					<td><em><a href="{{.Config.URLRoot}}/branch">Branches</a></em></td>
+-					<td><a href="{{.Config.URLRoot}}/tag">Tags</a></td>
++					<td><a href="{{.Config.URLRoot}}/branch">Branches</a></td>
++					<td><em><a href="{{.Config.URLRoot}}/tag">Tags</a></em></td>
+ 					</tr>
+ 				</table>
+ 				</div>

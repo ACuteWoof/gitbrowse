@@ -1,0 +1,59 @@
+.git-show {
+  font-family: monospace;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+/* Added lines: green */
+.git-line-added { color: #b8bb26; }
+/* Removed lines: red */
+.git-line-removed { color: #fb4934; }
+/* Context lines: gray */
+.git-line-context { color: #a89984; }
+
+/* Plus sign: bright green */
+.git-diff-plus { color: #b8bb26; font-weight: bold; }
+/* Minus sign: bright red */
+.git-diff-minus { color: #fb4934; font-weight: bold; }
+
+/* Commit hash: aqua */
+.git-hash { color: #8ec07c; }
+/* Commit message: blue */
+.git-commit { color: #83a598; }
+/* Author: yellow-green */
+.git-author { color: #b8bb26; }
+/* Date: purple */
+.git-date { color: #d3869b; }
+
+/* File A (old): red */
+.git-file-a { color: #fb4934; }
+/* File B (new): green */
+.git-file-b { color: #b8bb26; }
+
+/* Hunk header: purple */
+.git-hunk-header { color: #d3869b; }
+
+/* Index line */
+.git-index { color: #d3869b; }
+.git-index-old { color: #fb4934; }
+.git-index-new { color: #b8bb26; }
+.git-index-mode { color: #a89984; }
+
+/* File paths */
+.git-file-path--- { color: #fb4934; }
+.git-file-path-\+\+\+ { color: #b8bb26; }
+.git-file-location { color: #83a598; }
+.git-file-name { color: #ebdbb2; }
+
+/* Tag objects */
+.git-tag { color: #fe8019 }
+.git-tag-name { color: #fabd2f; }
+.git-tag-object-label { color: #83a598; }
+.git-tag-object-hash { color: #8ec07c; }
+.git-tag-type-label { color: #83a598; }
+.git-tag-type { color: #d3869b; }
+.git-tag-tagger-label { color: #83a598; }
+.git-tag-tagger-name { color: #b8bb26; }
+.git-tag-tagger-email { color: #fe8019; }
+.git-tag-tagger-date { color: #d3869b; }
+.git-tag-message { color: #ebdbb2; }
