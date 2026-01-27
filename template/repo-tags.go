@@ -89,7 +89,7 @@ func (p RepoTagsPage) Body() (body string) {
 	{{.Tag.Tagger.Name}}
 	</a>
 </td>
-<td class="date">{{.Tag.Tagger.When.UTC.Format "2006-01-02 15:04:05"}}</td>
+<td class="date">{{.Tag.Tagger.When.UTC.Format "2006-01-02 15:04:05"}} UTC</td>
 </tr>`))
 		cmd := exec.Command("git", "rev-parse", "--short", t.Hash.String())
 		cmd.Dir = p.Config.RootDir
