@@ -9,6 +9,7 @@ table.code tr, table.code td {
 	padding: 0px;
 	text-align: left;
 	white-space: pre;
+	word-wrap: normal;
 }
 
 table.code td.linenumber {
