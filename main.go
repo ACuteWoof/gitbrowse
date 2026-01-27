@@ -72,6 +72,12 @@ func setupSingleUserHandlers() {
 // }
 //
 // func setupMultiUserHandlers() {
+// 	// by default "/" redirects to user woof, change it to your default user
+//      const defaultUser = "woof"
+// 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+// 		http.Redirect(w, r, "/"+defaultUser, http.StatusTemporaryRedirect)
+// 	})
+//
 // 	http.HandleFunc("/{user}", func(w http.ResponseWriter, r *http.Request) {
 // 		user := r.PathValue("user")
 // 		routes.IndexRoute{RepoRoute: "/browse/" + user + "/", ConfigGetter: getIndexConfigGetterUser(user)}.Handler(w, r)
