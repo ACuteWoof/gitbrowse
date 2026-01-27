@@ -33,7 +33,7 @@ func (p RepoGitShowPage) Head() (head string) {
 func (p RepoGitShowPage) Body() (body string) {
 	var bodyBuffer bytes.Buffer
 	t := template.Must(template.New("body").Parse(`
-		<body class="repo-readme">
+		<body class="repo-git-show">
 			<header>
 			 	<img src="{{.Config.Thumbnail}}" alt="Thumbnail">
 				<div>

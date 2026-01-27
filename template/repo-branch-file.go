@@ -40,7 +40,7 @@ func (p RepoBranchFilePage) Head() (head string) {
 func (p RepoBranchFilePage) Body() (body string) {
 	var bodyBuffer bytes.Buffer
 	t := template.Must(template.New("body").Parse(`
-		<body class="repo-readme">
+		<body class="repo-branch-file">
 			<header>
 			 	<img src="{{.Config.Thumbnail}}" alt="Thumbnail">
 				<div>
