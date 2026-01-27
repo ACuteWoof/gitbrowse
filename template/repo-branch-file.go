@@ -142,7 +142,6 @@ func getHighlightedHTML(filename string, contents string) string {
 	if lexer == nil {
 		lexer = lexers.Fallback
 	}
-	println(lexer.Config().Name)
 
 	lexer = chroma.Coalesce(lexer)
 	style := styles.Get("gruvbox")
