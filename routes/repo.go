@@ -2,11 +2,15 @@ package routes
 
 import (
 	"fmt"
+	"net/http"
+	"strings"
+
 	"git.lewoof.xyz/gitbrowse/config"
+	"git.lewoof.xyz/gitbrowse/template"
 	"github.com/go-git/go-git/v6"
 	"github.com/go-git/go-git/v6/plumbing/object"
-	"net/http"
-	"git.lewoof.xyz/gitbrowse/template"
+	"github.com/gomarkdown/markdown/html"
+	stdhtml "html"
 )
 
 type RepoReadmeRoute struct {
@@ -46,7 +50,13 @@ func (route RepoReadmeRoute) Handler(w http.ResponseWriter, req *http.Request) {
 
 	content, err := readme.Contents()
 	errCheck(err)
-	readmeHtml := markdownToHtml(content)
+
+	var readmeHtml string
+	if strings.HasSuffix(readme.Name, ".md") {
+		readmeHtml = markdownToHtml(content)
+	} else {
+		readmeHtml = stdhtml.EscapeString(string(content))
+	}
 
 	fmt.Fprintf(w, template.RepoReadmePage{Readme: readmeHtml, Config: &config}.FullPage())
 }
