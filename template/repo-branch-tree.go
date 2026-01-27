@@ -102,18 +102,18 @@ func (p RepoBranchTreePage) Body() (body string) {
 </tr>`))
 			fileRef, err := p.Repo.Reference(plumbing.NewBranchReferenceName(p.Branch), true)
 			checkErr(err)
-			log, err := p.Repo.Log(&git.LogOptions{From: fileRef.Hash(), Order: git.LogOrderCommitterTime, PathFilter: func(path string) bool {
+			log, err := p.Repo.Log(&git.LogOptions{
+				From: fileRef.Hash(), 
+				Order: git.LogOrderCommitterTime,
+				PathFilter: func(path string) bool {
 				if p.FilePath == "" {
 					return path == entry.Name
 				}
 				return path == p.FilePath+"/"+entry.Name
 			}})
 			checkErr(err)
-			var lastCommit *object.Commit
-			log.ForEach(func(c *object.Commit) error {
-				lastCommit = c
-				return nil
-			})
+			lastCommit, err := log.Next()
+			checkErr(err)
 			var fileType string
 			isBinary, err := file.IsBinary()
 			if isBinary {
@@ -149,7 +149,7 @@ func (p RepoBranchTreePage) Body() (body string) {
 		rows = append(rows, rowBuffer.String())
 	}
 
-	tableHeader := "<tr><th>Type</th><th>File</th><th>Commit Message</th><th>Author</th><th>Commit Date</th><th>Size</th><th>Mode</th></tr>"
+	tableHeader := "<tr><th>Type</th><th>File</th><th>Last Commit</th><th>Author</th><th>Commit Date</th><th>Size</th><th>Mode</th></tr>"
 
 	table := "<table>" + tableHeader + strings.Join(rows, "") + "</table>"
 
