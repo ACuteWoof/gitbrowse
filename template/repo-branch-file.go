@@ -98,7 +98,7 @@ func (p RepoBranchFilePage) Body() (body string) {
 			{{.}}
 		</p>
 		`))
-	descTemplate.Execute(&bodyBuffer, "Browsing file on branch "+p.Branch)
+	descTemplate.Execute(&bodyBuffer, "Viewing file on branch "+p.Branch)
 
 	bodyBuffer.WriteString(breadcrumbs)
 	bodyBuffer.WriteString("<table class=\"code\">")
