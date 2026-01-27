@@ -51,8 +51,8 @@ func (p RepoBranchFilePage) Body() (body string) {
 				<p>Clone URL: <code>{{.Config.CloneURL}}</code></p>
 				<table>
 					<tr>
-					<td><em><a href="{{.Config.URLRoot}}/">Readme</a></em></td>
-					<td><a href="{{.Config.URLRoot}}/branch/master/tree">Tree</a></td>
+					<td><a href="{{.Config.URLRoot}}/">Readme</a></td>
+					<td><em><a href="{{.Config.URLRoot}}/branch/master/tree">Tree</a></em></td>
 					<td><a href="{{.Config.URLRoot}}/branch/master/commit">Commits</a></td>
 					<td><a href="{{.Config.URLRoot}}/branch">Branches</a></td>
 					<td><a href="{{.Config.URLRoot}}/tag">Tags</a></td>
