@@ -2,6 +2,7 @@
 
 @import url("/static/git-show.css");
 @import url("/static/viewer.css");
+@import url("/static/custom.css");
 
 * {
   border-color: #504945;
