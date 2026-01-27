@@ -104,7 +104,8 @@ func (p RepoBranchFilePage) Body() (body string) {
 	bodyBuffer.WriteString(breadcrumbs)
 	bodyBuffer.WriteString("<table class=\"code\">")
 	bodyBuffer.WriteString("<tbody>")
-	for i, line := range strings.Split(p.Contents, "\n") {
+	escapedContents := html.EscapeString(p.Contents)
+	for i, line := range strings.Split(escapedContents, "\n") {
 		bodyBuffer.WriteString("<tr id=\"" + strconv.Itoa(i + 1) + "\">")
 		bodyBuffer.WriteString("<td class=\"linenumber\">")
 		bodyBuffer.WriteString("<a href=\"#" + strconv.Itoa(i + 1) + "\">")
@@ -112,7 +113,7 @@ func (p RepoBranchFilePage) Body() (body string) {
 		bodyBuffer.WriteString("</a>")
 		bodyBuffer.WriteString("</td>")
 		bodyBuffer.WriteString("<td>")
-		bodyBuffer.WriteString(html.EscapeString(line))
+		bodyBuffer.WriteString(line)
 		bodyBuffer.WriteString("</td>")
 		bodyBuffer.WriteString("</tr>")
 	}
