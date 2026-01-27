@@ -16,7 +16,7 @@ type IndexRoute struct {
 func (i IndexRoute) Handler(w http.ResponseWriter, _ *http.Request) {
 	var dirs []string = getGitDirs(i.ConfigGetter().RootDir, i.RepoRoute)
 	config := i.ConfigGetter()
-	fmt.Fprintf(w, template.IndexPage{Repos: dirs, Config: &config}.FullPage())
+	fmt.Fprint(w, template.IndexPage{Repos: dirs, Config: &config}.FullPage())
 }
 
 func getGitDirs(root string, displayRoot string) []string {

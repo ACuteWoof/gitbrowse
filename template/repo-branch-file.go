@@ -63,10 +63,10 @@ func (p RepoBranchFilePage) Body() (body string) {
 	t.Execute(&bodyBuffer, p)
 
 	type Crumb struct {
-		Name        string
+		Name   string
 		DisplayName string
-		Root        *string
-		Branch      *string
+		Root   *string
+		Branch *string
 	}
 
 	type Breadcrumb struct {
@@ -105,14 +105,15 @@ func (p RepoBranchFilePage) Body() (body string) {
 	bodyBuffer.WriteString("<table class=\"code\">")
 	bodyBuffer.WriteString("<tbody>")
 	for i, line := range strings.Split(p.Contents, "\n") {
-		bodyBuffer.WriteString("<tr id=\"" + strconv.Itoa(i+1) + "\">")
+		bodyBuffer.WriteString("<tr id=\"" + strconv.Itoa(i + 1) + "\">")
 		bodyBuffer.WriteString("<td class=\"linenumber\">")
-		bodyBuffer.WriteString("<a href=\"#" + strconv.Itoa(i+1) + "\">")
+		bodyBuffer.WriteString("<a href=\"#" + strconv.Itoa(i + 1) + "\">")
 		bodyBuffer.WriteString(strconv.Itoa((i + 1)))
 		bodyBuffer.WriteString("</a>")
 		bodyBuffer.WriteString("</td>")
-		escaperTemplate := template.Must(template.New("escape").Parse(`<td>{{.}}</td>`))
-		escaperTemplate.Execute(&bodyBuffer, line)
+		bodyBuffer.WriteString("<td>")
+		bodyBuffer.WriteString(html.EscapeString(line))
+		bodyBuffer.WriteString("</td>")
 		bodyBuffer.WriteString("</tr>")
 	}
 	bodyBuffer.WriteString("<tbody>")

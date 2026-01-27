@@ -17,5 +17,5 @@ func (route RepoGitShowRoute) Handler(w http.ResponseWriter, req *http.Request) 
 	hash := req.PathValue("hash")
 	config := route.ConfigGetter(repo)
 
-	fmt.Fprintf(w, template.RepoGitShowPage{Commit: hash, Config: &config}.FullPage())
+	fmt.Fprint(w, template.RepoGitShowPage{Commit: hash, Config: &config}.FullPage())
 }

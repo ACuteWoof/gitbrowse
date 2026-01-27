@@ -21,5 +21,5 @@ func (route RepoTagsRoute) Handler(w http.ResponseWriter, req *http.Request) {
 
 	r, err := git.PlainOpen(config.RootDir)
 	errCheck(err)
-	fmt.Fprintf(w, template.RepoTagsPage{Repo: r, Config: &config}.FullPage())
+	fmt.Fprint(w, template.RepoTagsPage{Repo: r, Config: &config}.FullPage())
 }

@@ -41,5 +41,5 @@ func (route RepoBranchLogRoute) Handler(w http.ResponseWriter, req *http.Request
 
 	refName := plumbing.NewBranchReferenceName(branch)
 	ref, err := r.Reference(refName, true)
-	fmt.Fprintf(w, template.RepoBranchLogPage{Repo: r, Branch: branch, BranchRef: ref, Config: &config}.FullPage())
+	fmt.Fprint(w, template.RepoBranchLogPage{Repo: r, Branch: branch, BranchRef: ref, Config: &config}.FullPage())
 }

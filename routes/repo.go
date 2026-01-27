@@ -57,5 +57,5 @@ func (route RepoReadmeRoute) Handler(w http.ResponseWriter, req *http.Request) {
 		readmeHtml = "<pre>" + html.EscapeString(string(content)) + "</pre>"
 	}
 
-	fmt.Fprintf(w, template.RepoReadmePage{Readme: readmeHtml, Config: &config}.FullPage())
+	fmt.Fprint(w, template.RepoReadmePage{Readme: readmeHtml, Config: &config}.FullPage())
 }

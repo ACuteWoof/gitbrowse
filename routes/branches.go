@@ -21,5 +21,5 @@ func (route RepoBranchesRoute) Handler(w http.ResponseWriter, req *http.Request)
 
 	r, err := git.PlainOpen(config.RootDir)
 	errCheck(err)
-	fmt.Fprintf(w, template.RepoBranchesPage{Repo: r, Config: &config}.FullPage())
+	fmt.Fprint(w, template.RepoBranchesPage{Repo: r, Config: &config}.FullPage())
 }

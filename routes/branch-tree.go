@@ -51,7 +51,7 @@ func (route RepoBranchTreeRoute) Handler(w http.ResponseWriter, req *http.Reques
 	rootTree, err := commit.Tree()
 	errCheck(err)
 	if filePath == "" || filePath == "/" {
-		fmt.Fprintf(w, template.RepoBranchTreePage{Tree: rootTree, Branch: branch, FilePath: filePath, Config: &config, BranchCommit: commit, Repo: r}.FullPage())
+		fmt.Fprint(w, template.RepoBranchTreePage{Tree: rootTree, Branch: branch, FilePath: filePath, Config: &config, BranchCommit: commit, Repo: r}.FullPage())
 	} else {
 		entry, err := rootTree.FindEntry(filePath)
 		errCheck(err)
@@ -77,10 +77,10 @@ func (route RepoBranchTreeRoute) Handler(w http.ResponseWriter, req *http.Reques
 			}
 			contents, err := file.Contents()
 			errCheck(err)
-			fmt.Fprintf(w, template.RepoBranchFilePage{Contents: string(contents), FilePath: filePath, Branch: branch, IsBinary: isBinary, Config: &config}.FullPage())
+			fmt.Fprint(w, template.RepoBranchFilePage{Contents: string(contents), FilePath: filePath, Branch: branch, IsBinary: isBinary, Config: &config}.FullPage())
 			return
 		}
 		tree, err := r.TreeObject(entry.Hash)
-		fmt.Fprintf(w, template.RepoBranchTreePage{Tree: tree, Branch: branch, FilePath: filePath, Config: &config, BranchCommit: commit, Repo: r}.FullPage())
+		fmt.Fprint(w, template.RepoBranchTreePage{Tree: tree, Branch: branch, FilePath: filePath, Config: &config, BranchCommit: commit, Repo: r}.FullPage())
 	}
 }
