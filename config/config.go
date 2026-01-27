@@ -2,6 +2,9 @@ package config
 
 const SizePrecision = 2
 
+
+// IRRELEVANT FOR MULTI USER SETUP
+
 var IndexPageConfig PageConfig = PageConfig{
 	URLRoot: "/",
 	RootDir: "/home/acutewoof/gitbrowse",
