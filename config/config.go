@@ -10,7 +10,7 @@ var IndexPageConfig PageConfig = PageConfig{
 	Thumbnail: "/static/thumbnail.png",
 	Favicon: "/static/favicon.ico",
 	Styles: []string{
-		"/static/styles.css",
+		"/static/global.css",
 	},
 }
 
@@ -24,6 +24,6 @@ var RepoPageConfig PageConfig = PageConfig{
 	Thumbnail: "/static/thumbnail.png",
 	Favicon: "/static/favicon.ico",
 	Styles: []string{
-		"/static/styles.css",
+		"/static/global.css",
 	},
 }
