@@ -9,8 +9,7 @@ import (
 	"git.lewoof.xyz/gitbrowse/template"
 	"github.com/go-git/go-git/v6"
 	"github.com/go-git/go-git/v6/plumbing/object"
-	"github.com/gomarkdown/markdown/html"
-	stdhtml "html"
+	"html"
 )
 
 type RepoReadmeRoute struct {
@@ -55,7 +54,7 @@ func (route RepoReadmeRoute) Handler(w http.ResponseWriter, req *http.Request) {
 	if strings.HasSuffix(readme.Name, ".md") {
 		readmeHtml = markdownToHtml(content)
 	} else {
-		readmeHtml = stdhtml.EscapeString(string(content))
+		readmeHtml = html.EscapeString(string(content))
 	}
 
 	fmt.Fprintf(w, template.RepoReadmePage{Readme: readmeHtml, Config: &config}.FullPage())
