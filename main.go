@@ -35,7 +35,6 @@ func setupSingleUserHandlers() {
 }
 
 // uncomment the code below, and comment out the function setupSingleUserHandlers() to enable multi user support
-
 //
 // func getIndexConfigGetterUser(username string) func() config.PageConfig {
 // 	var IndexPageConfig config.PageConfig = config.PageConfig{
@@ -57,7 +56,7 @@ func setupSingleUserHandlers() {
 // func getRepoConfigGetter(username string) func(repo string) config.PageConfig {
 // 	return func(repo string) config.PageConfig {
 // 		var RepoPageConfig config.PageConfig = config.PageConfig{
-// 			URLRoot:     "/browse/" + username + "/" + repo, // url path, don't bother changing
+// 			URLRoot:     "/browse/" + username + "/" + repo,         // url path, don't bother changing
 // 			RootDir:     "/home/" + username + "/gitbrowse/" + repo, // directory in the unix filesystem where each repo is stored
 // 			Title:       username + "/" + repo,
 // 			Description: username + "/" + repo + " on git.lewoof.xyz",
@@ -73,9 +72,9 @@ func setupSingleUserHandlers() {
 //
 // func setupMultiUserHandlers() {
 // 	// by default "/" redirects to user woof, change it to your default user
-//      const defaultUser = "woof"
+// 	const defaultUser = "woof"
 // 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-// 		http.Redirect(w, r, "/"+defaultUser, http.StatusTemporaryRedirect)
+// 		http.Redirect(w, r, "/"+defaultUser, http.StatusMovedPermanently)
 // 	})
 //
 // 	http.HandleFunc("/{user}", func(w http.ResponseWriter, r *http.Request) {
