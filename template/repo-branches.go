@@ -44,6 +44,7 @@ func (p RepoBranchesPage) Body() (body string) {
 			 	<img src="{{.Config.Thumbnail}}" alt="Thumbnail">
 				<div>
 				<h1>{{.Config.Title}}</h1>
+				<p>Clone URL: <code>{{.Config.CloneURL}}</code></p>
 				<table>
 					<tr>
 					<td><a href="{{.Config.URLRoot}}/">Readme</a></td>

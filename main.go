@@ -58,6 +58,7 @@ func setupSingleUserHandlers() {
 // 		var RepoPageConfig config.PageConfig = config.PageConfig{
 // 			URLRoot:     "/browse/" + username + "/" + repo,         // url path, don't bother changing
 // 			RootDir:     "/home/" + username + "/gitbrowse/" + repo, // directory in the unix filesystem where each repo is stored
+// 			CloneURL:    "https://git.lewoof.xyz/clone/" + username + "/" + repo, // url used to clone the repo
 // 			Title:       username + "/" + repo,
 // 			Description: username + "/" + repo + " on git.lewoof.xyz",
 // 			Thumbnail:   "/static/thumbnail.png",

@@ -61,6 +61,12 @@ main {
   padding: 2rem;
 }
 
+code {
+  color: #ebdbb2;
+  background-color: #282828;
+  padding: 0.2rem;
+}
+
 img {
   max-width: 100%;
 }
@@ -85,6 +91,7 @@ header img {
 
 header h1 {
   text-align: left;
+  font-size: 1.5rem;
 }
 
 table {

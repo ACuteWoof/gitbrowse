@@ -10,4 +10,5 @@ type PageConfig struct {
 	Thumbnail string;
 	Favicon string;
 	Styles []string;
+	CloneURL string;
 }

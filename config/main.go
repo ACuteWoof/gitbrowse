@@ -21,6 +21,7 @@ func GetRepoConfg(repo string) PageConfig {
 		Favicon:     strings.ReplaceAll(RepoPageConfig.Favicon, "<REPO>", repo),
 		RootDir:     strings.ReplaceAll(RepoPageConfig.RootDir, "<REPO>", repo),
 		URLRoot:     strings.ReplaceAll(RepoPageConfig.URLRoot, "<REPO>", repo),
+		CloneURL:    strings.ReplaceAll(RepoPageConfig.CloneURL, "<REPO>", repo),
 		Styles:      newstyles,
 	}
 	return NewPageConfig

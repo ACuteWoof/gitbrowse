@@ -43,8 +43,9 @@ func (p RepoTagsPage) Body() (body string) {
 			<header>
 			 	<img src="{{.Config.Thumbnail}}" alt="Thumbnail">
 				<div>
-				<table>
 				<h1>{{.Config.Title}}</h1>
+				<p>Clone URL: <code>{{.Config.CloneURL}}</code></p>
+				<table>
 					<tr>
 					<td><a href="{{.Config.URLRoot}}/">Readme</a></td>
 					<td><a href="{{.Config.URLRoot}}/branch/master/tree">Tree</a></td>
