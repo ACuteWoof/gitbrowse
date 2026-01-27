@@ -1,14 +1,18 @@
 package template
 
 import (
-	"fmt"
 	"html"
 	"os/exec"
 	"regexp"
 	"strings"
+	"github.com/go-git/go-git/v6"
+	"github.com/go-git/go-git/v6/plumbing"
 )
 
 func GitShow(repo string, commit string) string {
+	if !validateCommitOrTag(repo, commit) {
+		return "<div class=\"error\">Invalid hash</div>"
+	}
 	cmd := exec.Command("git", "show", commit)
 	cmd.Dir = repo
 	out, err := cmd.Output()
@@ -17,7 +21,6 @@ func GitShow(repo string, commit string) string {
 	}
 
 	escaped := html.EscapeString(string(out))
-	fmt.Println(escaped)
 	output := colorizeGitShowAdvanced(escaped)
 	return "<div class=\"git-show\">" + output + "</div>"
 }
@@ -146,4 +149,21 @@ func colorizeDiffLine(line string) string {
 	default:
 		return line
 	}
+}
+
+func validateCommitOrTag(repoPath, ref string) bool {
+    repo, err := git.PlainOpen(repoPath)
+    if err != nil {
+        return false
+    }
+    
+    // Try to resolve it as a revision (tag, branch, or commit hash)
+    hash, err := repo.ResolveRevision(plumbing.Revision(ref))
+    if err != nil {
+        return false
+    }
+    
+    // Make sure it points to a commit
+    _, err = repo.CommitObject(*hash)
+    return err == nil
 }
