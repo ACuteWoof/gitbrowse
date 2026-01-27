@@ -78,13 +78,13 @@ func (p RepoBranchFilePage) Body() (body string) {
 	<table class="breadcrumbs">
 		<tr>
 		{{range .Crumbs}}
-			<td><a href="{{.Root}}/branch/{{.Branch}}/tree/{{.Name}}">{{.Name}}</a></td>
+			<td><a href="{{.Root}}/branch/{{.Branch}}/tree/{{.Name}}">{{.DisplayName}}</a></td>
 		{{end}}
 		</tr>
 	</table>
 	`))
 	defaultCrumbs := []Crumb{
-		{"/", "", &p.Config.URLRoot, &p.Branch},
+		{"", "/", &p.Config.URLRoot, &p.Branch},
 	}
 	if p.FilePath != "" {
 		for entry := range strings.SplitSeq(p.FilePath, "/") {
