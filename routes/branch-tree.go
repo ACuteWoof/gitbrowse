@@ -28,11 +28,18 @@ func (route RepoBranchTreeRoute) Handler(w http.ResponseWriter, req *http.Reques
 	r, err := git.PlainOpen(config.RootDir)
 	errCheck(err)
 
-	fmt.Println(r.Branches())
-
-	b, err := r.Branch(branch)
-	if err != nil || b == nil {
-		http.Redirect(w, req, config.URLRoot+"/branch", http.StatusTemporaryRedirect)
+	exists := false
+	bs, err := r.Branches()
+	errCheck(err)
+	bs.ForEach(func(b *plumbing.Reference) error {
+		if b.Name().Short() == branch {
+			exists = true
+			return nil
+		}
+		return nil
+	})
+	if !exists {
+		http.Redirect(w, req, config.URLRoot + "/branch", http.StatusTemporaryRedirect)
 		return
 	}
 
