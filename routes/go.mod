@@ -1,8 +1,8 @@
-module git.lewoof.xyz/gitbrowse/routes
+module git.lewoof.xyz/clone/gitbrowse/routes
 
-require git.lewoof.xyz/gitbrowse/config v1.0.0
+require git.lewoof.xyz/clone/gitbrowse/config v1.0.0
 
-require git.lewoof.xyz/gitbrowse/template v1.0.0
+require git.lewoof.xyz/clone/gitbrowse/template v1.0.0
 
 require (
 	github.com/Microsoft/go-winio v0.6.2 // indirect
@@ -24,8 +24,8 @@ require (
 	golang.org/x/sys v0.40.0 // indirect
 )
 
-replace git.lewoof.xyz/gitbrowse/config => ../config
+replace git.lewoof.xyz/clone/gitbrowse/config => ../config
 
-replace git.lewoof.xyz/gitbrowse/template => ../template
+replace git.lewoof.xyz/clone/gitbrowse/template => ../template
 
 go 1.25.6

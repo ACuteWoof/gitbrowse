@@ -1,6 +1,6 @@
-module git.lewoof.xyz/gitbrowse/template
+module git.lewoof.xyz/clone/gitbrowse/template
 
-require git.lewoof.xyz/gitbrowse/config v1.0.0
+require git.lewoof.xyz/clone/gitbrowse/config v1.0.0
 
 require (
 	github.com/Microsoft/go-winio v0.6.2 // indirect
@@ -23,6 +23,6 @@ require (
 	golang.org/x/sys v0.40.0 // indirect
 )
 
-replace git.lewoof.xyz/gitbrowse/config => ../config
+replace git.lewoof.xyz/clone/gitbrowse/config => ../config
 
 go 1.25.6

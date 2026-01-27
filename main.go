@@ -1,8 +1,8 @@
 package main
 
 import (
-	"git.lewoof.xyz/gitbrowse/config"
-	"git.lewoof.xyz/gitbrowse/routes"
+	"git.lewoof.xyz/clone/gitbrowse/config"
+	"git.lewoof.xyz/clone/gitbrowse/routes"
 	"net/http"
 	// "os"
 )

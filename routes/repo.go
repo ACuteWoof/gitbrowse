@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"strings"
 
-	"git.lewoof.xyz/gitbrowse/config"
-	"git.lewoof.xyz/gitbrowse/template"
+	"git.lewoof.xyz/clone/gitbrowse/config"
+	"git.lewoof.xyz/clone/gitbrowse/template"
 	"github.com/go-git/go-git/v6"
 	"github.com/go-git/go-git/v6/plumbing/object"
 	"html"

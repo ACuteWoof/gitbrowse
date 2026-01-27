@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"html/template"
 
-	"git.lewoof.xyz/gitbrowse/config"
+	"git.lewoof.xyz/clone/gitbrowse/config"
 )
 
 type IndexPage struct {

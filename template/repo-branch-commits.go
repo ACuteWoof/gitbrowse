@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"strings"
 
-	"git.lewoof.xyz/gitbrowse/config"
+	"git.lewoof.xyz/clone/gitbrowse/config"
 	"github.com/go-git/go-git/v6"
 	"github.com/go-git/go-git/v6/plumbing"
 	"github.com/go-git/go-git/v6/plumbing/object"

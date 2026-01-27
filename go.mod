@@ -1,11 +1,11 @@
-module git.lewoof.xyz/gitbrowse
+module git.lewoof.xyz/clone/gitbrowse
 
-require git.lewoof.xyz/gitbrowse/routes v1.0.0
+require git.lewoof.xyz/clone/gitbrowse/routes v1.0.0
 
-require git.lewoof.xyz/gitbrowse/config v1.0.0
+require git.lewoof.xyz/clone/gitbrowse/config v1.0.0
 
 require (
-	git.lewoof.xyz/gitbrowse/template v1.0.0 // indirect
+	git.lewoof.xyz/clone/gitbrowse/template v1.0.0 // indirect
 	github.com/Microsoft/go-winio v0.6.2 // indirect
 	github.com/ProtonMail/go-crypto v1.3.0 // indirect
 	github.com/alecthomas/chroma/v2 v2.23.1 // indirect
@@ -28,9 +28,9 @@ require (
 )
 
 replace (
-	git.lewoof.xyz/gitbrowse/config => ./config
-	git.lewoof.xyz/gitbrowse/routes => ./routes
-	git.lewoof.xyz/gitbrowse/template => ./template
+	git.lewoof.xyz/clone/gitbrowse/config => ./config
+	git.lewoof.xyz/clone/gitbrowse/routes => ./routes
+	git.lewoof.xyz/clone/gitbrowse/template => ./template
 )
 
 go 1.25.6

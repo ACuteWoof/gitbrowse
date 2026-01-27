@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 	"math"
-	"git.lewoof.xyz/gitbrowse/config"
+	"git.lewoof.xyz/clone/gitbrowse/config"
 )
 
 func getFormattedSize(size float64) (formatted string) {

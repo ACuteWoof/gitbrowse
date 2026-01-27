@@ -2,7 +2,7 @@ package template
 
 import (
 	"bytes"
-	"git.lewoof.xyz/gitbrowse/config"
+	"git.lewoof.xyz/clone/gitbrowse/config"
 	"html/template"
 )
 
