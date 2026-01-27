@@ -130,6 +130,10 @@ pre {
   color: #be5046;
 }
 
+.tree-dir {
+  color: #8ec07c;
+}
+
 @media (min-width: 768px) {
   body main {
     margin-top: 2rem;
