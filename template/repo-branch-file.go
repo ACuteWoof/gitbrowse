@@ -2,12 +2,15 @@ package template
 
 import (
 	"bytes"
-	"html"
 	"html/template"
 	"strconv"
 	"strings"
 
 	"git.lewoof.xyz/gitbrowse/config"
+	"github.com/alecthomas/chroma/v2"
+	"github.com/alecthomas/chroma/v2/formatters/html"
+	"github.com/alecthomas/chroma/v2/lexers"
+	"github.com/alecthomas/chroma/v2/styles"
 )
 
 type RepoBranchFilePage struct {
@@ -63,10 +66,10 @@ func (p RepoBranchFilePage) Body() (body string) {
 	t.Execute(&bodyBuffer, p)
 
 	type Crumb struct {
-		Name   string
+		Name        string
 		DisplayName string
-		Root   *string
-		Branch *string
+		Root        *string
+		Branch      *string
 	}
 
 	type Breadcrumb struct {
@@ -104,11 +107,11 @@ func (p RepoBranchFilePage) Body() (body string) {
 	bodyBuffer.WriteString(breadcrumbs)
 	bodyBuffer.WriteString("<table class=\"code\">")
 	bodyBuffer.WriteString("<tbody>")
-	escapedContents := html.EscapeString(p.Contents)
-	for i, line := range strings.Split(escapedContents, "\n") {
-		bodyBuffer.WriteString("<tr id=\"" + strconv.Itoa(i + 1) + "\">")
+	highlightedContents := getHighlightedHTML(defaultCrumbs[len(defaultCrumbs)-1].Name, p.Contents)
+	for i, line := range strings.Split(highlightedContents, "\n") {
+		bodyBuffer.WriteString("<tr id=\"" + strconv.Itoa(i+1) + "\">")
 		bodyBuffer.WriteString("<td class=\"linenumber\">")
-		bodyBuffer.WriteString("<a href=\"#" + strconv.Itoa(i + 1) + "\">")
+		bodyBuffer.WriteString("<a href=\"#" + strconv.Itoa(i+1) + "\">")
 		bodyBuffer.WriteString(strconv.Itoa((i + 1)))
 		bodyBuffer.WriteString("</a>")
 		bodyBuffer.WriteString("</td>")
@@ -127,4 +130,31 @@ func (p RepoBranchFilePage) Body() (body string) {
 
 func (p RepoBranchFilePage) FullPage() string {
 	return "<!DOCTYPE html><html>" + p.Head() + p.Body() + "</html>"
+}
+
+func getHighlightedHTML(filename string, contents string) string {
+	var w bytes.Buffer
+	var lexer chroma.Lexer
+	lexer = lexers.Match(filename)
+	if lexer == nil {
+		lexer = lexers.Analyse(contents)
+	}
+	if lexer == nil {
+		lexer = lexers.Fallback
+	}
+	println(lexer.Config().Name)
+
+	lexer = chroma.Coalesce(lexer)
+	style := styles.Get("gruvbox")
+	if style == nil {
+		style = styles.Fallback
+	}
+
+	formatter := html.New(html.Standalone(false), html.WithClasses(false), html.PreventSurroundingPre(true))
+	iterator, err := lexer.Tokenise(nil, string(contents))
+	checkErr(err)
+	err = formatter.Format(&w, style, iterator)
+	checkErr(err)
+	r := strings.TrimPrefix(strings.TrimSuffix(w.String(), "</code></pre>"), "<pre><code>")
+	return r
 }

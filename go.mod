@@ -2,7 +2,7 @@ module git.lewoof.xyz/gitbrowse
 
 require git.lewoof.xyz/gitbrowse/routes v1.0.0
 
-require git.lewoof.xyz/gitbrowse/config v1.0.0 // indirect
+require git.lewoof.xyz/gitbrowse/config v1.0.0
 
 require (
 	git.lewoof.xyz/gitbrowse/template v1.0.0 // indirect
