@@ -28,6 +28,8 @@ func (route RepoBranchTreeRoute) Handler(w http.ResponseWriter, req *http.Reques
 	r, err := git.PlainOpen(config.RootDir)
 	errCheck(err)
 
+	fmt.Println(r.Branches())
+
 	b, err := r.Branch(branch)
 	if err != nil || b == nil {
 		http.Redirect(w, req, config.URLRoot+"/branch", http.StatusTemporaryRedirect)
