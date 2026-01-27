@@ -35,11 +35,7 @@ body {
   padding: 1rem;
 }
 html {
-  background-color: #000000;
-  background-image: url("/static/background.jpg");
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
+  background-color: #1d2021;
   overflow-x: hidden;
 }
 input,
@@ -56,7 +52,7 @@ pre {
 main {
   max-width: 110ch;
   width: 100%;
-  background-color: #1d2021f2;
+  background-color: #1d2021;
   text-wrap: auto;
   overflow-x: hidden;
   padding: 1rem;
@@ -75,7 +71,7 @@ img {
 header {
   max-width: 110ch;
   width: 100%;
-  background-color: #1d2021f2;
+  background-color: #1d2021;
   padding: 1rem;
 }
 
@@ -161,6 +157,12 @@ pre {
   table {
     width: 100%;
   }
+  html {
+    background-image: url("/static/background.jpg");
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+  }
 }
 
 @media (max-width: 768px) {
@@ -171,6 +173,6 @@ pre {
     border: none;
   }
   header img {
-	  max-height: 50px;
+    max-height: 50px;
   }
 }
