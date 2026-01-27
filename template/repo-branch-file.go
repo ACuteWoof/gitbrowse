@@ -64,6 +64,7 @@ func (p RepoBranchFilePage) Body() (body string) {
 
 	type Crumb struct {
 		Name   string
+		DisplayName string
 		Root   *string
 		Branch *string
 	}
@@ -83,11 +84,11 @@ func (p RepoBranchFilePage) Body() (body string) {
 	</table>
 	`))
 	defaultCrumbs := []Crumb{
-		{"/", &p.Config.URLRoot, &p.Branch},
+		{"/", "", &p.Config.URLRoot, &p.Branch},
 	}
 	if p.FilePath != "" {
 		for entry := range strings.SplitSeq(p.FilePath, "/") {
-			defaultCrumbs = append(defaultCrumbs, Crumb{entry, &p.Config.URLRoot, &p.Branch})
+			defaultCrumbs = append(defaultCrumbs, Crumb{entry, entry, &p.Config.URLRoot, &p.Branch})
 		}
 	}
 	breadcrumbTemplate.Execute(&breadcrumbsBuffer, Breadcrumb{defaultCrumbs})
