@@ -87,7 +87,7 @@ func (p RepoBranchTreePage) Body() (body string) {
 
 			rowTemplate := template.Must(template.New("row").Parse(`<tr>
 <td class="isbinary" id="{{.Type}}">{{.Type}}</td>
-<td class="filename"><a href="{{.URLRoot}}/branch/{{.Branch}}/tree/{{.FilePath}}/{{.Entry.Name}}/">{{.Entry.Name}}</a></td>
+<td class="filename"><a href="{{.URLRoot}}/branch/{{.Branch}}/tree/{{.FilePath}}{{.Entry.Name}}/">{{.Entry.Name}}</a></td>
 <td class="commitmessage">
 	<a href="mailto:{{.LastCommit.Author.Email}}">
 	{{.LastCommit.Author.Name}}
@@ -118,15 +118,30 @@ func (p RepoBranchTreePage) Body() (body string) {
 			} else {
 				fileType = "txt"
 			}
-			rowTemplate.Execute(&rowBuffer, Row{&p.Config.URLRoot, &p.Branch, &p.FilePath, &entry, file, getFormattedSize(float64(file.Size)), lastCommit, fileType})
+			formattedFilePath := strings.TrimPrefix(p.FilePath+"/", "")
+			if !strings.HasSuffix(formattedFilePath, "/") {
+				formattedFilePath += "/"
+			}
+			if formattedFilePath == "/" {
+				formattedFilePath = ""
+			}
+
+			rowTemplate.Execute(&rowBuffer, Row{&p.Config.URLRoot, &p.Branch, &formattedFilePath, &entry, file, getFormattedSize(float64(file.Size)), lastCommit, fileType})
 		} else {
 			var fileType string = "dir"
-			rowTemplate := template.Must(template.New("row").Parse(`<tr><td class="isbinary" id="{{.Type}}">{{.Type}}</td><td class="tree-dir filename"><a href="{{.URLRoot}}/branch/{{.Branch}}/tree/{{.FilePath}}/{{.Entry.Name}}/">{{.Entry.Name}}</a></td><td></td><td></td><td></td><td class="filemode">{{.Entry.Mode.ToOSFileMode}}</td></tr>`))
+			formattedFilePath := strings.TrimPrefix(p.FilePath+"/", "")
+			if !strings.HasSuffix(formattedFilePath, "/") {
+				formattedFilePath += "/"
+			}
+			if formattedFilePath == "/" {
+				formattedFilePath = ""
+			}
+			rowTemplate := template.Must(template.New("row").Parse(`<tr><td class="isbinary" id="{{.Type}}">{{.Type}}</td><td class="tree-dir filename"><a href="{{.URLRoot}}/branch/{{.Branch}}/tree/{{.FilePath}}{{.Entry.Name}}/">{{.Entry.Name}}</a></td><td></td><td></td><td></td><td class="filemode">{{.Entry.Mode.ToOSFileMode}}</td></tr>`))
 			if entry.Mode == filemode.Submodule {
 				fileType = "sub"
 				rowTemplate = template.Must(template.New("row").Parse(`<tr><td class="isbinary" id="{{.Type}}">{{.Type}}</td><td class="filename">{{.Entry.Name}}</td><td></td><td></td><td></td><td class="filemode">{{.Entry.Mode.ToOSFileMode}}</td></tr>`))
 			}
-			rowTemplate.Execute(&rowBuffer, Row{&p.Config.URLRoot, &p.Branch, &p.FilePath, &entry, nil, "", nil, fileType})
+			rowTemplate.Execute(&rowBuffer, Row{&p.Config.URLRoot, &p.Branch, &formattedFilePath, &entry, nil, "", nil, fileType})
 		}
 		rows = append(rows, rowBuffer.String())
 	}
