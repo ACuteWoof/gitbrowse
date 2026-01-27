@@ -152,6 +152,7 @@ func (p RepoBranchTreePage) Body() (body string) {
 
 	type Crumb struct {
 		Name   string
+		DisplayName string
 		Root   *string
 		Branch *string
 	}
@@ -165,17 +166,17 @@ func (p RepoBranchTreePage) Body() (body string) {
 	<table class="breadcrumbs">
 		<tr>
 		{{range .Crumbs}}
-			<td><a href="{{.Root}}/branch/{{.Branch}}/tree/{{.Name}}">{{.Name}}</a></td>
+			<td><a href="{{.Root}}/branch/{{.Branch}}/tree/{{.Name}}">{{.DisplayName}}</a></td>
 		{{end}}
 		</tr>
 	</table>
 	`))
 	defaultCrumbs := []Crumb{
-		{"/", &p.Config.URLRoot, &p.Branch},
+		{"", "/", &p.Config.URLRoot, &p.Branch},
 	}
 	if p.FilePath != "" {
 		for _, entry := range strings.Split(p.FilePath, "/") {
-			defaultCrumbs = append(defaultCrumbs, Crumb{entry, &p.Config.URLRoot, &p.Branch})
+			defaultCrumbs = append(defaultCrumbs, Crumb{entry, entry, &p.Config.URLRoot, &p.Branch})
 		}
 	}
 	breadcrumbTemplate.Execute(&breadcrumbsBuffer, Breadcrumb{defaultCrumbs})
