@@ -89,6 +89,9 @@ func (p RepoBranchTreePage) Body() (body string) {
 <td class="isbinary" id="{{.Type}}">{{.Type}}</td>
 <td class="filename"><a href="{{.URLRoot}}/branch/{{.Branch}}/tree/{{.FilePath}}{{.Entry.Name}}/">{{.Entry.Name}}</a></td>
 <td class="commitmessage">
+	<a href="/branch/{{.Branch}}/commit/{{.LastCommit.Hash.String}}">{{.LastCommit.Message}}</a>
+</td>
+<td class="author">
 	<a href="mailto:{{.LastCommit.Author.Email}}">
 	{{.LastCommit.Author.Name}}
 	</a>
@@ -136,17 +139,17 @@ func (p RepoBranchTreePage) Body() (body string) {
 			if formattedFilePath == "/" {
 				formattedFilePath = ""
 			}
-			rowTemplate := template.Must(template.New("row").Parse(`<tr><td class="isbinary" id="{{.Type}}">{{.Type}}</td><td class="tree-dir filename"><a href="{{.URLRoot}}/branch/{{.Branch}}/tree/{{.FilePath}}{{.Entry.Name}}/">{{.Entry.Name}}</a></td><td></td><td></td><td></td><td class="filemode">{{.Entry.Mode.ToOSFileMode}}</td></tr>`))
+			rowTemplate := template.Must(template.New("row").Parse(`<tr><td class="isbinary" id="{{.Type}}">{{.Type}}</td><td class="tree-dir filename"><a href="{{.URLRoot}}/branch/{{.Branch}}/tree/{{.FilePath}}{{.Entry.Name}}/">{{.Entry.Name}}</a></td><td></td><td></td><td></td><td></td><td class="filemode">{{.Entry.Mode.ToOSFileMode}}</td></tr>`))
 			if entry.Mode == filemode.Submodule {
 				fileType = "sub"
-				rowTemplate = template.Must(template.New("row").Parse(`<tr><td class="isbinary" id="{{.Type}}">{{.Type}}</td><td class="filename">{{.Entry.Name}}</td><td></td><td></td><td></td><td class="filemode">{{.Entry.Mode.ToOSFileMode}}</td></tr>`))
+				rowTemplate = template.Must(template.New("row").Parse(`<tr><td class="isbinary" id="{{.Type}}">{{.Type}}</td><td class="filename">{{.Entry.Name}}</td><td></td><td></td><td></td><td></td><td class="filemode">{{.Entry.Mode.ToOSFileMode}}</td></tr>`))
 			}
 			rowTemplate.Execute(&rowBuffer, Row{&p.Config.URLRoot, &p.Branch, &formattedFilePath, &entry, nil, "", nil, fileType})
 		}
 		rows = append(rows, rowBuffer.String())
 	}
 
-	tableHeader := "<tr><th>Type</th><th>File</th><th>Commit</th><th>Commit Date</th><th>Size</th><th>Mode</th></tr>"
+	tableHeader := "<tr><th>Type</th><th>File</th><th>Commit Message</th><th>Author</th><th>Commit Date</th><th>Size</th><th>Mode</th></tr>"
 
 	table := "<table>" + tableHeader + strings.Join(rows, "") + "</table>"
 
