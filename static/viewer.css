@@ -17,6 +17,7 @@ table.code td.linenumber {
 	user-select: none;
 	padding-right: 15px;
 	padding-left: 5px;
+	vertical-align: top;
 	text-align: right;
 }
 
