@@ -54,7 +54,7 @@ func (route RepoReadmeRoute) Handler(w http.ResponseWriter, req *http.Request) {
 	if strings.HasSuffix(readme.Name, ".md") {
 		readmeHtml = markdownToHtml(content)
 	} else {
-		readmeHtml = html.EscapeString(string(content))
+		readmeHtml = "<pre>" + html.EscapeString(string(content)) + "</pre>"
 	}
 
 	fmt.Fprintf(w, template.RepoReadmePage{Readme: readmeHtml, Config: &config}.FullPage())
