@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"html/template"
 	"os/exec"
+	"strconv"
 	"strings"
 
 	"git.lewoof.xyz/clone/gitbrowse/config"
@@ -38,29 +39,7 @@ func (p RepoTagsPage) Head() (head string) {
 
 func (p RepoTagsPage) Body() (body string) {
 	var bodyBuffer bytes.Buffer
-	t := template.Must(template.New("body").Parse(`
-		<body class="repo-tags">
-			<header>
-			 	<img src="{{.Config.Thumbnail}}" alt="Thumbnail">
-				<div>
-				<h1>{{.Config.Title}}</h1>
-				<p>Clone URL: <code>{{.Config.CloneURL}}</code></p>
-				<table>
-					<tr>
-					<td><a href="{{.Config.URLRoot}}/">Readme</a></td>
-					<td><a href="{{.Config.URLRoot}}/branch/master/tree">Tree</a></td>
-					<td><a href="{{.Config.URLRoot}}/branch/master/commit">Commits</a></td>
-					<td><a href="{{.Config.URLRoot}}/branch">Branches</a></td>
-					<td><em><a href="{{.Config.URLRoot}}/tag">Tags</a></em></td>
-					</tr>
-				</table>
-				</div>
-			</header>
-			<main>
-			<article>
-	`))
-	t.Execute(&bodyBuffer, p)
-
+	bodyBuffer.WriteString(CommonHeader(p.Config, "Tags"))
 	tags, err := p.Repo.Tags()
 	checkErr(err)
 
@@ -109,7 +88,7 @@ func (p RepoTagsPage) Body() (body string) {
 		</p>
 		`))
 
-	descTemplate.Execute(&bodyBuffer, "Showing tags for repository")
+	descTemplate.Execute(&bodyBuffer, "Showing " + strconv.Itoa(len(rows)) + " tags for repository")
 
 	body = bodyBuffer.String() +
 		table + "</article></main></body>"

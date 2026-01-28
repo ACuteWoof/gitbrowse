@@ -3,8 +3,9 @@ package template
 import (
 	"bytes"
 	"html/template"
-	"strings"
 	"os/exec"
+	"strconv"
+	"strings"
 
 	"git.lewoof.xyz/clone/gitbrowse/config"
 	"github.com/go-git/go-git/v6"
@@ -38,28 +39,7 @@ func (p RepoBranchesPage) Head() (head string) {
 
 func (p RepoBranchesPage) Body() (body string) {
 	var bodyBuffer bytes.Buffer
-	t := template.Must(template.New("body").Parse(`
-		<body class="repo-branches">
-			<header>
-			 	<img src="{{.Config.Thumbnail}}" alt="Thumbnail">
-				<div>
-				<h1>{{.Config.Title}}</h1>
-				<p>Clone URL: <code>{{.Config.CloneURL}}</code></p>
-				<table>
-					<tr>
-					<td><a href="{{.Config.URLRoot}}/">Readme</a></td>
-					<td><a href="{{.Config.URLRoot}}/branch/master/tree">Tree</a></td>
-					<td><a href="{{.Config.URLRoot}}/branch/master/commit">Commits</a></td>
-					<td><em><a href="{{.Config.URLRoot}}/branch">Branches</a></em></td>
-					<td><a href="{{.Config.URLRoot}}/tag">Tags</a></td>
-					</tr>
-				</table>
-				</div>
-			</header>
-			<main>
-			<article>
-	`))
-	t.Execute(&bodyBuffer, p)
+	bodyBuffer.WriteString(CommonHeader(p.Config, "Branches"))
 
 	branches, err := p.Repo.Branches()
 	checkErr(err)
@@ -108,7 +88,7 @@ func (p RepoBranchesPage) Body() (body string) {
 		`))
 
 
-	descTemplate.Execute(&bodyBuffer, "Showing branches for repository")
+	descTemplate.Execute(&bodyBuffer, "Showing " + strconv.Itoa(len(rows)) + " branches for repository")
 
 	body = bodyBuffer.String() +
 		table + "</article></main></body>"

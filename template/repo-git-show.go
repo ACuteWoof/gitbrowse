@@ -32,28 +32,7 @@ func (p RepoGitShowPage) Head() (head string) {
 
 func (p RepoGitShowPage) Body() (body string) {
 	var bodyBuffer bytes.Buffer
-	t := template.Must(template.New("body").Parse(`
-		<body class="repo-git-show">
-			<header>
-			 	<img src="{{.Config.Thumbnail}}" alt="Thumbnail">
-				<div>
-				<h1>{{.Config.Title}}</h1>
-				<p>Clone URL: <code>{{.Config.CloneURL}}</code></p>
-				<table>
-					<tr>
-					<td><a href="{{.Config.URLRoot}}/">Readme</a></td>
-					<td><a href="{{.Config.URLRoot}}/branch/master/tree">Tree</a></td>
-					<td><em><a href="{{.Config.URLRoot}}/branch/master/commit">Commits</a></em></td>
-					<td><a href="{{.Config.URLRoot}}/branch">Branches</a></td>
-					<td><a href="{{.Config.URLRoot}}/tag">Tags</a></td>
-					</tr>
-				</table>
-				</div>
-			</header>
-			<main>
-			<article>
-	`))
-	t.Execute(&bodyBuffer, p)
+	bodyBuffer.WriteString(CommonHeader(p.Config, "Git Show"))
 	gitShow := GitShow(p.Config.RootDir, p.Commit)
 	body = bodyBuffer.String() + gitShow + "</article></main></body>"
 	return
