@@ -25,14 +25,19 @@ table.code * {
   font-family: monospace;
 }
 
+table.code tr {
+  overflow: hidden;
+  width: 100%;
+}
+
 table.code tr,
 table.code td {
   border: none;
   padding: 0px;
   text-align: left;
-  white-space: pre;
-  word-wrap: break-word;
-  text-wrap: auto;
+  white-space: pre-wrap;
+  word-break: break-all;
+  hyphens: none;
 }
 
 table.code td.linenumber {
@@ -52,4 +57,10 @@ table.code td.linenumber a {
 
 table.code td.linenumber a:hover {
   color: #282828;
+}
+
+@media (max-width: 768px) {
+  table.code {
+    border: 1px solid #504945;
+  }
 }
