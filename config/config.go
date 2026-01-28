@@ -3,19 +3,21 @@ package config
 const SizePrecision = 2
 
 
-// IRRELEVANT FOR MULTI USER SETUP
+// "domain/" uses IndexPageConfig
 
 var IndexPageConfig PageConfig = PageConfig{
 	URLRoot: "/",
-	RootDir: "/home/acutewoof/gitbrowse",
-	Title: "Gitbrowse on git.lewoof.xyz",
-	Description: "lewoof on git.lewoof.xyz",
+	RootDir: "/home/",
+	Title: "Users on git.lewoof.xyz",
+	Description: "Gitbrowse on git.lewoof.xyz",
 	Thumbnail: "/static/thumbnail.png",
 	Favicon: "/static/favicon.ico",
 	Styles: []string{
 		"/static/global.css",
 	},
 }
+
+// IRRELEVANT FOR MULTI USER SETUP
 
 // <REPO> will be replaced by the name of the repository
 // this is the config used for all the tabs on the repo page
