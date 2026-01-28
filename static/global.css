@@ -105,6 +105,27 @@ td {
   text-align: left;
 }
 
+td:has(table) {
+	padding: 0;
+}
+
+table.subtable {
+	border: none;
+}
+
+table.subtable td {
+	border-top: none;
+	border-bottom: none;
+}
+
+table.subtable td:first-child {
+	border-left: none;
+}
+
+table.subtable td:last-child {
+	border-right: none;
+}
+
 pre {
   padding: 1rem;
   border-width: 1px;

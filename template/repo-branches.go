@@ -77,7 +77,7 @@ func (p RepoBranchesPage) Body() (body string) {
 		return nil
 	})
 
-	tableHeader := "<tr><th>Branch</th><th>Head</th><th>Head Message</th><th>Head Author</th><th>Head Date</th><th>Actions</th></tr>"
+	tableHeader := "<tr><th>Branch</th><th>Head</th><th>Head Message</th><th>Head Author</th><th>Head Date</th><th></th></tr>"
 
 	table := "<table>" + tableHeader + strings.Join(rows, "") + "</table>"
 
