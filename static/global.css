@@ -42,6 +42,12 @@ a:hover {
 a:visited {
   color: #d3869b;
 }
+a.exception {
+  line-height: 0 !important;
+  text-underline-offset: 0 !important;
+  text-decoration: none !important;
+  background: none !important;
+}
 body {
   color: #ebdbb2;
   overflow-x: hidden;
@@ -124,24 +130,24 @@ td {
 }
 
 td:has(table) {
-	padding: 0;
+  padding: 0;
 }
 
 table.subtable {
-	border: none;
+  border: none;
 }
 
 table.subtable td {
-	border-top: none;
-	border-bottom: none;
+  border-top: none;
+  border-bottom: none;
 }
 
 table.subtable td:first-child {
-	border-left: none;
+  border-left: none;
 }
 
 table.subtable td:last-child {
-	border-right: none;
+  border-right: none;
 }
 
 pre {
@@ -217,5 +223,5 @@ pre {
   }
   header img {
     max-height: 50px;
-  } 
+  }
 }
