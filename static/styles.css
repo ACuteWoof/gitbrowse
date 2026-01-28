@@ -160,10 +160,12 @@ pre {
   text-wrap: auto;
 }
 
-td.filemode, td.filesize, td.lastupdated {
+td.filemode,
+td.filename,
+td.filesize,
+td.lastupdated {
   font-family: monospace;
 }
-
 
 .isbinary {
   font-family: monospace;
