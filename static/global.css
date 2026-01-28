@@ -211,11 +211,11 @@ pre {
 @media (max-width: 768px) {
   table {
     display: block;
-    min-width: 100%;
+    width: 100%;
     overflow-x: scroll;
     border: none;
   }
   header img {
     max-height: 50px;
-  }
+  } 
 }
