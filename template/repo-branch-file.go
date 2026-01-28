@@ -21,25 +21,6 @@ type RepoBranchFilePage struct {
 	Config   *config.PageConfig
 }
 
-func (p RepoBranchFilePage) Head() (head string) {
-	var headBuffer bytes.Buffer
-	t := template.Must(template.New("head").Parse(`
-		<head>
-			<meta charset="utf-8">
-			<meta name="viewport" content="width=device-width, initial-scale=1">
-			<title>{{.Title}}</title>
-			<meta name="description" content="{{.Description}}">
-			{{range .Styles}}
-				<link rel="stylesheet" href="{{.}}">
-			{{end}}
-			<link rel="icon" href="{{.Favicon}}">
-		</head>
-	`))
-	t.Execute(&headBuffer, *p.Config)
-	head = headBuffer.String()
-	return
-}
-
 func (p RepoBranchFilePage) Body() (body string) {
 	var bodyBuffer bytes.Buffer
 
@@ -108,10 +89,6 @@ func (p RepoBranchFilePage) Body() (body string) {
 	return
 }
 
-func (p RepoBranchFilePage) FullPage() string {
-	return "<!DOCTYPE html><html>" + p.Head() + p.Body() + "</html>"
-}
-
 func getHighlightedHTML(filename string, contents string) string {
 	var w bytes.Buffer
 	var lexer chroma.Lexer
@@ -136,4 +113,8 @@ func getHighlightedHTML(filename string, contents string) string {
 	checkErr(err)
 	r := strings.TrimPrefix(strings.TrimSuffix(w.String(), "</code></pre>"), "<pre><code>")
 	return r
+}
+
+func (p RepoBranchFilePage) FullPage() string {
+	return "<!DOCTYPE html><html>" + CommonHead(p.Config) + p.Body() + "</html>"
 }

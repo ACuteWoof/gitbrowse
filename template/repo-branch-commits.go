@@ -20,25 +20,6 @@ type RepoBranchLogPage struct {
 	Config    *config.PageConfig
 }
 
-func (p RepoBranchLogPage) Head() (head string) {
-	var headBuffer bytes.Buffer
-	t := template.Must(template.New("head").Parse(`
-		<head>
-			<meta charset="utf-8">
-			<meta name="viewport" content="width=device-width, initial-scale=1">
-			<title>{{.Title}}</title>
-			<meta name="description" content="{{.Description}}">
-			{{range .Styles}}
-				<link rel="stylesheet" href="{{.}}">
-			{{end}}
-			<link rel="icon" href="{{.Favicon}}">
-		</head>
-	`))
-	t.Execute(&headBuffer, *p.Config)
-	head = headBuffer.String()
-	return
-}
-
 func (p RepoBranchLogPage) Body() (body string) {
 	var bodyBuffer bytes.Buffer
 	bodyBuffer.WriteString(CommonHeader(p.Config, "Commits"))
@@ -99,5 +80,5 @@ func (p RepoBranchLogPage) Body() (body string) {
 }
 
 func (p RepoBranchLogPage) FullPage() string {
-	return "<!DOCTYPE html><html>" + p.Head() + p.Body() + "</html>"
+	return "<!DOCTYPE html><html>" + CommonHead(p.Config) + p.Body() + "</html>"
 }
