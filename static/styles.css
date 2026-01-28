@@ -154,9 +154,10 @@ pre {
   text-wrap: auto;
 }
 
-.filemode {
+td.filemode, td.filesize, td.lastupdated {
   font-family: monospace;
 }
+
 
 .isbinary {
   font-family: monospace;
