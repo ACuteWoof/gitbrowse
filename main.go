@@ -40,14 +40,13 @@ func HandleStatic(w http.ResponseWriter, r *http.Request) {
 }
 
 // func singleUserHandler(mux *http.ServeMux) {
-// 	mux.HandleFunc("GET /", routes.IndexRoute{RepoRoute: "/", ConfigGetter: config.GetIndexConfg}.Handler)
-// 	mux.HandleFunc("GET /{repo}/", routes.RepoReadmeRoute{ConfigGetter: config.GetRepoConfg}.Handler)
-// 	mux.HandleFunc("GET /{repo}/branch/", routes.RepoBranchesRoute{ConfigGetter: config.GetRepoConfg}.Handler)
-// 	mux.HandleFunc("GET /{repo}/branch/{branch}/tree/{filepath...}", routes.RepoBranchTreeRoute{ConfigGetter: config.GetRepoConfg}.Handler)
-// 	mux.HandleFunc("GET /{repo}/branch/{branch}/commit", routes.RepoBranchLogRoute{ConfigGetter: config.GetRepoConfg}.Handler)
-// 	mux.HandleFunc("GET /{repo}/tag/", routes.RepoTagsRoute{ConfigGetter: config.GetRepoConfg}.Handler)
-// 	mux.HandleFunc("GET /{repo}/commit/{hash}", routes.RepoGitShowRoute{ConfigGetter: config.GetRepoConfg}.Handler)
-// 	mux.HandleFunc("GET /{repo}/tag/{hash}", routes.RepoGitShowRoute{ConfigGetter: config.GetRepoConfg}.Handler)
+// 	mux.HandleFunc("/", routes.IndexRoute{RepoRoute: "/", ConfigGetter: config.GetIndexConfg}.Handler)
+// 	mux.HandleFunc("/{repo}/", routes.RepoReadmeRoute{ConfigGetter: config.GetRepoConfg}.Handler)
+// 	mux.HandleFunc("/{repo}/branch/", routes.RepoBranchesRoute{ConfigGetter: config.GetRepoConfg}.Handler)
+// 	mux.HandleFunc("/{repo}/branch/{branch}/tree/{filepath...}", routes.RepoBranchTreeRoute{ConfigGetter: config.GetRepoConfg}.Handler)
+// 	mux.HandleFunc("/{repo}/branch/{branch}/commit", routes.RepoBranchLogRoute{ConfigGetter: config.GetRepoConfg}.Handler)
+// 	mux.HandleFunc("/{repo}/tag/", routes.RepoTagsRoute{ConfigGetter: config.GetRepoConfg}.Handler)
+// 	mux.HandleFunc("/{repo}/show/{hash}", routes.RepoGitShowRoute{ConfigGetter: config.GetRepoConfg}.Handler)
 // }
 
 func getIndexConfigGetterUser(username string) func() config.PageConfig {
@@ -115,11 +114,7 @@ func setupMultiUserHandlers(mux *http.ServeMux) {
 		user := r.PathValue("user")
 		routes.RepoTagsRoute{ConfigGetter: getRepoConfigGetter(user)}.Handler(w, r)
 	})
-	mux.HandleFunc("/{user}/{repo}/commit/{hash}", func(w http.ResponseWriter, r *http.Request) {
-		user := r.PathValue("user")
-		routes.RepoGitShowRoute{ConfigGetter: getRepoConfigGetter(user)}.Handler(w, r)
-	})
-	mux.HandleFunc("/{user}/{repo}/tag/{hash}", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/{user}/{repo}/show/{hash}", func(w http.ResponseWriter, r *http.Request) {
 		user := r.PathValue("user")
 		routes.RepoGitShowRoute{ConfigGetter: getRepoConfigGetter(user)}.Handler(w, r)
 	})

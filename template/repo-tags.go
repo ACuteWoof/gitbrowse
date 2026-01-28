@@ -60,8 +60,8 @@ func (p RepoTagsPage) Body() (body string) {
 		checkErr(err)
 		var rowBuffer bytes.Buffer
 		rowTemplate := template.Must(template.New("row").Parse(`<tr>
-<td class="tag"><a href="{{.URLRoot}}/tag/{{.Tag.Hash.String}}">{{.Tag.Name}}</a></td>
-<td class="taghash"><a href="{{.URLRoot}}/tag/{{.Tag.Hash.String}}">{{.ShortHash}}</a></td>
+<td class="tag"><a href="{{.URLRoot}}/show/{{.Tag.Hash.String}}">{{.Tag.Name}}</a></td>
+<td class="taghash"><a href="{{.URLRoot}}/show/{{.Tag.Hash.String}}">{{.ShortHash}}</a></td>
 <td class="tagmessage">{{.Tag.Message}}</td>
 <td class="tagger">
 	<a href="mailto:{{.Tag.Tagger.Email}}">

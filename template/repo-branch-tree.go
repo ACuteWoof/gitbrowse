@@ -68,7 +68,7 @@ func (p RepoBranchTreePage) Body() (body string) {
 <td class="isbinary" id="{{.Type}}">{{.Type}}</td>
 <td class="filename"><a href="{{.URLRoot}}/branch/{{.Branch}}/tree/{{.FilePath}}{{.Entry.Name}}/">{{.Entry.Name}}</a></td>
 <td class="commitmessage">
-	<a href="{{.URLRoot}}/commit/{{.LastCommit.Hash.String}}">{{.LastCommit.Message}}</a>
+	<a href="{{.URLRoot}}/show/{{.LastCommit.Hash.String}}">{{.LastCommit.Message}}</a>
 </td>
 <td class="author">
 	<a href="mailto:{{.LastCommit.Author.Email}}">
