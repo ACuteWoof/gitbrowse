@@ -3,11 +3,18 @@ package template
 import (
 	"bytes"
 	"html/template"
+	"log"
 
 	"git.lewoof.xyz/clone/gitbrowse/config"
+	"github.com/go-git/go-git/v6"
 )
 
 func CommonHeader(c *config.PageConfig, currentPage string) string {
+
+	r, err := git.PlainOpen(c.RootDir)
+	checkErr(err)
+	headBranch := getHeadBranch(r)
+
 	type Page struct {
 		Path string
 		Name string
@@ -16,8 +23,8 @@ func CommonHeader(c *config.PageConfig, currentPage string) string {
 
 	var pages []Page = []Page{
 		{"/", "Readme", &c.URLRoot},
-		{"/branch/master/tree", "Tree", &c.URLRoot},
-		{"/branch/master/commit", "Commits", &c.URLRoot},
+		{"/branch/" + headBranch + "/tree", "Tree", &c.URLRoot},
+		{"/branch/" + headBranch + "/commit", "Commits", &c.URLRoot},
 		{"/branch", "Branches", &c.URLRoot},
 		{"/tag", "Tags", &c.URLRoot},
 		{"/show/HEAD", "Git Show", &c.URLRoot},
@@ -49,11 +56,26 @@ func CommonHeader(c *config.PageConfig, currentPage string) string {
 	<article>
 	`))
 	type TemplateInfo struct {
-		Pages  []Page
-		Config *config.PageConfig
+		Pages       []Page
+		Config      *config.PageConfig
 		CurrentPage string
 	}
 	var ti TemplateInfo = TemplateInfo{pages, c, currentPage}
 	t.Execute(&headBuffer, ti)
 	return headBuffer.String()
+}
+
+func getHeadBranch(repo *git.Repository) string {
+	head, err := repo.Head()
+	if err != nil {
+		log.Fatal(err)
+		return "master"
+	}
+
+	if head.Name().IsBranch() {
+		branchName := head.Name().Short()
+		return branchName
+	}
+
+	return "master"
 }
