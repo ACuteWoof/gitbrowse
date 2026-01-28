@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"strings"
 
-	"git.lewoof.xyz/clone/gitbrowse/config"
+	"git.lewoof.xyz/gitbrowse/config"
 	"github.com/alecthomas/chroma/v2"
 	"github.com/alecthomas/chroma/v2/formatters/html"
 	"github.com/alecthomas/chroma/v2/lexers"
