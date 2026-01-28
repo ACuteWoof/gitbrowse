@@ -7,9 +7,9 @@ const SizePrecision = 2
 
 var IndexPageConfig PageConfig = PageConfig{
 	URLRoot: "/",
-	RootDir: "/home/",
-	Title: "Users on git.lewoof.xyz",
-	Description: "Gitbrowse on git.lewoof.xyz",
+	RootDir: "/home/acutewoof/gitbrowse",
+	Title: "Repositories on git.lewoof.xyz",
+	Description: "lewoof on git.lewoof.xyz",
 	Thumbnail: "/static/thumbnail.png",
 	Favicon: "/static/favicon.ico",
 	Styles: []string{
