@@ -48,7 +48,9 @@ func CommonHeader(c *config.PageConfig, currentPage string) string {
 	t := template.Must(template.New("head").Parse(`
 	<body class="{{.CurrentPage}}">
 	<header>
-		<img src="{{.Config.Thumbnail}}" alt="Thumbnail">
+		<a href="https://lewoof.xyz">
+			<img src="{{.Config.Thumbnail}}" alt="Thumbnail">
+		</a>	
 		<div>
 		<h1>{{.Config.Title}}</h1>
 		{{if .Config.CloneURL}}
