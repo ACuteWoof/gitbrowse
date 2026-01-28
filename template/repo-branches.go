@@ -3,8 +3,9 @@ package template
 import (
 	"bytes"
 	"html/template"
-	"strings"
 	"os/exec"
+	"strconv"
+	"strings"
 
 	"git.lewoof.xyz/clone/gitbrowse/config"
 	"github.com/go-git/go-git/v6"
@@ -87,7 +88,7 @@ func (p RepoBranchesPage) Body() (body string) {
 		`))
 
 
-	descTemplate.Execute(&bodyBuffer, "Showing branches for repository")
+	descTemplate.Execute(&bodyBuffer, "Showing " + strconv.Itoa(len(rows)) + " branches for repository")
 
 	body = bodyBuffer.String() +
 		table + "</article></main></body>"

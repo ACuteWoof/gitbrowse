@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"html/template"
 	"os/exec"
+	"strconv"
 	"strings"
 
 	"git.lewoof.xyz/clone/gitbrowse/config"
@@ -87,7 +88,7 @@ func (p RepoTagsPage) Body() (body string) {
 		</p>
 		`))
 
-	descTemplate.Execute(&bodyBuffer, "Showing tags for repository")
+	descTemplate.Execute(&bodyBuffer, "Showing " + strconv.Itoa(len(rows)) + " tags for repository")
 
 	body = bodyBuffer.String() +
 		table + "</article></main></body>"
