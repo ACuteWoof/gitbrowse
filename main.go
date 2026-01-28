@@ -114,6 +114,10 @@ func setupMultiUserHandlers(mux *http.ServeMux) {
 		user := r.PathValue("user")
 		routes.RepoTagsRoute{ConfigGetter: getRepoConfigGetter(user)}.Handler(w, r)
 	})
+	mux.HandleFunc("/{user}/{repo}/tag/{name}/{fileName}", func(w http.ResponseWriter, r *http.Request) {
+		user := r.PathValue("user")
+		routes.TagDownloadRoute{ConfigGetter: getRepoConfigGetter(user)}.Handler(w, r)
+	})
 	mux.HandleFunc("/{user}/{repo}/show/{hash}", func(w http.ResponseWriter, r *http.Request) {
 		user := r.PathValue("user")
 		routes.RepoGitShowRoute{ConfigGetter: getRepoConfigGetter(user)}.Handler(w, r)

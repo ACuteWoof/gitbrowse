@@ -69,6 +69,16 @@ func (p RepoTagsPage) Body() (body string) {
 	</a>
 </td>
 <td class="date">{{.Tag.Tagger.When.UTC.Format "2006-01-02 15:04:05"}} UTC</td>
+<td class="download">
+<table class="subtable">
+<tr>
+<td>	<a href="{{.URLRoot}}/tag/{{.Tag.Name}}/{{.Tag.Name}}.zip">zip</a></td>
+<td>	<a href="{{.URLRoot}}/tag/{{.Tag.Name}}/{{.Tag.Name}}.tar.gz">tar.gz</a></td>
+<td>	<a href="{{.URLRoot}}/tag/{{.Tag.Name}}/{{.Tag.Name}}.tar.gz">tar</a></td>
+<td>	<a href="{{.URLRoot}}/tag/{{.Tag.Name}}/{{.Tag.Name}}.tgz">tgz</a></td>
+	</tr>
+	</table>
+</td>
 </tr>`))
 		cmd := exec.Command("git", "rev-parse", "--short", t.Hash.String())
 		cmd.Dir = p.Config.RootDir
@@ -78,7 +88,7 @@ func (p RepoTagsPage) Body() (body string) {
 		return nil
 	})
 
-	tableHeader := "<tr><th>Name</th><th>Hash</th><th>Message</th><th>Tagger</th><th>Date</th></tr>"
+	tableHeader := "<tr><th>Name</th><th>Hash</th><th>Message</th><th>Tagger</th><th>Date</th><th>Download</th></tr>"
 
 	table := "<table>" + tableHeader + strings.Join(rows, "") + "</table>"
 
@@ -88,7 +98,7 @@ func (p RepoTagsPage) Body() (body string) {
 		</p>
 		`))
 
-	descTemplate.Execute(&bodyBuffer, "Showing " + strconv.Itoa(len(rows)) + " tags for repository")
+	descTemplate.Execute(&bodyBuffer, "Showing "+strconv.Itoa(len(rows))+" tags for repository")
 
 	body = bodyBuffer.String() +
 		table + "</article></main></body>"
