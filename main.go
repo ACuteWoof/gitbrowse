@@ -1,8 +1,8 @@
 package main
 
 import (
-	"git.lewoof.xyz/clone/gitbrowse/config"
-	"git.lewoof.xyz/clone/gitbrowse/routes"
+	"git.lewoof.xyz/gitbrowse/config"
+	"git.lewoof.xyz/gitbrowse/routes"
 	"net/http"
 	"strings"
 	// "os"
@@ -71,7 +71,7 @@ func getRepoConfigGetter(username string) func(repo string) config.PageConfig {
 		var RepoPageConfig config.PageConfig = config.PageConfig{
 			URLRoot:     "/" + username + "/" + repo,         // url path, don't bother changing
 			RootDir:     "/home/" + username + "/gitbrowse/" + repo, // directory in the unix filesystem where each repo is stored
-			CloneURL:    "https://git.lewoof.xyz/clone/" + username + "/" + repo, // url used to clone the repo
+			CloneURL:    "https://git.lewoof.xyz/" + username + "/" + repo, // url used to clone the repo
 			Title:       username + "/" + repo,
 			Description: username + "/" + repo + " on git.lewoof.xyz",
 			Thumbnail:   "/static/thumbnail.png",

@@ -1,9 +1,9 @@
-module git.lewoof.xyz/clone/gitbrowse/routes
+module git.lewoof.xyz/gitbrowse/routes
 
-require git.lewoof.xyz/clone/gitbrowse/config v1.0.0
+require git.lewoof.xyz/gitbrowse/config v1.0.0
 
 require (
-	git.lewoof.xyz/clone/gitbrowse/template v1.0.0
+	git.lewoof.xyz/gitbrowse/template v1.0.0
 	github.com/go-git/go-git/v6 v6.0.0-20260123133532-f99a98e81ce9
 	github.com/gomarkdown/markdown v0.0.0-20250810172220-2e2c11897d1a
 )
@@ -28,8 +28,8 @@ require (
 	golang.org/x/sys v0.40.0 // indirect
 )
 
-replace git.lewoof.xyz/clone/gitbrowse/config => ../config
+replace git.lewoof.xyz/gitbrowse/config => ../config
 
-replace git.lewoof.xyz/clone/gitbrowse/template => ../template
+replace git.lewoof.xyz/gitbrowse/template => ../template
 
 go 1.25.6

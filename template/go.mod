@@ -1,7 +1,7 @@
-module git.lewoof.xyz/clone/gitbrowse/template
+module git.lewoof.xyz/gitbrowse/template
 
 require (
-	git.lewoof.xyz/clone/gitbrowse/config v1.0.0
+	git.lewoof.xyz/gitbrowse/config v1.0.0
 	github.com/alecthomas/chroma/v2 v2.23.1
 	github.com/go-git/go-git/v6 v6.0.0-20260123133532-f99a98e81ce9
 )
@@ -25,6 +25,6 @@ require (
 	golang.org/x/sys v0.40.0 // indirect
 )
 
-replace git.lewoof.xyz/clone/gitbrowse/config => ../config
+replace git.lewoof.xyz/gitbrowse/config => ../config
 
 go 1.25.6

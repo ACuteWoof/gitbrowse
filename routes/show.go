@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"net/http"
 
-	"git.lewoof.xyz/clone/gitbrowse/config"
-	"git.lewoof.xyz/clone/gitbrowse/template"
+	"git.lewoof.xyz/gitbrowse/config"
+	"git.lewoof.xyz/gitbrowse/template"
 )
 
 type RepoGitShowRoute struct {
