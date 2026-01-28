@@ -8,8 +8,6 @@ import (
 	// "os"
 )
 
-const defaultUser = "acutewoof"
-
 func main() {
 	startHttpServer()
 }
@@ -46,6 +44,7 @@ func HandleStatic(w http.ResponseWriter, r *http.Request) {
 // 	mux.HandleFunc("/{repo}/branch/{branch}/tree/{filepath...}", routes.RepoBranchTreeRoute{ConfigGetter: config.GetRepoConfg}.Handler)
 // 	mux.HandleFunc("/{repo}/branch/{branch}/commit", routes.RepoBranchLogRoute{ConfigGetter: config.GetRepoConfg}.Handler)
 // 	mux.HandleFunc("/{repo}/tag/", routes.RepoTagsRoute{ConfigGetter: config.GetRepoConfg}.Handler)
+// 	mux.HandleFunc("/{repo}/tag/{name}/{fileName}", routes.TagDownloadRoute{ConfigGetter: config.GetRepoConfg}.Handler)
 // 	mux.HandleFunc("/{repo}/show/{hash}", routes.RepoGitShowRoute{ConfigGetter: config.GetRepoConfg}.Handler)
 // }
 
@@ -86,7 +85,7 @@ func getRepoConfigGetter(username string) func(repo string) config.PageConfig {
 
 func setupMultiUserHandlers(mux *http.ServeMux) {
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		http.Redirect(w, r, "/"+defaultUser, http.StatusMovedPermanently)
+		routes.IndexRoute{RepoRoute: "/", ConfigGetter: config.GetIndexConfg}.Handler(w, r)
 	})
 
 	mux.HandleFunc("/{user}", func(w http.ResponseWriter, r *http.Request) {
