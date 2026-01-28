@@ -59,6 +59,26 @@ table.code td.linenumber a:hover {
   color: #282828;
 }
 
+div.info {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}
+
+table.info td.content {
+	padding: 15px;
+}
+
+table.info td.txt {
+	padding: 15px;
+	font-family: monospace;
+	white-space: pre-wrap;
+}
+
+table.info-nav {
+	width: fit-content;
+}
+
 @media (max-width: 768px) {
   table.code {
     border: 1px solid #504945;

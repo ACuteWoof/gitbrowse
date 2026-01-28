@@ -37,7 +37,7 @@ func CommonHeader(c *config.PageConfig, currentPage string) string {
 	}
 
 	var pages []Page = []Page{
-		{"/", "Readme", &c.URLRoot},
+		{"/", "Info", &c.URLRoot},
 		{"/branch/" + headBranch + "/tree", "Tree", &c.URLRoot},
 		{"/branch/" + headBranch + "/commit", "Commits", &c.URLRoot},
 		{"/branch", "Branches", &c.URLRoot},
