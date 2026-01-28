@@ -150,6 +150,8 @@ pre {
   border-style: solid;
   overflow-x: scroll;
   font-family: monospace;
+  word-wrap: break-word;
+  text-wrap: auto;
 }
 
 .filemode {
