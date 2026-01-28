@@ -48,8 +48,7 @@ func (route RepoReadmeRoute) Handler(w http.ResponseWriter, req *http.Request) {
 	tree, err := commit.Tree()
 	errCheck(err)
 
-	// file, err := tree.File("README.md")
-	possibleReadmes := []string{"README.md", "README.markdown", "README.txt", "README", "readme", "README", "LICENSE", "LICENSE.md", "LICENSE.txt", "license", "license.txt", "license.md"}
+	possibleReadmes := []string{"README.md", "README.txt", "README", "readme.txt", "readme.md", "readme", "NOTICE", "NOTICE.txt", "NOTICE.md", "notice", "notice.txt", "notice.md", "LICENSE", "LICENSE.md", "LICENSE.txt", "license", "license.txt", "license.md"}
 	var readme *object.File
 	for _, possibleReadme := range possibleReadmes {
 		file, err := tree.File(possibleReadme)
