@@ -72,7 +72,7 @@ func (p RepoBranchTreePage) Body() (body string) {
 	{{.LastCommit.Author.Name}}
 	</a>
 </td>
-<td class="lastupdated">{{.LastCommit.Author.When.UTC.Format "2006-01-02 15:04:05"}} UTC</td>
+<td class="lastupdated">{{.LastCommit.Author.When.UTC.Format "2006-01-02 15:04"}} UTC</td>
 <td class="filesize">{{.FileSize}}</td>
 <td class="filemode">{{.File.Mode.ToOSFileMode}}</td>
 </tr>`))
