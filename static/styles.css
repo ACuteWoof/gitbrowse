@@ -124,24 +124,24 @@ td {
 }
 
 td:has(table) {
-	padding: 0;
+  padding: 0;
 }
 
 table.subtable {
-	border: none;
+  border: none;
 }
 
 table.subtable td {
-	border-top: none;
-	border-bottom: none;
+  border-top: none;
+  border-bottom: none;
 }
 
 table.subtable td:first-child {
-	border-left: none;
+  border-left: none;
 }
 
 table.subtable td:last-child {
-	border-right: none;
+  border-right: none;
 }
 
 pre {
@@ -154,10 +154,12 @@ pre {
   text-wrap: auto;
 }
 
-td.filemode, td.filesize, td.lastupdated {
+td.filemode,
+td.filename,
+td.filesize,
+td.lastupdated {
   font-family: monospace;
 }
-
 
 .isbinary {
   font-family: monospace;
@@ -218,5 +220,5 @@ td.filemode, td.filesize, td.lastupdated {
   }
   header img {
     max-height: 50px;
-  } 
+  }
 }
