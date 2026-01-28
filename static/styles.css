@@ -156,8 +156,7 @@ pre {
 
 td.filemode,
 td.filename,
-td.filesize,
-td.lastupdated {
+td.filesize {
   font-family: monospace;
 }
 

@@ -72,7 +72,7 @@ func (p RepoBranchTreePage) Body() (body string) {
 	{{.LastCommit.Author.Name}}
 	</a>
 </td>
-<td class="lastupdated">{{.LastCommit.Author.When.UTC.Format "2006-01-02 15:04"}} UTC</td>
+<td class="lastupdated">{{.LastCommit.Author.When.UTC.Format "15:04, Jan 2 2006"}}</td>
 <td class="filesize">{{.FileSize}}</td>
 </tr>`))
 			fileRef, err := p.Repo.Reference(plumbing.NewBranchReferenceName(p.Branch), true)
@@ -124,7 +124,7 @@ func (p RepoBranchTreePage) Body() (body string) {
 		rows = append(rows, rowBuffer.String())
 	}
 
-	tableHeader := "<tr><th>Type</th><th>File</th><th>Last Commit</th><th>Author</th><th>Commit Date</th><th>Size</th></tr>"
+	tableHeader := "<tr><th>Type</th><th>File</th><th>Last Commit</th><th>Author</th><th>Commit Date (UTC)</th><th>Size</th></tr>"
 
 	table := "<table>" + tableHeader + strings.Join(rows, "") + "</table>"
 
