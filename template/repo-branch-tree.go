@@ -74,7 +74,6 @@ func (p RepoBranchTreePage) Body() (body string) {
 </td>
 <td class="lastupdated">{{.LastCommit.Author.When.UTC.Format "2006-01-02 15:04"}} UTC</td>
 <td class="filesize">{{.FileSize}}</td>
-<td class="filemode">{{.File.Mode.ToOSFileMode}}</td>
 </tr>`))
 			fileRef, err := p.Repo.Reference(plumbing.NewBranchReferenceName(p.Branch), true)
 			checkErr(err)
@@ -115,17 +114,17 @@ func (p RepoBranchTreePage) Body() (body string) {
 			if formattedFilePath == "/" {
 				formattedFilePath = ""
 			}
-			rowTemplate := template.Must(template.New("row").Parse(`<tr><td class="isbinary" id="{{.Type}}">{{.Type}}</td><td class="tree-dir filename"><a href="{{.URLRoot}}/branch/{{.Branch}}/tree/{{.FilePath}}{{.Entry.Name}}/">{{.Entry.Name}}</a></td><td></td><td></td><td></td><td></td><td class="filemode">{{.Entry.Mode.ToOSFileMode}}</td></tr>`))
+			rowTemplate := template.Must(template.New("row").Parse(`<tr><td class="isbinary" id="{{.Type}}">{{.Type}}</td><td class="tree-dir filename"><a href="{{.URLRoot}}/branch/{{.Branch}}/tree/{{.FilePath}}{{.Entry.Name}}/">{{.Entry.Name}}</a></td></tr>`))
 			if entry.Mode == filemode.Submodule {
 				fileType = "sub"
-				rowTemplate = template.Must(template.New("row").Parse(`<tr><td class="isbinary" id="{{.Type}}">{{.Type}}</td><td class="filename">{{.Entry.Name}}</td><td></td><td></td><td></td><td></td><td class="filemode">{{.Entry.Mode.ToOSFileMode}}</td></tr>`))
+				rowTemplate = template.Must(template.New("row").Parse(`<tr><td class="isbinary" id="{{.Type}}">{{.Type}}</td><td class="filename">{{.Entry.Name}}</td></tr>`))
 			}
 			rowTemplate.Execute(&rowBuffer, Row{&p.Config.URLRoot, &p.Branch, &formattedFilePath, &entry, nil, "", nil, fileType})
 		}
 		rows = append(rows, rowBuffer.String())
 	}
 
-	tableHeader := "<tr><th>Type</th><th>File</th><th>Last Commit</th><th>Author</th><th>Commit Date</th><th>Size</th><th>Mode</th></tr>"
+	tableHeader := "<tr><th>Type</th><th>File</th><th>Last Commit</th><th>Author</th><th>Commit Date</th><th>Size</th></tr>"
 
 	table := "<table>" + tableHeader + strings.Join(rows, "") + "</table>"
 
