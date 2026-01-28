@@ -27,6 +27,11 @@ func startHttpServer() {
 			return
 		}
 
+		if r.URL.Path == "/favicon.ico" {
+			http.ServeFile(w, r, "./static/favicon.ico")
+			return
+		}
+
 		mux.ServeHTTP(w, r)
 	})
 
