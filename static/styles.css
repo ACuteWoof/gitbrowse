@@ -19,7 +19,7 @@
 /* I'm HORRIBLE at plain css, so you really should write your own */
 
 @import url("/static/git-show.css");
-@import url("/static/viewer.css");
+@import url("/static/code.css");
 @import url("/static/custom.css");
 
 * {
