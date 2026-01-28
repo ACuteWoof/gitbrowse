@@ -59,7 +59,7 @@ func (p RepoBranchesPage) Body() (body string) {
 		var rowBuffer bytes.Buffer
 		rowTemplate := template.Must(template.New("row").Parse(`<tr>
 <td class="branchname"><a href="{{.URLRoot}}/branch/{{.Branch}}/tree">{{.Branch}}</a></td>
-<td class="commithash"><a href="{{.URLRoot}}/commit/{{.Commit.Hash.String}}">{{.ShortHash}}</a></td>
+<td class="commithash"><a href="{{.URLRoot}}/show/{{.Commit.Hash.String}}">{{.ShortHash}}</a></td>
 <td class="commitmessage">{{.Commit.Message}}</td>
 <td class="author">
 	<a href="mailto:{{.Commit.Author.Email}}">
