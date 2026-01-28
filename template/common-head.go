@@ -17,6 +17,8 @@ func CommonHead(c *config.PageConfig) string {
 			{{range .Styles}}
 				<link rel="stylesheet" href="{{.}}">
 			{{end}}
+			<meta name="theme-color" content="#d8a657">
+			<meta property="og:image" content="{{.Thumbnail}}" />
 			<link rel="icon" href="{{.Favicon}}">
 		</head>
 	`))
