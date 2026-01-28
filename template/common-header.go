@@ -24,20 +24,23 @@ func CommonHeader(c *config.PageConfig, currentPage string) string {
 	}
 	var headBuffer bytes.Buffer
 	t := template.Must(template.New("head").Parse(`
-	<body class="{{$currentPage}}">
+	<body class="{{.CurrentPage}}">
 	<header>
 		<img src="{{.Config.Thumbnail}}" alt="Thumbnail">
 		<div>
 		<h1>{{.Config.Title}}</h1>
-		<p>Clone URL: <code>{{.Config.CloneURL}}</code></p>
+		{{if .Config.CloneURL}}
+			<p>Clone URL: <code>{{.Config.CloneURL}}</code></p>
+		{{end}}
 		<table>
 			<tr>
 			{{range .Pages}}
-				{{if eq .Name $currentPage}}
+				{{if eq .Name $.CurrentPage}}
 					<td><em><a href="{{.Root}}{{.Path}}">{{.Name}}</a></em></td>
 				{{else}}
-					<td><a href="{{.Root}}{{Path}}">{{.Name}}</a></td>
+					<td><a href="{{.Root}}{{.Path}}">{{.Name}}</a></td>
 				{{end}}
+			{{end}}
 			</tr>
 		</table>
 		</div>
@@ -48,8 +51,9 @@ func CommonHeader(c *config.PageConfig, currentPage string) string {
 	type TemplateInfo struct {
 		Pages  []Page
 		Config *config.PageConfig
+		CurrentPage string
 	}
-	var ti TemplateInfo = TemplateInfo{pages, c}
+	var ti TemplateInfo = TemplateInfo{pages, c, currentPage}
 	t.Execute(&headBuffer, ti)
 	return headBuffer.String()
 }
