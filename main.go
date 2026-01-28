@@ -78,7 +78,7 @@ func getIndexConfigGetterUser(username string) func() config.PageConfig {
 		Thumbnail:   "/static/thumbnail.png",
 		Favicon:     "/static/favicon.ico",
 		Styles: []string{
-			"/static/global.css",
+			"/static/styles.css",
 		},
 	}
 	return func() config.PageConfig {
@@ -97,7 +97,7 @@ func getRepoConfigGetter(username string) func(repo string) config.PageConfig {
 			Thumbnail:   "/static/thumbnail.png",
 			Favicon:     "/static/favicon.ico",
 			Styles: []string{
-				"/static/global.css",
+				"/static/styles.css",
 			},
 		}
 		return RepoPageConfig
