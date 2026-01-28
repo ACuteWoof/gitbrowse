@@ -10,7 +10,6 @@ import (
 )
 
 func CommonHeader(c *config.PageConfig, currentPage string) string {
-
 	r, err := git.PlainOpen(c.RootDir)
 	checkErr(err)
 	headBranch := getHeadBranch(r)
