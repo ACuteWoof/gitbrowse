@@ -40,7 +40,7 @@ The configuration is part of the binary insofar as it is not a stylesheet in
 when the master branch is updated and compile from there. I use
 [`entr`](https://github.com/eradman/entr) for this.
 
-### The `config.PageConfig` struct
+### The `config.PageConfig` Struct
 
 A quick look at `main.go` reveals two configuration functions that return
 functions. This is also a result of one of those temporary changes I mentioned
