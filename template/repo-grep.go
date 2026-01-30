@@ -128,7 +128,7 @@ func (p RepoGrepPage) FullPage() string {
 func (p RepoGrepPage) SearchBar(bodyBuffer *bytes.Buffer) {
 	bodyBuffer.WriteString("<div class=\"search\">")
 	bodyBuffer.WriteString("<form class=\"search-form\" action=\"" + p.Config.URLRoot + "/grep\" method=\"get\">")
-	bodyBuffer.WriteString("<input type=\"text\" name=\"q\" placeholder=\"Search\" value=\"" + p.Regex + "\">")
+	bodyBuffer.WriteString("<input type=\"text\" name=\"q\" placeholder=\"Regex\" value=\"" + p.Regex + "\">")
 	if p.Branch != "" {
 		bodyBuffer.WriteString("<input type=\"hidden\" name=\"branch\" value=\"" + p.Branch + "\">")
 	}
