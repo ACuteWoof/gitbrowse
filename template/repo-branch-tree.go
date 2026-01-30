@@ -114,10 +114,10 @@ func (p RepoBranchTreePage) Body() (body string) {
 			if formattedFilePath == "/" {
 				formattedFilePath = ""
 			}
-			rowTemplate := template.Must(template.New("row").Parse(`<tr><td class="isbinary" id="{{.Type}}">{{.Type}}</td><td class="tree-dir filename"><a href="{{.URLRoot}}/branch/{{.Branch}}/tree/{{.FilePath}}{{.Entry.Name}}/">{{.Entry.Name}}</a></td></tr>`))
+			rowTemplate := template.Must(template.New("row").Parse(`<tr><td class="isbinary" id="{{.Type}}">{{.Type}}</td><td class="tree-dir filename"><a href="{{.URLRoot}}/branch/{{.Branch}}/tree/{{.FilePath}}{{.Entry.Name}}/">{{.Entry.Name}}</a></td><td></td><td></td><td></td><td></td></tr>`))
 			if entry.Mode == filemode.Submodule {
 				fileType = "sub"
-				rowTemplate = template.Must(template.New("row").Parse(`<tr><td class="isbinary" id="{{.Type}}">{{.Type}}</td><td class="filename">{{.Entry.Name}}</td></tr>`))
+				rowTemplate = template.Must(template.New("row").Parse(`<tr><td class="isbinary" id="{{.Type}}">{{.Type}}</td><td class="filename">{{.Entry.Name}}</td><td></td><td></td><td></td><td></td></tr>`))
 			}
 			rowTemplate.Execute(&rowBuffer, Row{&p.Config.URLRoot, &p.Branch, &formattedFilePath, &entry, nil, "", nil, fileType})
 		}
