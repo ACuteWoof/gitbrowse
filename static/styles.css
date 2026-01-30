@@ -26,7 +26,7 @@
   border-color: #504945;
 }
 a {
-  color: #458588;
+  color: #689d6a;
   line-height: 1;
   text-decoration-line: underline;
   text-underline-offset: 2px;
@@ -216,7 +216,7 @@ td.mintd {
 }
 
 ::selection {
-  background-color: #ebdbb2;
+  background-color: #689d6a;
   color: #1d2021;
 }
 
