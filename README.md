@@ -22,7 +22,7 @@ may change in the future.
 
 Browsing [this](https://git.lewoof.xyz/gitbrowse) site should give you a good
 idea of what the site looks like, as I stick to the defaults other than having
-added remote fonts.
+added remote fonts and treating `/` as `/{user}/`.
 
 ## Configuration
 
