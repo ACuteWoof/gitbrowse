@@ -7,18 +7,18 @@ may change in the future.
 
 ## Routes
 
-| Route                                               | Description                                                                                                      |
-| --------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
-| `/`                                                 | shows a list of users                                                                                            |
-| `/{user}`                                           | shows a list of repositories for the user                                                                        |
-| `/{user}/{repo}/`                                   | shows the readme and licenses for a repo                                                                         |
-| `/{user}/{repo}/branch/`                            | shows the list of branches for a repo                                                                            |
+| Route                                               | Description                                                                                                     |
+| --------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| `/`                                                 | shows a list of users                                                                                           |
+| `/{user}`                                           | shows a list of repositories for the user                                                                       |
+| `/{user}/{repo}/`                                   | shows the readme and licenses for a repo                                                                        |
+| `/{user}/{repo}/branch/`                            | shows the list of branches for a repo                                                                           |
 | `/{user}/{repo}/branch/{branch}/tree/{filepath...}` | shows the tree (or file if filepath points to a file and not a directory) on the given path on the given branch |
-| `/{user}/{repo}/branch/{branch}/commit`             | shows the commit log for the given branch                                                                        |
-| `/{user}/{repo}/tag/`                               | shows the list of annotated tags for a repo                                                                      |
-| `/{user}/{repo}/tag/{name}/{fileName}`              | downloads a tag with the given file name, you will usually be led to this by a link                              |
-| `/{user}/{repo}/show/{hash}`                        | shows the output of `git show` for the given hash                                                                |
-| `/{user}/{repo}/grep?q={regex}`                     | greps the repo with the regex and shows the lines that match                                                     |
+| `/{user}/{repo}/branch/{branch}/commit`             | shows the commit log for the given branch                                                                       |
+| `/{user}/{repo}/tag/`                               | shows the list of annotated tags for a repo                                                                     |
+| `/{user}/{repo}/tag/{name}/{fileName}`              | downloads a tag with the given file name, you will usually be led to this by a link                             |
+| `/{user}/{repo}/show/{hash}`                        | shows the output of `git show` for the given hash                                                               |
+| `/{user}/{repo}/grep?q={regex}`                     | greps the repo with the regex and shows the lines that match                                                    |
 
 Browsing [this](https://git.lewoof.xyz/gitbrowse) site should give you a good
 idea of what the site looks like, as I stick to the defaults other than having
@@ -62,16 +62,16 @@ The fields you really should change are `RootDir`, `Title`, and `Description`.
 
 Now to what the fields of `config.PageConfig` represent:
 
-| Field         | Explanation                                                                                                                                                                          |
-| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `URLRoot`     | The URL for the the user page (for index config) or the repo page (for repo config). E.g, the `URLRoot` for `/{user}/{repo}/branch/{branch}/tree/{filepath...}` is `/{user}/{repo}`. |
-| `RootDir`     | The directory in the unix filesystem where either the user's repositories are immediately found (for index config) or the repo's directory is immediately found (for repo config).   |
-| `CloneURL`    | Not used in the user page. The URL used to clone the repo. This must be handled by some other service as Gitbrowse does not bother to; I use nginx with the git http server.         |
-| `Title`       | The title of the page, used for `<head>` and for the `<header>`                                                                                                                      |
-| `Description` | The description of the page, used for `<head>`                                                                                                                                       |
-| `Thumbnail`   | The URL to the thumbnail image, used for `<head>` and the image in `<header>`, this can be an https URL if you have an API that provides your users with profile pictures            |
-| `Favicon`     | The URL to the favicon                                                                                                                                                               |
-| `Styles`      | A list of URLs to stylesheets                                                                                                                                                        |
+| Field         | Explanation                                                                                                                                                                         |
+| ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `URLRoot`     | the URL for the the user page (for index config) or the repo page (for repo config). E.g, the `URLRoot` for `/{user}/{repo}/branch/{branch}/tree/{filepath...}` is `/{user}/{repo}` |
+| `RootDir`     | the directory in the unix filesystem where either the user's repositories are immediately found (for index config) or the repo's directory is immediately found (for repo config)   |
+| `CloneURL`    | not used in the user page. The URL used to clone the repo. This must be handled by some other service as Gitbrowse does not bother to; I use nginx with the git http server         |
+| `Title`       | the title of the page, used for `<head>` and for the `<header>`                                                                                                                     |
+| `Description` | the description of the page, used for `<head>`                                                                                                                                      |
+| `Thumbnail`   | the URL to the thumbnail image, used for `<head>` and the image in `<header>`, this can be an https URL if you have an API that provides your users with profile pictures           |
+| `Favicon`     | the URL to the favicon                                                                                                                                                              |
+| `Styles`      | a list of URLs to stylesheets                                                                                                                                                       |
 
 The header is generated by a function in `template/common-header.go`, and the head tag in `template/common-head.go`.
 
@@ -136,11 +136,11 @@ the Free Software Foundation, either version 3 of the License, or
 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
+along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 ---
 
