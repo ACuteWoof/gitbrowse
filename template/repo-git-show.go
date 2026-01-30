@@ -28,7 +28,7 @@ type RepoGitShowPage struct {
 
 func (p RepoGitShowPage) Body() (body string) {
 	var bodyBuffer bytes.Buffer
-	bodyBuffer.WriteString(CommonHeader(p.Config, "Git Show"))
+	bodyBuffer.WriteString(CommonHeader(p.Config, "Show"))
 	gitShow := GitShow(p.Config.RootDir, p.Commit)
 	body = bodyBuffer.String() + gitShow + "</article></main></body>"
 	return
