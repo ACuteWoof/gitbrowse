@@ -14,7 +14,6 @@ import (
 
 type RepoGrepPage struct {
 	Regex  string
-	Hash   string
 	Branch string
 	Config *config.PageConfig
 }
@@ -36,12 +35,6 @@ func (p RepoGrepPage) Body() string {
 		return bodyBuffer.String()
 	}
 
-	hash, err := repo.ResolveRevision(plumbing.Revision(p.Hash))
-	if err != nil && p.Hash != "" {
-		bodyBuffer.WriteString("<div class=\"error\">Invalid hash</div>")
-		return bodyBuffer.String()
-	}
-
 	regex, err := regexp.Compile(p.Regex)
 	if err != nil {
 		bodyBuffer.WriteString("<div class=\"error\">Invalid regex in query</div>")
@@ -51,10 +44,8 @@ func (p RepoGrepPage) Body() string {
 	grepOptions := git.GrepOptions{
 		Patterns: []*regexp.Regexp{regex},
 	}
-	if p.Hash != "" {
-		grepOptions.CommitHash = *hash
-	} else if p.Branch != "" {
-		grepOptions.ReferenceName = plumbing.ReferenceName(p.Branch)
+	if p.Branch != "" {
+		grepOptions.ReferenceName = plumbing.NewBranchReferenceName(p.Branch)
 	}
 
 	results, err := repo.Grep(&grepOptions)
@@ -122,6 +113,9 @@ func (p RepoGrepPage) SearchBar(bodyBuffer *bytes.Buffer) {
 	bodyBuffer.WriteString("<div class=\"search\">")
 	bodyBuffer.WriteString("<form class=\"search-form\" action=\"" + p.Config.URLRoot + "/grep\" method=\"get\">")
 	bodyBuffer.WriteString("<input type=\"text\" name=\"q\" placeholder=\"Search\" value=\"" + p.Regex + "\">")
+	if p.Branch != "" {
+		bodyBuffer.WriteString("<input type=\"hidden\" name=\"branch\" value=\"" + p.Branch + "\">")
+	}
 	bodyBuffer.WriteString("<button type=\"submit\">Search</button>")
 	bodyBuffer.WriteString("</form>")
 	bodyBuffer.WriteString("</div>")

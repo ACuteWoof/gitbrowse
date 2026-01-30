@@ -31,9 +31,8 @@ type RepoGrepRoute struct {
 func (route RepoGrepRoute) Handler(w http.ResponseWriter, req *http.Request) {
 	repo := req.PathValue("repo")
 	branch := req.URL.Query().Get("branch")
-	hash := req.URL.Query().Get("hash")
 	query := req.URL.Query().Get("q")
 	config := route.ConfigGetter(repo)
 
-	fmt.Fprint(w, template.RepoGrepPage{Branch: branch, Hash: hash, Config: &config, Regex: query}.FullPage())
+	fmt.Fprint(w, template.RepoGrepPage{Branch: branch, Config: &config, Regex: query}.FullPage())
 }

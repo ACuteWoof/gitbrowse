@@ -64,7 +64,10 @@ func (p RepoBranchesPage) Body() (body string) {
 	</a>
 </td>
 <td class="date">{{.Commit.Author.When.UTC.Format "15:04, Jan 2 2006"}}</td>
-<td class="actions"><a href="{{.URLRoot}}/branch/{{.Branch}}/commit">See Commits</a></td>
+<td class="actions">
+<a href="{{.URLRoot}}/branch/{{.Branch}}/commit">See commits</a>
+<a href="{{.URLRoot}}/grep?branch={{.Branch}}">Search</a>
+</td>
 </tr>`))
 		cmd := exec.Command("git", "rev-parse", "--short", c.Hash.String())
 		cmd.Dir = p.Config.RootDir
