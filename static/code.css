@@ -59,24 +59,34 @@ table.code td.linenumber a:hover {
   color: #282828;
 }
 
+table.code tr:hover {
+  background-color: #282828;
+}
+
+table ::selection {
+  color: #ebdbb2;
+  background-color: #504945;
+  text-shadow: none;
+}
+
 div.info {
-	display: flex;
-	flex-direction: column;
-	gap: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 table.info td.content {
-	padding: 1rem;
+  padding: 1rem;
 }
 
 table.info td.txt {
-	padding: 1rem;
-	font-family: monospace;
-	white-space: pre-wrap;
+  padding: 1rem;
+  font-family: monospace;
+  white-space: pre-wrap;
 }
 
 table.info-nav {
-	width: fit-content;
+  width: fit-content;
 }
 
 @media (max-width: 768px) {

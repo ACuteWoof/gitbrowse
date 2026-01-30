@@ -215,6 +215,11 @@ td.mintd {
   width: 1px;
 }
 
+::selection {
+  background-color: #ebdbb2;
+  color: #1d2021;
+}
+
 @media (min-width: 768px) {
   main {
     margin-top: 2rem;
