@@ -62,7 +62,7 @@ func (p RepoBranchLogPage) Body() (body string) {
 	{{.Commit.Author.Name}}
 	</a>
 </td>
-<td class="date">{{.Commit.Author.When.UTC.Format "2006-01-02 15:04:05"}} UTC</td>
+<td class="date">{{.Commit.Author.When.UTC.Format "15:04, Jan 2 2006"}}</td>
 </tr>`))
 		checkErr(err)
 
@@ -76,7 +76,7 @@ func (p RepoBranchLogPage) Body() (body string) {
 		return nil
 	})
 
-	tableHeader := "<tr><th>Commit</th><th>Message</th><th>Author</th><th>Date</th></tr>"
+	tableHeader := "<tr><th>Commit</th><th>Message</th><th>Author</th><th>Date (UTC)</th></tr>"
 
 	table := "<table>" +tableHeader + strings.Join(rows, "") + "</table>"
 

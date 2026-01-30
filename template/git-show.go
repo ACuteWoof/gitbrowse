@@ -29,7 +29,7 @@ func GitShow(repo string, commit string) string {
 	if !validateCommitOrTag(repo, commit) {
 		return "<div class=\"error\">Invalid hash</div>"
 	}
-	cmd := exec.Command("git", "show", commit)
+	cmd := exec.Command("git", "show", commit, "--date=format:%a %b %d %H:%M:%S %Y +0000")
 	cmd.Dir = repo
 	out, err := cmd.Output()
 	if err != nil {

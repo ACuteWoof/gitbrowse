@@ -42,7 +42,7 @@ table.code td {
 
 table.code td.linenumber {
   user-select: none;
-  padding-right: 15px;
+  padding-right: 1rem;
   padding-left: 5px;
   vertical-align: top;
   text-align: right;
@@ -66,11 +66,11 @@ div.info {
 }
 
 table.info td.content {
-	padding: 15px;
+	padding: 1rem;
 }
 
 table.info td.txt {
-	padding: 15px;
+	padding: 1rem;
 	font-family: monospace;
 	white-space: pre-wrap;
 }
