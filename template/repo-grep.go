@@ -70,8 +70,7 @@ func (p RepoGrepPage) Body() string {
 		<td></td>
 		{{end}}
 		<td><a href="{{.Config.URLRoot}}/branch/{{.Branch}}/tree/{{.FileName}}#{{.LineNumber}}">{{.LineNumber}}</a></td>
-		<td>{{.Content}}</td>
-		</tr>
+		<td>
 		`))
 
 		type TemplateResult struct {
@@ -90,7 +89,6 @@ func (p RepoGrepPage) Body() string {
 			Branch: defaultBranch,
 			FileName: result.FileName,
 			LineNumber: result.LineNumber,
-			Content: result.Content,
 			Config: p.Config,
 			NeedFileName: result.FileName != lastFileName,
 		}
@@ -98,6 +96,8 @@ func (p RepoGrepPage) Body() string {
 			r.Branch = p.Branch
 		}
 		t.Execute(&bodyBuffer, r)
+		bodyBuffer.WriteString(getHighlightedHTML(result.FileName, result.Content))
+		bodyBuffer.WriteString("</td></tr>")
 		lastFileName = result.FileName
 	}
 	bodyBuffer.WriteString("</table>")
