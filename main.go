@@ -142,4 +142,9 @@ func setupMultiUserHandlers(mux *http.ServeMux) {
 		user := r.PathValue("user")
 		routes.RepoGitShowRoute{ConfigGetter: getRepoConfigGetter(user)}.Handler(w, r)
 	})
+	mux.HandleFunc("/{user}/{repo}/grep/", func(w http.ResponseWriter, r *http.Request) {
+		user := r.PathValue("user")
+		routes.RepoGrepRoute{ConfigGetter: getRepoConfigGetter(user)}.Handler(w, r)
+	})
+	
 }

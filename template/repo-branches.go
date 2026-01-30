@@ -63,7 +63,7 @@ func (p RepoBranchesPage) Body() (body string) {
 	{{.Commit.Author.Name}}
 	</a>
 </td>
-<td class="date">{{.Commit.Author.When.UTC.Format "2006-01-02 15:04:05"}} UTC</td>
+<td class="date">{{.Commit.Author.When.UTC.Format "15:04, Jan 2 2006"}}</td>
 <td class="actions"><a href="{{.URLRoot}}/branch/{{.Branch}}/commit">See Commits</a></td>
 </tr>`))
 		cmd := exec.Command("git", "rev-parse", "--short", c.Hash.String())
@@ -74,7 +74,7 @@ func (p RepoBranchesPage) Body() (body string) {
 		return nil
 	})
 
-	tableHeader := "<tr><th>Branch</th><th>Head</th><th>Head Message</th><th>Head Author</th><th>Head Date</th><th></th></tr>"
+	tableHeader := "<tr><th>Branch</th><th>Head</th><th>Head Message</th><th>Head Author</th><th>Head Date (UTC)</th><th></th></tr>"
 
 	table := "<table>" + tableHeader + strings.Join(rows, "") + "</table>"
 

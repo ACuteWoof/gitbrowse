@@ -154,12 +154,6 @@ pre {
   text-wrap: auto;
 }
 
-td.filemode,
-td.filename,
-td.filesize {
-  font-family: monospace;
-}
-
 .isbinary {
   font-family: monospace;
 }
@@ -178,6 +172,43 @@ td.filesize {
 
 .tree-dir a {
   color: #8ec07c;
+}
+
+div.search {
+  margin-bottom: 1rem;
+}
+
+.search-form {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 5px;
+  margin-top: 0.5rem;
+  width: 100%;
+}
+
+input,
+button {
+  background-color: #282828;
+  border: 1px solid #504945;
+  color: #ebdbb2;
+  padding: 0.25rem 0.5rem;
+}
+
+button {
+  cursor: pointer;
+}
+
+.search-form input[type="text"] {
+  flex-grow: 1;
+}
+
+.search-results td {
+	font-family: monospace;
+}
+
+td.mintd {
+  width: 1px;
 }
 
 @media (min-width: 768px) {
@@ -219,5 +250,14 @@ td.filesize {
   }
   header img {
     max-height: 50px;
+  }
+  table.nav tr {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  header * {
+	  word-break: break-all;
   }
 }

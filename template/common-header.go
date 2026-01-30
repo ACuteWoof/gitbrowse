@@ -42,7 +42,8 @@ func CommonHeader(c *config.PageConfig, currentPage string) string {
 		{"/branch/" + headBranch + "/commit", "Commits", &c.URLRoot},
 		{"/branch", "Branches", &c.URLRoot},
 		{"/tag", "Tags", &c.URLRoot},
-		{"/show/HEAD", "Git Show", &c.URLRoot},
+		{"/show/HEAD", "Show", &c.URLRoot},
+		{"/grep/", "Search", &c.URLRoot},
 	}
 	var headBuffer bytes.Buffer
 	t := template.Must(template.New("head").Parse(`
@@ -54,7 +55,7 @@ func CommonHeader(c *config.PageConfig, currentPage string) string {
 		{{if .Config.CloneURL}}
 			<p>Clone URL: <code>{{.Config.CloneURL}}</code></p>
 		{{end}}
-		<table>
+		<table class="nav">
 			<tr>
 			{{range .Pages}}
 				{{if eq .Name $.CurrentPage}}

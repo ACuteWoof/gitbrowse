@@ -65,7 +65,7 @@ func (p RepoTagsPage) Body() (body string) {
 	{{.Tag.Tagger.Name}}
 	</a>
 </td>
-<td class="date">{{.Tag.Tagger.When.UTC.Format "2006-01-02 15:04:05"}} UTC</td>
+<td class="date">{{.Tag.Tagger.When.UTC.Format "15:04 Jan 2 2006"}}</td>
 <td class="download">
 <table class="subtable">
 <tr>
