@@ -13,7 +13,7 @@ may change in the future.
 | `/{user}`                                           | shows a list of repositories for the user                                                                        |
 | `/{user}/{repo}/`                                   | shows the readme and licenses for a repo                                                                         |
 | `/{user}/{repo}/branch/`                            | shows the list of branches for a repo                                                                            |
-| `/{user}/{repo}/branch/{branch}/tree/{filepath...}` | shows the tree (or file if filepath represents a file and not a directory) on the given path on the given branch |
+| `/{user}/{repo}/branch/{branch}/tree/{filepath...}` | shows the tree (or file if filepath points to a file and not a directory) on the given path on the given branch |
 | `/{user}/{repo}/branch/{branch}/commit`             | shows the commit log for the given branch                                                                        |
 | `/{user}/{repo}/tag/`                               | shows the list of annotated tags for a repo                                                                      |
 | `/{user}/{repo}/tag/{name}/{fileName}`              | downloads a tag with the given file name, you will usually be led to this by a link                              |
@@ -27,7 +27,7 @@ added remote fonts.
 ## Configuration
 
 The configuration files are mainly in the `main.go` and the `config/config.go`
-file. (The project was originally written with the configuration being entirely
+files. (The project was originally written with the configuration being entirely
 dependent on `config/config.go`, but some temporary changes in `main.go` turned
 out to be not temporary --- this may of course change at any time in the
 future).
