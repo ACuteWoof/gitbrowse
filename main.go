@@ -67,5 +67,5 @@ func singleUserHandler(mux *http.ServeMux) {
 	mux.HandleFunc("/{repo}/tag/", routes.RepoTagsRoute{ConfigGetter: config.GetRepoConfg}.Handler)
 	mux.HandleFunc("/{repo}/tag/{name}/{fileName}", routes.TagDownloadRoute{ConfigGetter: config.GetRepoConfg}.Handler)
 	mux.HandleFunc("/{repo}/show/{hash}", routes.RepoGitShowRoute{ConfigGetter: config.GetRepoConfg}.Handler)
-	mux.HandleFunc("/{repo}/search", routes.RepoGrepRoute{ConfigGetter: config.GetRepoConfg}.Handler)
+	mux.HandleFunc("/{repo}/grep", routes.RepoGrepRoute{ConfigGetter: config.GetRepoConfg}.Handler)
 }
