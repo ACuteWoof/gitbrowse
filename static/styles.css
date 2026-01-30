@@ -210,7 +210,11 @@ button {
 }
 
 .search-results td {
-	font-family: monospace;
+  font-family: monospace;
+}
+
+td.search-content {
+  break-word: break-all;
 }
 
 td.mintd {
@@ -270,6 +274,6 @@ td.mintd {
     flex-wrap: wrap;
   }
   header * {
-	  word-break: break-all;
+    word-break: break-all;
   }
 }
