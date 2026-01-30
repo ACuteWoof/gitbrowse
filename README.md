@@ -42,6 +42,19 @@ when the master branch is updated and compile from there. I use
 
 ### The `config.PageConfig` Struct
 
+```go
+type PageConfig struct {
+	RootDir string;
+	URLRoot string;
+	Title string;
+	Description string;
+	Thumbnail string;
+	Favicon string;
+	Styles []string;
+	CloneURL string;
+}
+```
+
 A quick look at `main.go` reveals two configuration functions that return
 functions. This is also a result of one of those temporary changes I mentioned
 earlier. Both are meant for obtaining variables of the same type, `config.PageConfig`.
