@@ -37,7 +37,7 @@ func (p RepoInfoPage) Body() (body string) {
 	var bodyBuffer bytes.Buffer
 	bodyBuffer.WriteString(CommonHeader(p.Config, "Info"))
 	bodyBuffer.WriteString("<div class=\"info\">")
-	bodyBuffer.WriteString("<table class=\"info-nav\"><tbody><tr>")
+	bodyBuffer.WriteString("<table class=\"nav\"><tbody><tr>")
 	for _, infoFile := range p.InfoFiles {
 		bodyBuffer.WriteString("<td class=\"txt\"><a href=\"#" + infoFile.Name + "\">" + infoFile.Name + "</a></td>")
 	}

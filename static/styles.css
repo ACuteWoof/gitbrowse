@@ -251,6 +251,12 @@ td.mintd {
   header img {
     max-height: 50px;
   }
+  table.breadcrumbs tr {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+  }
   table.nav tr {
     display: flex;
     flex-direction: row;
