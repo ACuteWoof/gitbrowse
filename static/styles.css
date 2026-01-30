@@ -148,7 +148,6 @@ pre {
   padding: 1rem;
   border-width: 1px;
   border-style: solid;
-  overflow-x: scroll;
   font-family: monospace;
   word-wrap: break-word;
   text-wrap: auto;
