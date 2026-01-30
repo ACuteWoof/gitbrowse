@@ -126,6 +126,7 @@ See [https://www.lewoof.xyz#pgp](https://www.lewoof.xyz#pgp) for my PGP key.
 ## License
 
 Gitbrowse: a simple web server for git.
+
 Copyright (C) 2026 Vithushan
 
 This program is free software: you can redistribute it and/or modify
