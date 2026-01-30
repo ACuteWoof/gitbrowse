@@ -35,9 +35,9 @@ a {
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 a:hover {
-  background-color: #eddbb2;
+  background-color: #689d6a;
   color: #282828 !important;
-  text-decoration-color: #ebdbb2;
+  text-decoration-color: #689d6a;
 }
 a:visited {
   color: #d3869b;
