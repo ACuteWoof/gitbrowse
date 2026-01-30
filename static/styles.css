@@ -214,7 +214,7 @@ button {
 }
 
 td.search-content {
-  break-word: break-all;
+  word-break: break-all;
 }
 
 td.mintd {
