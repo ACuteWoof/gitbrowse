@@ -86,7 +86,7 @@ func (p RepoGrepPage) Body() string {
 		<td></td>
 		{{end}}
 		<td><a href="{{.Config.URLRoot}}/branch/{{.Branch}}/tree/{{.FileName}}#{{.LineNumber}}">{{.LineNumber}}</a></td>
-		<td>
+		<td class="search-content">
 		`))
 
 		type TemplateResult struct {
