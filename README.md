@@ -47,7 +47,7 @@ functions. This is also a result of one of those temporary changes I mentioned
 earlier. Both are meant for obtaining variables of the same type, `config.PageConfig`.
 
 `getIndexConfigGetterUser` deals with the configuration for the page that lists
-the repositories for a given user (`/{user}/...`). Here we have access to one variable,
+the repositories for a given user (`/{user}`). Here we have access to one variable,
 `username`.
 
 `getRepoConfigGetter` deals with the configuration for all the pages that deal
