@@ -1,16 +1,16 @@
 // Gitbrowse: a simple web server for git.
 // Copyright (C) 2026 Vithushan
-// 
+//
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-// 
+//
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
@@ -30,8 +30,8 @@ import (
 )
 
 type RepoBranchesPage struct {
-	Repo      *git.Repository
-	Config    *config.PageConfig
+	Repo   *git.Repository
+	Config *config.PageConfig
 }
 
 func (p RepoBranchesPage) Body() (body string) {
@@ -42,9 +42,9 @@ func (p RepoBranchesPage) Body() (body string) {
 	checkErr(err)
 
 	type Row struct {
-		URLRoot *string
-		Branch  string
-		Commit  *object.Commit
+		URLRoot   *string
+		Branch    string
+		Commit    *object.Commit
 		ShortHash string
 	}
 
@@ -69,7 +69,7 @@ func (p RepoBranchesPage) Body() (body string) {
 <a href="{{.URLRoot}}/grep?branch={{.Branch}}">Search</a>
 </td>
 </tr>`))
-		cmd := exec.Command("git", "rev-parse", "--short", c.Hash.String())
+		cmd := exec.Command("git", "-c", "safe.directory="+p.Config.RootDir, "rev-parse", "--short", c.Hash.String())
 		cmd.Dir = p.Config.RootDir
 		shortHash, err := cmd.Output()
 		if err != nil {
@@ -90,8 +90,7 @@ func (p RepoBranchesPage) Body() (body string) {
 		</p>
 		`))
 
-
-	descTemplate.Execute(&bodyBuffer, "Showing " + strconv.Itoa(len(rows)) + " branches for repository")
+	descTemplate.Execute(&bodyBuffer, "Showing "+strconv.Itoa(len(rows))+" branches for repository")
 
 	body = bodyBuffer.String() +
 		table + "</article></main></body>"
