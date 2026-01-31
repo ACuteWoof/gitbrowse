@@ -62,7 +62,7 @@ func (route TagDownloadRoute) Handler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	cmd := exec.Command("git", "archive", "--format="+strings.TrimPrefix(fileType, "."), tag.Name().Short())
+	cmd := exec.Command("git", "-c", "safe.directory="+repoPath, "archive", "--format="+strings.TrimPrefix(fileType, "."), tag.Name().Short())
 	fmt.Println(tag.Name().Short())
 	fmt.Println(cmd.String())
 	cmd.Dir = repoPath
