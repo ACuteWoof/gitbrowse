@@ -72,6 +72,9 @@ func (p RepoBranchesPage) Body() (body string) {
 		cmd := exec.Command("git", "rev-parse", "--short", c.Hash.String())
 		cmd.Dir = p.Config.RootDir
 		shortHash, err := cmd.Output()
+		if err != nil {
+			c.Hash.Write(shortHash)
+		}
 		rowTemplate.Execute(&rowBuffer, Row{&p.Config.URLRoot, r.Name().Short(), c, string(shortHash)})
 		rows = append(rows, rowBuffer.String())
 		return nil
