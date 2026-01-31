@@ -1,16 +1,16 @@
 // Gitbrowse: a simple web server for git.
 // Copyright (C) 2026 Vithushan
-// 
+//
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-// 
+//
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
@@ -42,19 +42,16 @@ func (p RepoTagsPage) Body() (body string) {
 
 	type Row struct {
 		URLRoot   *string
-		Branch    string
-		Tag       *object.Tag
+		Name      string
+		Tag       object.Tag
 		ShortHash string
+		Commit    *object.Commit
+		FullHash  string
 	}
 
 	rows := []string{}
 
 	tags.ForEach(func(r *plumbing.Reference) error {
-		t, err := p.Repo.TagObject(r.Hash())
-		if err == plumbing.ErrObjectNotFound {
-			return nil
-		}
-		checkErr(err)
 		var rowBuffer bytes.Buffer
 		rowTemplate := template.Must(template.New("row").Parse(`<tr>
 <td class="tag"><a href="{{.URLRoot}}/show/{{.Tag.Hash.String}}">{{.Tag.Name}}</a></td>
@@ -77,18 +74,48 @@ func (p RepoTagsPage) Body() (body string) {
 	</table>
 </td>
 </tr>`))
-		cmd := exec.Command("git", "-c", "safe.directory="+p.Config.RootDir, "rev-parse", "--short", t.Hash.String())
+		var t object.Tag
+		var cmd *exec.Cmd
+		var commit *object.Commit
+		tp, err := p.Repo.TagObject(r.Hash())
+		if err != nil {
+			commit, err = p.Repo.CommitObject(r.Hash())
+			rowTemplate = template.Must(template.New("row").Parse(`<tr>
+<td class="tag"><a href="{{.URLRoot}}/show/{{.Name}}">{{.Name}}</a></td>
+<td class="taghash"><a href="{{.URLRoot}}/show/{{.FullHash}}">{{.ShortHash}}</a></td>
+<td class="commitmessage">{{.Commit.Message}}</td>
+<td class="author">
+	<a href="mailto:{{.Commit.Author.Email}}">
+	{{.Commit.Author.Name}}
+	</a>
+</td>
+<td class="date">{{.Commit.Author.When.UTC.Format "15:04 Jan 2 2006"}}</td>
+<td class="download">
+<table class="subtable">
+<tr>
+<td>	<a href="{{.URLRoot}}/tag/{{.Name}}/{{.Name}}.zip">zip</a></td>
+<td>	<a href="{{.URLRoot}}/tag/{{.Name}}/{{.Name}}.tar.gz">tar.gz</a></td>
+<td>	<a href="{{.URLRoot}}/tag/{{.Name}}/{{.Name}}.tar.gz">tar</a></td>
+<td>	<a href="{{.URLRoot}}/tag/{{.Name}}/{{.Name}}.tgz">tgz</a></td>
+	</tr>
+	</table>
+</td>
+</tr>`))
+		} else {
+			t = *tp
+		}
+		cmd = exec.Command("git", "-c", "safe.directory="+p.Config.RootDir, "rev-parse", "--short", r.Hash().String())
 		cmd.Dir = p.Config.RootDir
 		shortHash, err := cmd.Output()
 		if err != nil {
 			t.Hash.Write(shortHash)
 		}
-		rowTemplate.Execute(&rowBuffer, Row{&p.Config.URLRoot, r.Name().Short(), t, string(shortHash)})
+		rowTemplate.Execute(&rowBuffer, Row{&p.Config.URLRoot, r.Name().Short(), t, string(shortHash), commit, r.Hash().String()})
 		rows = append(rows, rowBuffer.String())
 		return nil
 	})
 
-	tableHeader := "<tr><th>Name</th><th>Hash</th><th>Message</th><th>Tagger</th><th>Date</th><th>Download</th></tr>"
+	tableHeader := "<tr><th>Name</th><th>Hash</th><th>Message</th><th>Tagger/Author</th><th>Date</th><th>Download</th></tr>"
 
 	table := "<table>" + tableHeader + strings.Join(rows, "") + "</table>"
 
