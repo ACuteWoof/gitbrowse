@@ -66,7 +66,7 @@ func (p RepoBranchLogPage) Body() (body string) {
 </tr>`))
 		checkErr(err)
 
-		cmd := exec.Command("git", "rev-parse", "--short", c.Hash.String())
+		cmd := exec.Command("git", "-c", "safe.directory="+p.Config.RootDir, "rev-parse", "--short", c.Hash.String())
 		cmd.Dir = p.Config.RootDir
 		shortHash, err := cmd.Output()
 		if err != nil {

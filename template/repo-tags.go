@@ -77,7 +77,7 @@ func (p RepoTagsPage) Body() (body string) {
 	</table>
 </td>
 </tr>`))
-		cmd := exec.Command("git", "rev-parse", "--short", t.Hash.String())
+		cmd := exec.Command("git", "-c", "safe.directory="+p.Config.RootDir, "rev-parse", "--short", t.Hash.String())
 		cmd.Dir = p.Config.RootDir
 		shortHash, err := cmd.Output()
 		if err != nil {
