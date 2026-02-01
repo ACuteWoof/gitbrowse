@@ -214,6 +214,12 @@ td.mintd {
   width: 1px;
 }
 
+table video {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
 ::selection {
   background-color: #689d6a;
   color: #1d2021;
