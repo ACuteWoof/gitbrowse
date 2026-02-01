@@ -23,7 +23,7 @@ const SizePrecision = 2
 
 var IndexPageConfig PageConfig = PageConfig{
 	URLRoot: "/",
-	RootDir: "/home/",
+	RootDir: "/home/acutewoof/gitbrowse",
 	Title: "Users on git.lewoof.xyz",
 	Description: "Gitbrowse on git.lewoof.xyz",
 	Thumbnail: "/static/thumbnail.png",

@@ -72,7 +72,7 @@ func HandleStatic(w http.ResponseWriter, r *http.Request) {
 func getIndexConfigGetterUser(username string) func() config.PageConfig {
 	var IndexPageConfig config.PageConfig = config.PageConfig{
 		URLRoot:     "/" + username,
-		RootDir:     "/home/" + username + "/gitbrowse", // directory in the unix filesystem, ls here is the list of repos displayed
+		RootDir:     "/home/acutewoof/gitbrowse/" + username,
 		Title:       username,
 		Description: username + " on git.lewoof.xyz",
 		Thumbnail:   "/static/thumbnail.png",
@@ -90,7 +90,7 @@ func getRepoConfigGetter(username string) func(repo string) config.PageConfig {
 	return func(repo string) config.PageConfig {
 		var RepoPageConfig config.PageConfig = config.PageConfig{
 			URLRoot:     "/" + username + "/" + repo,         // url path, don't bother changing
-			RootDir:     "/home/" + username + "/gitbrowse/" + repo, // directory in the unix filesystem where each repo is stored
+			RootDir:     "/home/acutewoof/gitbrowse/" + username + "/" + repo, // directory in the unix filesystem where each repo is stored
 			CloneURL:    "https://git.lewoof.xyz/" + username + "/" + repo, // url used to clone the repo
 			Title:       username + "/" + repo,
 			Description: username + "/" + repo + " on git.lewoof.xyz",
