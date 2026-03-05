@@ -153,8 +153,14 @@ func (p RepoBranchTreePage) Body() (body string) {
 		{"", "/", &p.Config.URLRoot, &p.Branch},
 	}
 	if p.FilePath != "" {
+		cumulativeName := ""
 		for _, entry := range strings.Split(p.FilePath, "/") {
-			defaultCrumbs = append(defaultCrumbs, Crumb{entry, entry, &p.Config.URLRoot, &p.Branch})
+			if cumulativeName == "" {
+				cumulativeName = entry
+			} else {
+				cumulativeName += "/" + entry
+			}
+			defaultCrumbs = append(defaultCrumbs, Crumb{cumulativeName, entry, &p.Config.URLRoot, &p.Branch})
 		}
 	}
 	breadcrumbTemplate.Execute(&breadcrumbsBuffer, Breadcrumb{defaultCrumbs})
