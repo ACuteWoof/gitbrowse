@@ -21,8 +21,7 @@ may change in the future.
 | `/{user}/{repo}/grep?q={regex}`                     | greps the repo with the regex and shows the lines that match                                                    |
 
 Browsing [this](https://git.lewoof.xyz/gitbrowse) site should give you a good
-idea of what the site looks like, as I stick to the defaults other than having
-added remote fonts and treating `/` as `/{user}/`. The [instance on
+idea of what the site looks like. The [instance on
 buni.party](https://git.buni.party) is also a great example of what
 gitbrowse is like.
 
@@ -81,7 +80,7 @@ Now to what the fields of `config.PageConfig` represent:
 | ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `URLRoot`     | the URL for the the user page (for index config) or the repo page (for repo config); e.g, the `URLRoot` for `/{user}/{repo}/branch/{branch}/tree/{filepath...}` is `/{user}/{repo}` |
 | `RootDir`     | the directory in the unix filesystem where either the user's repositories are immediately found (for index config) or the repo's directory is immediately found (for repo config)   |
-| `CloneURL`    | not used in the user page; the URL used to clone the repo; his must be handled by some other service as Gitbrowse does not bother to; I use nginx with the git http server         |
+| `CloneURL`    | not used in the user page; the URL used to clone the repo; his must be handled by some other service as Gitbrowse does not bother to; I use nginx with the git http server          |
 | `Title`       | the title of the page, used for `<head>` and for the `<header>`                                                                                                                     |
 | `Description` | the description of the page, used for `<head>`                                                                                                                                      |
 | `Thumbnail`   | the URL to the thumbnail image, used for `<head>` and the image in `<header>`, this can be an https URL if you have an API that provides your users with profile pictures           |
