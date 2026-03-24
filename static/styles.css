@@ -78,7 +78,7 @@ main {
 }
 
 code {
-  font-family: "B612 Mono";
+  font-family: "Mono";
   color: #ebdbb2;
   background-color: #282828;
   padding: 0.2rem;
@@ -149,13 +149,13 @@ pre {
   padding: 1rem;
   border-width: 1px;
   border-style: solid;
-  font-family: "B612 Mono";
+  font-family: "Mono";
   word-wrap: break-word;
   text-wrap: auto;
 }
 
 .isbinary {
-  font-family: "B612 Mono";
+  font-family: "Mono";
 }
 
 .isbinary#sub {
@@ -204,7 +204,7 @@ button {
 }
 
 .search-results td {
-  font-family: "B612 Mono";
+  font-family: "Mono";
 }
 
 td.search-content {
