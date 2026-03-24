@@ -22,7 +22,7 @@ table.code {
 }
 
 table.code * {
-  font-family: "Monaspace";
+  font-family: "B612 Mono";
 }
 
 table.code tr {
@@ -81,7 +81,7 @@ table.info td.content {
 
 table.info td.txt {
   padding: 1rem;
-  font-family: "Monaspace";
+  font-family: "B612 Mono";
   white-space: pre-wrap;
 }
 

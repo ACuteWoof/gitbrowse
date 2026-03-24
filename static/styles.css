@@ -148,13 +148,13 @@ pre {
   padding: 1rem;
   border-width: 1px;
   border-style: solid;
-  font-family: "Monaspace";
+  font-family: "B612 Mono";
   word-wrap: break-word;
   text-wrap: auto;
 }
 
 .isbinary {
-  font-family: "Monaspace";
+  font-family: "B612 Mono";
 }
 
 .isbinary#sub {
@@ -203,7 +203,7 @@ button {
 }
 
 .search-results td {
-  font-family: "Monaspace";
+  font-family: "B612 Mono";
 }
 
 td.search-content {
