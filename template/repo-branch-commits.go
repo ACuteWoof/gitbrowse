@@ -68,13 +68,7 @@ func (p RepoBranchLogPage) Body() (body string) {
 <title>{{.Commit.Message}}</title>
 <guid>{{.ShortHash}}</guid>
 <description><![CDATA[
-<p>{{.ShortHash}}</p>
-<p>{{.Commit.Message}}</p>
-<hr>
-<p>
-{{.Commit.Author.Name}}
-({{.Commit.Author.Email}})
-<p>
+<hr>GITSHOW<hr>
 ]]></description>
 <author>
 	{{.Commit.Author.Name}}
@@ -107,7 +101,7 @@ func (p RepoBranchLogPage) Body() (body string) {
 		var rowString string
 		if p.Format == "rss" {
 			rowString = strings.Replace(rowBuffer.String(), ">&lt;![CDATA[", "><![CDATA[", 1)
-			rowString = strings.Replace(rowString, "<hr>", "<pre>" + GitShow(p.Config.RootDir, c.Hash.String()) + "</pre>", 1)
+			rowString = strings.Replace(rowString, "<hr>GITSHOW<hr>", "<pre>" + GitShow(p.Config.RootDir, c.Hash.String()) + "</pre>", 1)
 		} else {
 			rowString = rowBuffer.String()
 		}
