@@ -73,7 +73,7 @@ func (p RepoBranchLogPage) Body() (body string) {
 	{{.Commit.Author.Name}}
 	({{.Commit.Author.Email}})
 </author>
-<pubDate>{{.Commit.Author.When.UTC.Format "Mon, 14 Feb 2011 00:09:04 GMT"}}</pubDate>
+<pubDate>{{.Commit.Author.When.UTC.Format "Mon, 02 Jan 2006 15:04:05 GMT"}}</pubDate>
 </item>`))
 		} else {
 			rowTemplate = template.Must(template.New("row").Parse(`<tr>
