@@ -66,6 +66,7 @@ func (p RepoBranchLogPage) Body() (body string) {
 			rowTemplate = template.Must(template.New("row").Parse(`<item>
 <link>{{.URLRoot}}/show/{{.Commit.Hash.String}}</link>
 <title>{{.Commit.Message}}</title>
+<guid>{{.ShortHash}}</guid>
 <description><![CDATA[
 <p>{{.ShortHash}}</p>
 <p>{{.Commit.Message}}</p>
