@@ -128,7 +128,7 @@ func (p RepoBranchLogPage) Body() (body string) {
 		</p>
 		`))
 
-	descTemplate.Execute(&bodyBuffer, "Showing "+strconv.Itoa(len(rows))+"(gitbrowse max 100) commits for branch "+p.Branch)
+	descTemplate.Execute(&bodyBuffer, "Showing "+strconv.Itoa(len(rows))+" (gitbrowse max 100) commits for branch "+p.Branch)
 
 	body = bodyBuffer.String() +
 		table + "</article></main></body>"
