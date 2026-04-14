@@ -68,6 +68,7 @@ func (p RepoBranchLogPage) Body() (body string) {
 <title>{{.Commit.Message}}</title>
 <guid>{{.ShortHash}}</guid>
 <description><![CDATA[
+<link rel="stylesheet" href="/static/git-show.css">
 <hr>GITSHOW<hr>
 ]]></description>
 <author>
