@@ -1,16 +1,16 @@
 // Gitbrowse: a simple web server for git.
 // Copyright (C) 2026 Vithushan
-// 
+//
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-// 
+//
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
@@ -30,6 +30,7 @@ import (
 )
 
 type RepoBranchLogPage struct {
+	Format    string
 	Repo      *git.Repository
 	Branch    string
 	BranchRef *plumbing.Reference
@@ -44,9 +45,9 @@ func (p RepoBranchLogPage) Body() (body string) {
 	checkErr(err)
 
 	type Row struct {
-		URLRoot *string
-		Branch  *string
-		Commit  *object.Commit
+		URLRoot   *string
+		Branch    *string
+		Commit    *object.Commit
 		ShortHash string
 	}
 
@@ -54,7 +55,28 @@ func (p RepoBranchLogPage) Body() (body string) {
 
 	commits.ForEach(func(c *object.Commit) error {
 		var rowBuffer bytes.Buffer
-		rowTemplate := template.Must(template.New("row").Parse(`<tr>
+		var rowTemplate *template.Template
+		if p.Format == "rss" {
+			rowTemplate = template.Must(template.New("row").Parse(`<item>
+<link>{{.URLRoot}}/show/{{.Commit.Hash.String}}</link>
+<title>{{.Commit.Message}}</title>
+<description><![CDATA[
+<p>{{.ShortHash}}</p>
+<p>{{.Commit.Message}}</p>
+<hr>
+<p>
+{{.Commit.Author.Name}}
+({{.Commit.Author.Email}})
+<p>
+]]></description>
+<author>
+	{{.Commit.Author.Name}}
+	({{.Commit.Author.Email}})
+</author>
+<pubDate>{{.Commit.Author.When.UTC.Format "Mon, 14 Feb 2011 00:09:04 GMT"}}</pubDate>
+</item>`))
+		} else {
+			rowTemplate = template.Must(template.New("row").Parse(`<tr>
 <td class="commithash"><a href="{{.URLRoot}}/show/{{.Commit.Hash.String}}">{{.ShortHash}}</a></td>
 <td class="commitmessage">{{.Commit.Message}}</td>
 <td class="author">
@@ -64,7 +86,7 @@ func (p RepoBranchLogPage) Body() (body string) {
 </td>
 <td class="date">{{.Commit.Author.When.UTC.Format "15:04, Jan 2 2006"}}</td>
 </tr>`))
-		checkErr(err)
+		}
 
 		cmd := exec.Command("git", "-c", "safe.directory="+p.Config.RootDir, "rev-parse", "--short", c.Hash.String())
 		cmd.Dir = p.Config.RootDir
@@ -75,13 +97,23 @@ func (p RepoBranchLogPage) Body() (body string) {
 		checkErr(err)
 
 		rowTemplate.Execute(&rowBuffer, Row{&p.Config.URLRoot, &p.Branch, c, string(shortHash)})
-		rows = append(rows, rowBuffer.String())
+		rows = append(rows, strings.Replace(rowBuffer.String(), ">&lt;![CDATA[", "><![CDATA[", 1))
 		return nil
 	})
 
-	tableHeader := "<tr><th>Commit</th><th>Message</th><th>Author</th><th>Date (UTC)</th></tr>"
+	var tableHeader, table string
+	if p.Format == "rss" {
+		tableHeader = "<title>" + p.Config.Title + "</title><link>" + p.Config.URLRoot + "</link><description>Commits on branch " + p.Branch + "</description><language>en-us</language>"
+	} else {
+		tableHeader = "<tr><th>Commit</th><th>Message</th><th>Author</th><th>Date (UTC)</th></tr>"
+	}
 
-	table := "<table>" +tableHeader + strings.Join(rows, "") + "</table>"
+	if p.Format == "rss" {
+		table = "<channel>" + tableHeader + strings.Join(rows, "") + "</channel>"
+	        return table
+	} else {
+		table = "<table>" + tableHeader + strings.Join(rows, "") + "</table>"
+	}
 
 	descTemplate := template.Must(template.New("desc").Parse(`
 		<p class="description">
@@ -89,8 +121,7 @@ func (p RepoBranchLogPage) Body() (body string) {
 		</p>
 		`))
 
-
-	descTemplate.Execute(&bodyBuffer, "Showing " + strconv.Itoa(len(rows)) + " commits for branch "+p.Branch)
+	descTemplate.Execute(&bodyBuffer, "Showing "+strconv.Itoa(len(rows))+" commits for branch "+p.Branch)
 
 	body = bodyBuffer.String() +
 		table + "</article></main></body>"
@@ -99,5 +130,12 @@ func (p RepoBranchLogPage) Body() (body string) {
 }
 
 func (p RepoBranchLogPage) FullPage() string {
+	if p.Format == "rss" {
+		return `<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" 
+     xmlns:atom="http://www.w3.org/2005/Atom"
+     xmlns:content="http://purl.org/rss/1.0/modules/content/">
+` + p.Body()
+	}
 	return "<!DOCTYPE html><html>" + CommonHead(p.Config) + p.Body() + "</html>"
 }
