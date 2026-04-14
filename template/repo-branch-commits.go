@@ -97,7 +97,7 @@ func (p RepoBranchLogPage) Body() (body string) {
 		checkErr(err)
 
 		rowTemplate.Execute(&rowBuffer, Row{&p.Config.URLRoot, &p.Branch, c, string(shortHash)})
-		rows = append(rows, rowBuffer.String())
+		rows = append(rows, strings.Replace(rowBuffer.String(), ">&lt;![CDATA[", "><![CDATA[", 1))
 		return nil
 	})
 
