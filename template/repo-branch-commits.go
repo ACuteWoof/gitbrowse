@@ -27,6 +27,7 @@ import (
 	"github.com/go-git/go-git/v6"
 	"github.com/go-git/go-git/v6/plumbing"
 	"github.com/go-git/go-git/v6/plumbing/object"
+	"github.com/go-git/go-git/v6/plumbing/storer"
 )
 
 type RepoBranchLogPage struct {
@@ -53,7 +54,12 @@ func (p RepoBranchLogPage) Body() (body string) {
 
 	rows := []string{}
 
+	var count int
+
 	commits.ForEach(func(c *object.Commit) error {
+		if count >= 100 {
+			return storer.ErrStop
+		}
 		var rowBuffer bytes.Buffer
 		var rowTemplate *template.Template
 		if p.Format == "rss" {
@@ -73,7 +79,7 @@ func (p RepoBranchLogPage) Body() (body string) {
 	{{.Commit.Author.Name}}
 	({{.Commit.Author.Email}})
 </author>
-<pubDate>{{.Commit.Author.When.UTC.Format "Mon, 14 Feb 2011 00:09:04 GMT"}}</pubDate>
+<pubDate>{{.Commit.Author.When.UTC.Format "Mon, 02 Jan 2006 15:04:05 GMT"}}</pubDate>
 </item>`))
 		} else {
 			rowTemplate = template.Must(template.New("row").Parse(`<tr>
@@ -98,6 +104,7 @@ func (p RepoBranchLogPage) Body() (body string) {
 
 		rowTemplate.Execute(&rowBuffer, Row{&p.Config.URLRoot, &p.Branch, c, string(shortHash)})
 		rows = append(rows, strings.Replace(rowBuffer.String(), ">&lt;![CDATA[", "><![CDATA[", 1))
+		count += 1
 		return nil
 	})
 
