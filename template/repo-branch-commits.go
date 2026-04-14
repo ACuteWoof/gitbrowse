@@ -135,7 +135,7 @@ func (p RepoBranchLogPage) FullPage() string {
 <rss version="2.0" 
      xmlns:atom="http://www.w3.org/2005/Atom"
      xmlns:content="http://purl.org/rss/1.0/modules/content/">
-` + p.Body()
+` + p.Body() + "</rss>"
 	}
 	return "<!DOCTYPE html><html>" + CommonHead(p.Config) + p.Body() + "</html>"
 }
