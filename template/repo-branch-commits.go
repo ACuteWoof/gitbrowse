@@ -27,6 +27,7 @@ import (
 	"github.com/go-git/go-git/v6"
 	"github.com/go-git/go-git/v6/plumbing"
 	"github.com/go-git/go-git/v6/plumbing/object"
+	"github.com/go-git/go-git/v6/plumbing/storer"
 )
 
 type RepoBranchLogPage struct {
@@ -53,7 +54,12 @@ func (p RepoBranchLogPage) Body() (body string) {
 
 	rows := []string{}
 
+	var count int
+
 	commits.ForEach(func(c *object.Commit) error {
+		if count >= 100 {
+			return storer.ErrStop
+		}
 		var rowBuffer bytes.Buffer
 		var rowTemplate *template.Template
 		if p.Format == "rss" {
@@ -98,6 +104,7 @@ func (p RepoBranchLogPage) Body() (body string) {
 
 		rowTemplate.Execute(&rowBuffer, Row{&p.Config.URLRoot, &p.Branch, c, string(shortHash)})
 		rows = append(rows, strings.Replace(rowBuffer.String(), ">&lt;![CDATA[", "><![CDATA[", 1))
+		count += 1
 		return nil
 	})
 
@@ -121,7 +128,7 @@ func (p RepoBranchLogPage) Body() (body string) {
 		</p>
 		`))
 
-	descTemplate.Execute(&bodyBuffer, "Showing "+strconv.Itoa(len(rows))+" commits for branch "+p.Branch)
+	descTemplate.Execute(&bodyBuffer, "Showing "+strconv.Itoa(len(rows))+"(gitbrowse max 100) commits for branch "+p.Branch)
 
 	body = bodyBuffer.String() +
 		table + "</article></main></body>"
