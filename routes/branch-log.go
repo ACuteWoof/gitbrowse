@@ -34,6 +34,10 @@ type RepoBranchLogRoute struct {
 func (route RepoBranchLogRoute) Handler(w http.ResponseWriter, req *http.Request) {
 	repo := req.PathValue("repo")
 	branch := req.PathValue("branch")
+	format := req.URL.Query().Get("format")
+	if format == "" {
+		format = "html"
+	}
 
 	config := route.ConfigGetter(repo)
 
@@ -57,5 +61,5 @@ func (route RepoBranchLogRoute) Handler(w http.ResponseWriter, req *http.Request
 
 	refName := plumbing.NewBranchReferenceName(branch)
 	ref, err := r.Reference(refName, true)
-	fmt.Fprint(w, template.RepoBranchLogPage{Repo: r, Branch: branch, BranchRef: ref, Config: &config}.FullPage())
+	fmt.Fprint(w, template.RepoBranchLogPage{Format: format, Repo: r, Branch: branch, BranchRef: ref, Config: &config}.FullPage())
 }
