@@ -104,7 +104,14 @@ func (p RepoBranchLogPage) Body() (body string) {
 		checkErr(err)
 
 		rowTemplate.Execute(&rowBuffer, Row{&p.Config.URLRoot, &p.Branch, c, string(shortHash)})
-		rows = append(rows, strings.Replace(rowBuffer.String(), ">&lt;![CDATA[", "><![CDATA[", 1))
+		var rowString string
+		if p.Format == "rss" {
+			rowString = strings.Replace(rowBuffer.String(), ">&lt;![CDATA[", "><![CDATA[", 1)
+			rowString = strings.Replace(rowString, "<hr>", GitShow(p.Config.RootDir, c.Hash.String()), 1)
+		} else {
+			rowString = rowBuffer.String()
+		}
+		rows = append(rows, rowString)
 		count += 1
 		return nil
 	})
