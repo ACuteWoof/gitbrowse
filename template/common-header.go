@@ -44,6 +44,7 @@ func CommonHeader(c *config.PageConfig, currentPage string) string {
 		{"/tag", "Tags", &c.URLRoot},
 		{"/show/HEAD", "Show", &c.URLRoot},
 		{"/grep/", "Grep", &c.URLRoot},
+		{"/branch/" + headBranch + "/commit?format=rss", "RSS", &c.URLRoot},
 	}
 	var headBuffer bytes.Buffer
 	t := template.Must(template.New("head").Parse(`
