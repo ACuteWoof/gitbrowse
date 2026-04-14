@@ -57,6 +57,9 @@ func (p RepoBranchLogPage) Body() (body string) {
 	var count int
 
 	commits.ForEach(func(c *object.Commit) error {
+		if count >= 20 && p.Format == "rss" {
+			return storer.ErrStop
+		}
 		if count >= 100 {
 			return storer.ErrStop
 		}
