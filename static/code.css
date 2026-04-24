@@ -59,7 +59,11 @@ table.code td.linenumber a:hover {
   color: #282828;
 }
 
-table.code tr:hover tr:target {
+tr:target {
+  background-color: #504945;
+}
+
+table.code tr:hover {
   background-color: #282828;
 }
 
