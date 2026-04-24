@@ -127,13 +127,19 @@ WantedBy=network-online.target
 
 Note that the working directory contains the `static` directory.
 
+## Contributing
+
+To contribute: make your changes in a local branch, generate a patch with `git
+format-patch`, write a sensible description of your changes, and email it to
+`patches@lewoof.xyz`, including the name of this respoistory in the subject.
+
 ## Addresses, Links, and Contact
 
 See [https://www.lewoof.xyz#pgp](https://www.lewoof.xyz#pgp) for my PGP key.
 
 - Email: [contact@lewoof.xyz](mailto:contact@lewoof.xyz)
 - Site: [www.lewoof.xyz](https://www.lewoof.xyz)
-- Solana: `JDkK2kpBmPm6YyYnLYNHpw8FhKyZ9AQ2CQTqj6BQxFKY`
+- Solana: `GHHPYZDDyXmwPLnQPEBgXAD9FzZmDPhCbVRpgqxuEpQ3`
 - Bitcoin (native segwit): `c1qh5m8v9xyd8l4yc7d3qfs5a83rqk3eukcjlw6sh`
 - BuyMeACoffee: [acutewoof](https://www.buymeacoffee.com/acutewoof)
 

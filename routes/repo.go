@@ -49,7 +49,7 @@ func (route RepoReadmeRoute) Handler(w http.ResponseWriter, req *http.Request) {
 
 	var infoFiles []template.RepoInfoFile
 
-	possibleInfoFiles := []string{"README.md", "README.txt", "README", "readme.txt", "readme.md", "readme", "NOTICE", "NOTICE.txt", "NOTICE.md", "notice", "notice.txt", "notice.md", "LICENSE", "LICENSE.md", "LICENSE.txt", "license", "license.txt", "license.md", "THIRD_PARTY_LICENSES.txt", "THIRD_PARTY_LICENSES.md", "THIRD_PARTY_LICENSES", "third_party_licenses.txt", "third_party_licenses.md", "third_party_licenses", "CONTRIBUTING.md", "CONTRIBUTING", "CONTRIBUTING.txt", "contributing.md", "contributing.txt"}
+	possibleInfoFiles := []string{"README.md", "README.txt", "README", "readme.txt", "readme.md", "readme", "NOTICE", "NOTICE.txt", "NOTICE.md", "notice", "notice.txt", "notice.md", "LICENSE", "LICENSE.md", "LICENSE.txt", "license", "license.txt", "license.md", "CONTRIBUTING.md", "CONTRIBUTING", "CONTRIBUTING.txt", "contributing.md", "contributing.txt", "THIRD_PARTY_LICENSES.txt", "THIRD_PARTY_LICENSES.md", "THIRD_PARTY_LICENSES", "third_party_licenses.txt", "third_party_licenses.md", "third_party_licenses"}
 	for _, possibleInfoFile := range possibleInfoFiles {
 		file, err := tree.File(possibleInfoFile)
 		if err == nil {
