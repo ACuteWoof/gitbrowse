@@ -149,9 +149,9 @@ func (p RepoBranchLogPage) Body() (body string) {
 	var nextButton string
 	nextButton = `<a href="?starthash=` + nextbuttonhash + `">`
 	if nextbuttonhash == "" {
-		nextButton += "Go to start of log</a>"
+		nextButton += "[ Go to start of log ]</a>"
 	} else {
-		nextButton += "Next</a>"
+		nextButton += "[ Next ]</a>"
 	}
 
 	body = bodyBuffer.String() +
