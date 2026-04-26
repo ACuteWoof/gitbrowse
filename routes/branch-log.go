@@ -35,6 +35,7 @@ func (route RepoBranchLogRoute) Handler(w http.ResponseWriter, req *http.Request
 	repo := req.PathValue("repo")
 	branch := req.PathValue("branch")
 	format := req.URL.Query().Get("format")
+	starthash := req.URL.Query().Get("starthash")
 	if format == "" {
 		format = "html"
 	}
@@ -61,5 +62,5 @@ func (route RepoBranchLogRoute) Handler(w http.ResponseWriter, req *http.Request
 
 	refName := plumbing.NewBranchReferenceName(branch)
 	ref, err := r.Reference(refName, true)
-	fmt.Fprint(w, template.RepoBranchLogPage{Format: format, Repo: r, Branch: branch, BranchRef: ref, Config: &config}.FullPage())
+	fmt.Fprint(w, template.RepoBranchLogPage{Format: format, Repo: r, Branch: branch, BranchRef: ref, StartHash: starthash, Config: &config}.FullPage())
 }

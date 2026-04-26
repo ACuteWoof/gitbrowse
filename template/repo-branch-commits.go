@@ -36,13 +36,21 @@ type RepoBranchLogPage struct {
 	Branch    string
 	BranchRef *plumbing.Reference
 	Config    *config.PageConfig
+	StartHash string
 }
 
 func (p RepoBranchLogPage) Body() (body string) {
 	var bodyBuffer bytes.Buffer
 	bodyBuffer.WriteString(CommonHeader(p.Config, "Commits"))
 
-	commits, err := p.Repo.Log(&git.LogOptions{From: p.BranchRef.Hash(), Order: git.LogOrderCommitterTime})
+	var starthash plumbing.Hash
+	if p.StartHash == "" {
+		starthash = p.BranchRef.Hash()
+	} else {
+		starthash = plumbing.NewHash(p.StartHash)
+	}
+
+	commits, err := p.Repo.Log(&git.LogOptions{From: starthash, Order: git.LogOrderCommitterTime})
 	checkErr(err)
 
 	type Row struct {
@@ -55,12 +63,14 @@ func (p RepoBranchLogPage) Body() (body string) {
 	rows := []string{}
 
 	var count int
+	var nextbuttonhash string
 
 	commits.ForEach(func(c *object.Commit) error {
 		if count >= 20 && p.Format == "rss" {
 			return storer.ErrStop
 		}
 		if count >= 100 {
+			nextbuttonhash = c.Hash.String()
 			return storer.ErrStop
 		}
 		var rowBuffer bytes.Buffer
@@ -105,7 +115,7 @@ func (p RepoBranchLogPage) Body() (body string) {
 		var rowString string
 		if p.Format == "rss" {
 			rowString = strings.Replace(rowBuffer.String(), ">&lt;![CDATA[", "><![CDATA[", 1)
-			rowString = strings.Replace(rowString, "<hr>GITSHOW<hr>", "<pre>" + GitShow(p.Config.RootDir, c.Hash.String()) + "</pre>", 1)
+			rowString = strings.Replace(rowString, "<hr>GITSHOW<hr>", "<pre>"+GitShow(p.Config.RootDir, c.Hash.String())+"</pre>", 1)
 		} else {
 			rowString = rowBuffer.String()
 		}
@@ -123,7 +133,7 @@ func (p RepoBranchLogPage) Body() (body string) {
 
 	if p.Format == "rss" {
 		table = "<channel>" + tableHeader + strings.Join(rows, "") + "</channel>"
-	        return table
+		return table
 	} else {
 		table = "<table>" + tableHeader + strings.Join(rows, "") + "</table>"
 	}
@@ -134,10 +144,18 @@ func (p RepoBranchLogPage) Body() (body string) {
 		</p>
 		`))
 
-	descTemplate.Execute(&bodyBuffer, "Showing "+strconv.Itoa(len(rows))+" (gitbrowse max 100) commits for branch "+p.Branch)
+	descTemplate.Execute(&bodyBuffer, "Showing "+strconv.Itoa(len(rows))+" commits for branch "+p.Branch)
+
+	var nextButton string
+	nextButton = `<a href="?starthash=` + nextbuttonhash + `">`
+	if nextbuttonhash == "" {
+		nextButton += "Go to start of log</a>"
+	} else {
+		nextButton += "Next</a>"
+	}
 
 	body = bodyBuffer.String() +
-		table + "</article></main></body>"
+		table + nextButton + "</article></main></body>"
 
 	return body
 }
