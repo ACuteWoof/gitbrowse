@@ -70,7 +70,7 @@ func (p RepoBranchFilePage) Body() (body string) {
 	}
 	if p.FilePath != "" {
 		cumulativeName := ""
-		for _, entry := range strings.Split(p.FilePath, "/") {
+		for entry := range strings.SplitSeq(p.FilePath, "/") {
 			if cumulativeName == "" {
 				cumulativeName = entry
 			} else {
