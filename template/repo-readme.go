@@ -51,7 +51,7 @@ func (p RepoInfoPage) Body() (body string) {
 		bodyBuffer.WriteString(infoFile.RenderedContent)
 		bodyBuffer.WriteString("</td></tr></tbody></table>")
 	}
-	body = bodyBuffer.String() + "</div></article></main></body>"
+	body = bodyBuffer.String() + "</div></main></body>"
 	return
 }
 

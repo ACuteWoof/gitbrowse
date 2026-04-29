@@ -1,16 +1,16 @@
 // Gitbrowse: a simple web server for git.
 // Copyright (C) 2026 Vithushan
-// 
+//
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-// 
+//
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
@@ -19,11 +19,13 @@ package template
 import (
 	"bytes"
 	"html/template"
+	"slices"
 	"strconv"
 	"strings"
 
 	"git.lewoof.xyz/gitbrowse/config"
 	"github.com/go-git/go-git/v6"
+
 	// "github.com/go-git/go-git/v6/plumbing"
 	"github.com/go-git/go-git/v6/plumbing/filemode"
 	"github.com/go-git/go-git/v6/plumbing/object"
@@ -44,6 +46,8 @@ func (p RepoBranchTreePage) Body() (body string) {
 
 	rows := []string{}
 
+	infofiles := []RepoInfoFile{}
+
 	type Row struct {
 		URLRoot    *string
 		Branch     *string
@@ -61,6 +65,18 @@ func (p RepoBranchTreePage) Body() (body string) {
 			file, err := p.Tree.File(entry.Name)
 			checkErr(err)
 
+			if slices.Contains(config.GetPossibleInfoFiles(), file.Name) {
+				contents, err := file.Contents()
+				checkErr(err)
+				var renderedContent string
+				if file.Name[len(file.Name)-3:] == ".md" {
+					renderedContent = MarkdownToHtml(contents)
+				} else {
+					renderedContent = template.HTMLEscapeString(contents)
+				}
+				infofiles = append(infofiles, RepoInfoFile{Name: file.Name, RenderedContent: renderedContent})
+			}
+
 			rowTemplate := template.Must(template.New("row").Parse(`<tr>
 <td class="isbinary" id="{{.Type}}">{{.Type}}</td>
 <td class="filename"><a href="{{.URLRoot}}/branch/{{.Branch}}/tree/{{.FilePath}}{{.Entry.Name}}/">{{.Entry.Name}}</a></td>
@@ -76,6 +92,7 @@ func (p RepoBranchTreePage) Body() (body string) {
 <td class="filesize">{{.FileSize}}</td>
 </tr>`))
 			lastCommit := GetLog1File(p.Repo, p.Config.RootDir, p.FilePath+"/"+entry.Name)
+
 			var fileType string
 			isBinary, err := file.IsBinary()
 			if isBinary {
@@ -160,7 +177,26 @@ func (p RepoBranchTreePage) Body() (body string) {
 		`))
 	descTemplate.Execute(&bodyBuffer, "Browsing tree for branch "+p.Branch+", showing "+strconv.Itoa(len(rows))+" entries")
 
-	body = bodyBuffer.String() + breadcrumbs + table + "</article></main></body>"
+	var renderingBuffer bytes.Buffer
+
+	renderingBuffer.WriteString(`<div class="tree-info">`)
+	renderingBuffer.WriteString("<table class=\"nav\"><tbody><tr>")
+	for _, infoFile := range infofiles {
+		renderingBuffer.WriteString("<td class=\"txt\"><a href=\"#" + infoFile.Name + "\">" + infoFile.Name + "</a></td>")
+	}
+	renderingBuffer.WriteString("</tr></tbody></table>")
+	for _, infoFile := range infofiles {
+		tdClass := "txt"
+		if strings.HasSuffix(infoFile.Name, ".md") {
+			tdClass = "content"
+		}
+		renderingBuffer.WriteString("<table class=\"info\" id=\"" + infoFile.Name + "\"><tbody><tr><td>" + infoFile.Name + "</td></tr><tr><td class=\"" + tdClass + "\">")
+		renderingBuffer.WriteString(infoFile.RenderedContent)
+		renderingBuffer.WriteString("</td></tr></tbody></table>")
+	}
+	renderingBuffer.WriteString(`</div>`)
+
+	body = bodyBuffer.String() + breadcrumbs + table + renderingBuffer.String() + "</article></main></body>"
 	return
 }
 

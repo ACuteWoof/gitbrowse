@@ -21,6 +21,10 @@ import (
 	"log"
 	"math"
 	"git.lewoof.xyz/gitbrowse/config"
+
+	"github.com/gomarkdown/markdown"
+	"github.com/gomarkdown/markdown/html"
+	"github.com/gomarkdown/markdown/parser"
 )
 
 func getFormattedSize(size float64) (formatted string) {
@@ -50,3 +54,17 @@ func checkErr(err error) {
 		log.Println(err)
 	}
 }
+
+func MarkdownToHtml(content string) string {
+	md := []byte(content)
+
+	extensions := parser.CommonExtensions | parser.AutoHeadingIDs | parser.NoEmptyLineBeforeBlock
+	p := parser.NewWithExtensions(extensions)
+	doc := p.Parse(md)
+
+	htmlFlags := html.CommonFlags | html.HrefTargetBlank
+	opts := html.RendererOptions{Flags: htmlFlags}
+	renderer := html.NewRenderer(opts)
+
+	return string(markdown.Render(doc, renderer))
+}	

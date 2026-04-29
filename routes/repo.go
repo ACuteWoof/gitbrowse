@@ -21,14 +21,15 @@ import (
 	"net/http"
 	"strings"
 
-	"git.lewoof.xyz/gitbrowse/config"
+	c "git.lewoof.xyz/gitbrowse/config"
+	lt "git.lewoof.xyz/gitbrowse/template"
 	"git.lewoof.xyz/gitbrowse/template"
 	"github.com/go-git/go-git/v6"
 	"html"
 )
 
 type RepoReadmeRoute struct {
-	ConfigGetter func(repo string) config.PageConfig
+	ConfigGetter func(repo string) c.PageConfig
 }
 
 func (route RepoReadmeRoute) Handler(w http.ResponseWriter, req *http.Request) {
@@ -49,14 +50,14 @@ func (route RepoReadmeRoute) Handler(w http.ResponseWriter, req *http.Request) {
 
 	var infoFiles []template.RepoInfoFile
 
-	possibleInfoFiles := []string{"README.md", "README.txt", "README", "readme.txt", "readme.md", "readme", "NOTICE", "NOTICE.txt", "NOTICE.md", "notice", "notice.txt", "notice.md", "LICENSE", "LICENSE.md", "LICENSE.txt", "license", "license.txt", "license.md", "CONTRIBUTING.md", "CONTRIBUTING", "CONTRIBUTING.txt", "contributing.md", "contributing.txt", "THIRD_PARTY_LICENSES.txt", "THIRD_PARTY_LICENSES.md", "THIRD_PARTY_LICENSES", "third_party_licenses.txt", "third_party_licenses.md", "third_party_licenses"}
+	possibleInfoFiles := c.GetPossibleInfoFiles()
 	for _, possibleInfoFile := range possibleInfoFiles {
 		file, err := tree.File(possibleInfoFile)
 		if err == nil {
 			content, err := file.Contents()
 			errCheck(err)
 			if strings.HasSuffix(possibleInfoFile, ".md") {
-				infoFiles = append(infoFiles, template.RepoInfoFile{possibleInfoFile, markdownToHtml(content)})
+				infoFiles = append(infoFiles, template.RepoInfoFile{possibleInfoFile, lt.MarkdownToHtml(content)})
 			} else {
 				infoFiles = append(infoFiles, template.RepoInfoFile{possibleInfoFile, html.EscapeString(content)})
 			}
