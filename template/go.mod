@@ -1,16 +1,16 @@
 // Gitbrowse: a simple web server for git.
 // Copyright (C) 2026 Vithushan
-// 
+//
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-// 
+//
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
@@ -20,6 +20,7 @@ require (
 	git.lewoof.xyz/gitbrowse/config v1.0.0
 	github.com/alecthomas/chroma/v2 v2.23.1
 	github.com/go-git/go-git/v6 v6.0.0-20260123133532-f99a98e81ce9
+	github.com/gomarkdown/markdown v0.0.0-20260417124207-7d523f7318df
 )
 
 require (

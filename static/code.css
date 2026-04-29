@@ -73,10 +73,15 @@ table ::selection {
   text-shadow: none;
 }
 
-div.info {
+div.info,
+div.tree-info {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+}
+
+div.tree-info {
+  margin-top: 1rem;
 }
 
 table.info td.content {

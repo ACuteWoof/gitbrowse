@@ -42,3 +42,7 @@ func GetRepoConfg(repo string) PageConfig {
 	}
 	return NewPageConfig
 }
+
+func GetPossibleInfoFiles() []string {
+	return []string{"README.md", "README.txt", "README", "readme.txt", "readme.md", "readme", "NOTICE", "NOTICE.txt", "NOTICE.md", "notice", "notice.txt", "notice.md", "LICENSE", "LICENSE.md", "LICENSE.txt", "license", "license.txt", "license.md", "CONTRIBUTING.md", "CONTRIBUTING", "CONTRIBUTING.txt", "contributing.md", "contributing.txt", "THIRD_PARTY_LICENSES.txt", "THIRD_PARTY_LICENSES.md", "THIRD_PARTY_LICENSES", "third_party_licenses.txt", "third_party_licenses.md", "third_party_licenses"}
+}
