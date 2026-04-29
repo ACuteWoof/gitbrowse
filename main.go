@@ -74,13 +74,13 @@ func getIndexConfigGetterUser(username string) func() config.PageConfig {
 		URLRoot: "/" + username,
 		RootDir: "/home/" + username + "/gitbrowse", // directory in the unix filesystem, ls here is the list of repos displayed
 		Title:   username,
+		Description: username + " on git.lewoof.xyz",
+		Thumbnail:   "/static/thumbnail.png",
+		Favicon:     "/static/favicon.ico",
 		Breadcrumbs: []config.HeadBreadCrumb{
 			{DisplayString: "/", URL: "/"},
 			{DisplayString: username, URL: "/" + username},
 		},
-		Description: username + " on git.lewoof.xyz",
-		Thumbnail:   "/static/thumbnail.png",
-		Favicon:     "/static/favicon.ico",
 		Styles: []string{
 			"/static/styles.css",
 		},

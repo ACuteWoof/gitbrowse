@@ -1,16 +1,16 @@
 // Gitbrowse: a simple web server for git.
 // Copyright (C) 2026 Vithushan
-// 
+//
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-// 
+//
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
@@ -24,8 +24,8 @@ import (
 )
 
 type IndexPage struct {
-	Repos []string;
-	Config *config.PageConfig;
+	Repos  []string
+	Config *config.PageConfig
 }
 
 func (p IndexPage) Body() (body string) {
@@ -33,6 +33,14 @@ func (p IndexPage) Body() (body string) {
 	t := template.Must(template.New("body").Parse(`
 		<body class="user">
 			<main>
+		<table class="breadcrumbs">
+		<tbody>
+		<tr>
+		{{range .Config.Breadcrumbs}}<td><a href="{{.URL}}">{{.DisplayString}}</a></td>
+		{{end}}
+		</tr>
+		</tbody>
+		</table>
 			<h1>{{.Config.Title}}</h1>
 			<ul>
 				{{range .Repos}}
