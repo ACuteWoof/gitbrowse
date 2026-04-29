@@ -18,6 +18,11 @@ package config
 
 // to change template, see ../template
 
+type HeadBreadCrumb struct {
+	DisplayString string;
+	URL string;
+}
+
 type PageConfig struct {
 	RootDir string;
 	URLRoot string;
@@ -27,4 +32,5 @@ type PageConfig struct {
 	Favicon string;
 	Styles []string;
 	CloneURL string;
+	Breadcrumbs []HeadBreadCrumb;
 }

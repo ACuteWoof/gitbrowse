@@ -52,7 +52,14 @@ func CommonHeader(c *config.PageConfig, currentPage string) string {
 	<header>
 		<img src="{{.Config.Thumbnail}}" alt="Thumbnail">
 		<div>
-		<h1>{{.Config.Title}}</h1>
+		<table class="breadcrumbs headercrumbs">
+		<tbody>
+		<tr>
+		{{range .Config.Breadcrumbs}}<td><a href="{{.URL}}">{{.DisplayString}}</a></td>
+		{{end}}
+		</tbody>
+		</tr>
+		<table>
 		{{if .Config.CloneURL}}
 			<p>Clone URL: <code>{{.Config.CloneURL}}</code></p>
 		{{end}}
