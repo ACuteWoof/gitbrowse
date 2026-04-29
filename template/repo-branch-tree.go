@@ -24,7 +24,7 @@ import (
 
 	"git.lewoof.xyz/gitbrowse/config"
 	"github.com/go-git/go-git/v6"
-	"github.com/go-git/go-git/v6/plumbing"
+	// "github.com/go-git/go-git/v6/plumbing"
 	"github.com/go-git/go-git/v6/plumbing/filemode"
 	"github.com/go-git/go-git/v6/plumbing/object"
 )
@@ -75,20 +75,7 @@ func (p RepoBranchTreePage) Body() (body string) {
 <td class="lastupdated">{{.LastCommit.Author.When.UTC.Format "15:04, Jan 2 2006"}}</td>
 <td class="filesize">{{.FileSize}}</td>
 </tr>`))
-			fileRef, err := p.Repo.Reference(plumbing.NewBranchReferenceName(p.Branch), true)
-			checkErr(err)
-			log, err := p.Repo.Log(&git.LogOptions{
-				From: fileRef.Hash(), 
-				Order: git.LogOrderCommitterTime,
-				PathFilter: func(path string) bool {
-				if p.FilePath == "" {
-					return path == entry.Name
-				}
-				return path == p.FilePath+"/"+entry.Name
-			}})
-			checkErr(err)
-			lastCommit, err := log.Next()
-			checkErr(err)
+			lastCommit := GetLog1File(p.Repo, p.Config.RootDir, p.FilePath+"/"+entry.Name)
 			var fileType string
 			isBinary, err := file.IsBinary()
 			if isBinary {
@@ -154,7 +141,7 @@ func (p RepoBranchTreePage) Body() (body string) {
 	}
 	if p.FilePath != "" {
 		cumulativeName := ""
-		for _, entry := range strings.Split(p.FilePath, "/") {
+		for entry := range strings.SplitSeq(p.FilePath, "/") {
 			if cumulativeName == "" {
 				cumulativeName = entry
 			} else {
