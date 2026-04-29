@@ -93,7 +93,7 @@ func (p RepoBranchLogPage) Body() (body string) {
 		} else {
 			rowTemplate = template.Must(template.New("row").Parse(`<tr>
 <td class="commithash"><a href="{{.URLRoot}}/show/{{.Commit.Hash.String}}">{{.ShortHash}}</a></td>
-<td class="commitmessage">{{.Commit.Message}}</td>
+<td class="commitmessage"><span>{{.Commit.Message}}</span></td>
 <td class="author">
 	<a href="mailto:{{.Commit.Author.Email}}">
 	{{.Commit.Author.Name}}
@@ -135,7 +135,7 @@ func (p RepoBranchLogPage) Body() (body string) {
 		table = "<channel>" + tableHeader + strings.Join(rows, "") + "</channel>"
 		return table
 	} else {
-		table = "<table>" + tableHeader + strings.Join(rows, "") + "</table>"
+		table = `<table class="log">` + tableHeader + strings.Join(rows, "") + "</table>"
 	}
 
 	descTemplate := template.Must(template.New("desc").Parse(`

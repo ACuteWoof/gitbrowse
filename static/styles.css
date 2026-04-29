@@ -108,11 +108,11 @@ table {
   border-collapse: collapse;
 }
 
-table.tree {
+table.tree,
+table.log {
   table-layout: fixed;
   width: 100%;
 }
-
 
 table.breadcrumbs {
   width: fit-content;
@@ -165,10 +165,10 @@ table.subtable td:last-child {
 
 td.commitmessage {
    min-width: 0;
-overflow: hidden;
+   overflow: hidden;
 }
 
-td.commitmessage a { 
+td.commitmessage a, td.commitmessage span { 
   display: block;  
   white-space: nowrap;
   overflow-x: hidden;
