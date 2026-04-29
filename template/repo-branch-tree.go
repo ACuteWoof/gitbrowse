@@ -64,7 +64,7 @@ func (p RepoBranchTreePage) Body() (body string) {
 			rowTemplate := template.Must(template.New("row").Parse(`<tr>
 <td class="isbinary" id="{{.Type}}">{{.Type}}</td>
 <td class="filename"><a href="{{.URLRoot}}/branch/{{.Branch}}/tree/{{.FilePath}}{{.Entry.Name}}/">{{.Entry.Name}}</a></td>
-<td class="commitmessage">
+<td class="commitmessage" data-fulltext="{{.LastCommit.Message}}">
 	<a href="{{.URLRoot}}/show/{{.LastCommit.Hash.String}}">{{.LastCommit.Message}}</a>
 </td>
 <td class="author">
@@ -113,7 +113,7 @@ func (p RepoBranchTreePage) Body() (body string) {
 
 	tableHeader := "<tr><th>Type</th><th>File</th><th>Last Commit</th><th>Author</th><th>Commit Date (UTC)</th><th>Size</th></tr>"
 
-	table := "<table>" + tableHeader + strings.Join(rows, "") + "</table>"
+	table := `<table class="tree">` + tableHeader + strings.Join(rows, "") + "</table>"
 
 	type Crumb struct {
 		Name   string
