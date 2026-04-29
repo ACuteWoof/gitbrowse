@@ -25,20 +25,21 @@ import (
 	"github.com/go-git/go-git/v6/plumbing"
 )
 
-func GitShow(repo string, commit string) string {
+func GitShow(repo string, commit string) (string, string) {
 	if !validateCommitOrTag(repo, commit) {
-		return "<div class=\"error\">Invalid hash</div>"
+		return "<div class=\"error\">Invalid hash</div>", ""
 	}
 	cmd := exec.Command("git", "-c", "safe.directory="+repo,  "show", commit, "--date=format:%a %b %d %H:%M:%S %Y +0000")
 	cmd.Dir = repo
 	out, err := cmd.Output()
 	if err != nil {
-		return ""
+		return "", ""
 	}
 
-	escaped := html.EscapeString(string(out))
+	outstr := string(out)
+	escaped := html.EscapeString(outstr)
 	output := colorizeGitShowAdvanced(escaped)
-	return "<div class=\"git-show\">" + output + "</div>"
+	return "<div class=\"git-show\">" + output + "</div>", outstr
 }
 
 func colorizeGitShowAdvanced(text string) string {

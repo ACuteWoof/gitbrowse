@@ -115,7 +115,8 @@ func (p RepoBranchLogPage) Body() (body string) {
 		var rowString string
 		if p.Format == "rss" {
 			rowString = strings.Replace(rowBuffer.String(), ">&lt;![CDATA[", "><![CDATA[", 1)
-			rowString = strings.Replace(rowString, "<hr>GITSHOW<hr>", "<pre>"+GitShow(p.Config.RootDir, c.Hash.String())+"</pre>", 1)
+			renderedShow, _ := GitShow(p.Config.RootDir, c.Hash.String())
+			rowString = strings.Replace(rowString, "<hr>GITSHOW<hr>", "<pre>"+renderedShow+"</pre>", 1)
 		} else {
 			rowString = rowBuffer.String()
 		}
