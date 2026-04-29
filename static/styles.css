@@ -109,6 +109,12 @@ table {
   border-collapse: collapse;
 }
 
+table.tree {
+  table-layout: fixed;
+  width: 100%;
+}
+
+
 table.breadcrumbs {
   width: fit-content;
   border-collapse: collapse;
@@ -156,6 +162,18 @@ table.subtable td:first-child {
 
 table.subtable td:last-child {
   border-right: none;
+}
+
+td.commitmessage {
+   min-width: 0;
+overflow: hidden;
+}
+
+td.commitmessage a { 
+  display: block;  
+  white-space: nowrap;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
 }
 
 pre {

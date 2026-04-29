@@ -10,7 +10,8 @@ import (
 )
 
 func GetLog1File(repo *git.Repository, repoPath string, path string) (*object.Commit) {
-	cmd := exec.Command("git", "-c", "safe.directory="+repoPath, "log", `--format=%H`, "-1", "--", "."+path)
+	path = "./" + strings.TrimPrefix(path, "/")
+	cmd := exec.Command("git", "-c", "safe.directory="+repoPath, "log", `--format=%H`, "-1", "--", path)
 	cmd.Dir = repoPath
 	out, err := cmd.Output()
 	if err != nil {
