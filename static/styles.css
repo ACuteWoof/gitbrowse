@@ -115,6 +115,19 @@ table.breadcrumbs {
   margin-bottom: 1rem;
 }
 
+table.headercrumbs {
+	font-size: 2em;
+}
+
+table.headercrumbs a {
+	text-decoration: none;
+}
+
+table.headercrumbs a:visited {
+	text-decoration: none;
+  	color: #689d6a;
+}
+
 table,
 th,
 td {
