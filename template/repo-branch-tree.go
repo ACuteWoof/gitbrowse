@@ -20,6 +20,7 @@ import (
 	"bytes"
 	"html/template"
 	"slices"
+	"sort"
 	"strconv"
 	"strings"
 
@@ -45,6 +46,7 @@ func (p RepoBranchTreePage) Body() (body string) {
 	bodyBuffer.WriteString(CommonHeader(p.Config, "Tree"))
 
 	rows := []string{}
+	possibleInfoFiles := config.GetPossibleInfoFiles()
 
 	infofiles := []RepoInfoFile{}
 
@@ -65,7 +67,7 @@ func (p RepoBranchTreePage) Body() (body string) {
 			file, err := p.Tree.File(entry.Name)
 			checkErr(err)
 
-			if slices.Contains(config.GetPossibleInfoFiles(), file.Name) {
+			if slices.Contains(possibleInfoFiles, file.Name) {
 				contents, err := file.Contents()
 				checkErr(err)
 				var renderedContent string
@@ -133,10 +135,10 @@ func (p RepoBranchTreePage) Body() (body string) {
 	table := `<table class="tree">` + tableHeader + strings.Join(rows, "") + "</table>"
 
 	type Crumb struct {
-		Name   string
+		Name        string
 		DisplayName string
-		Root   *string
-		Branch *string
+		Root        *string
+		Branch      *string
 	}
 
 	type Breadcrumb struct {
@@ -176,6 +178,19 @@ func (p RepoBranchTreePage) Body() (body string) {
 		</p>
 		`))
 	descTemplate.Execute(&bodyBuffer, "Browsing tree for branch "+p.Branch+", showing "+strconv.Itoa(len(rows))+" entries")
+
+	rank := make(map[string]int, len(possibleInfoFiles))
+	for i, name := range possibleInfoFiles {
+		rank[name] = i
+	}
+	sort.SliceStable(infofiles, func(i, j int) bool {
+		ri, oki := rank[infofiles[i].Name]
+		rj, okj := rank[infofiles[j].Name]
+		if oki && okj {
+			return ri < rj
+		}
+		return oki || (!okj && infofiles[i].Name < infofiles[j].Name)
+	})
 
 	var renderingBuffer bytes.Buffer
 
